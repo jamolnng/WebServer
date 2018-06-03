@@ -3,6 +3,8 @@
 #include <map>
 #include <memory>
 #include "plugin.h"
+#include "config.h"
+#include "file_utils.h"
 
 namespace webserver
 {
@@ -11,7 +13,7 @@ namespace webserver
 		class PluginManager
 		{
 		public:
-			PluginManager(std::string path);
+			PluginManager(webserver::config::Config config);
 			~PluginManager();
 
 			void loadPlugin(std::string name);
@@ -20,7 +22,7 @@ namespace webserver
 
 		private:
 			std::map<std::string, Plugin*> plugins;
-			std::string path;
+			webserver::config::Config conf;
 		};
 	}
 }

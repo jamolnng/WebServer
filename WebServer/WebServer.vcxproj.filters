@@ -28,6 +28,9 @@
     <Filter Include="Header Files\config">
       <UniqueIdentifier>{6399aae0-7940-47cb-be79-dd285773fcb9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\config">
+      <UniqueIdentifier>{b4c73519-a775-4108-a887-de2db5c75c7e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -40,6 +43,12 @@
       <Filter>Source Files\utils</Filter>
     </ClCompile>
     <ClCompile Include="plugin_manager.cpp">
+      <Filter>Source Files\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="config.cpp">
+      <Filter>Source Files\config</Filter>
+    </ClCompile>
+    <ClCompile Include="plugin.cpp">
       <Filter>Source Files\plugin</Filter>
     </ClCompile>
   </ItemGroup>
@@ -60,6 +69,12 @@
       <Filter>Header Files\config</Filter>
     </ClInclude>
     <ClInclude Include="string_utils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_utils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="file_utils.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
   </ItemGroup>

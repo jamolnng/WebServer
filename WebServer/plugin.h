@@ -1,16 +1,17 @@
 #pragma once
 #include <string>
+#include "lib_utils.h"
 
 namespace webserver
 {
 	namespace plugin
 	{
-		class Plugin
+		class LIBEXPORT Plugin
 		{
 		public:
-			Plugin(std::string name) : name(name) {}
+			Plugin(std::string name);
 
-			std::string getName() { return name; }
+			const std::string& getName() const;
 
 		private:
 			std::string name;
