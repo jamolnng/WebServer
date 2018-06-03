@@ -1,6 +1,8 @@
 #include "webserver.h"
 #include <string>
 #include <iostream>
+#include <algorithm>
+#include "request_parser.h"
 
 using namespace webserver;
 using webserver::utils::SocketUtils;
@@ -18,14 +20,13 @@ WebServer::WebServer(config::Config& config) :
 
 WebServer::~WebServer()
 {
-	int quit = SocketUtils::quit();
-	if (quit != 0)
-		throw std::runtime_error("Failed to shutdown WinSock");
+	SocketUtils::quit();
 }
 
 void WebServer::start()
 {
-	if (running) return;
+	if (running)
+		return;
 
 	std::shared_ptr<addrinfo> res(nullptr, [](addrinfo* ai) { freeaddrinfo(ai); });
 	addrinfo hints;
@@ -73,7 +74,8 @@ void WebServer::stop()
 	}
 	SocketUtils::shutdown(server);
 	SocketUtils::close(server);
-	if (!running) return;
+	if (!running)
+		return;
 	running = false;
 	if (thread.joinable())
 		thread.join();
@@ -101,10 +103,7 @@ void WebServer::run()
 
 void WebServer::handleClient(SOCKET client, int bufferSize)
 {
-	std::string http = \
-		"HTTP/1.1 200 OK\r\n"
-		"Connection: close\r\n"
-		"Content-type: text/html\r\n\r\n"
+	std::string http_content = \
 		"<!DOCTYPE html>\r\n"
 		"<html>\r\n"
 		"<head>\r\n"
@@ -115,43 +114,46 @@ void WebServer::handleClient(SOCKET client, int bufferSize)
 		"</body>\r\n"
 		"</html>\r\n";
 
+	std::string http_header = \
+		"HTTP/1.1 200 OK\r\n"
+		"Connection: keep-alive\r\n"
+		"Content-type: text/html\r\n"
+		"Content-length: " + std::to_string(http_content.size()) + "\r\n"
+		"\r\n";
 
+	http::request::RequestParser parser;
 	sockaddr_in clientInfo;
 	socklen_t addrLen = sizeof(clientInfo);
-	int status;
-	status = getpeername(client, (sockaddr*)&clientInfo, &addrLen);
-	if (status != 0)
-	{
-		SocketUtils::shutdown(client);
-		SocketUtils::close(client);
-		return;
-	}
-	char* clientIP = inet_ntoa(clientInfo.sin_addr);
+	char* clientIP;
 
 	std::vector<char> buffer(bufferSize, 0);
-	std::string s;
-	int toRecv;
-	do
+	int bytes;
+	bool keepAlive = true;
+	http::request::Request request;
+	
+	if (getpeername(client, (sockaddr*)&clientInfo, &addrLen) != 0)
+		goto close;
+	clientIP = inet_ntoa(clientInfo.sin_addr);
+	
+	while (true)
 	{
-		SocketUtils::ioctl(client, FIONREAD, &toRecv);
-		if (toRecv)
+		parser.clear();
+		while (!parser.isDone())
 		{
 			std::fill(buffer.begin(), buffer.end(), 0);
-			int bytes = recv(client, &buffer[0], (int)buffer.size(), NULL);
+			bytes = recv(client, &buffer[0], (int)buffer.size(), NULL);
 			if (bytes > 0)
-			{
-				s += std::string(buffer.begin(), buffer.begin() + bytes);
-			}
+				parser.parse(std::string(&buffer[0], bytes));
 			else
-			{
-				SocketUtils::shutdown(client);
-				SocketUtils::close(client);
-				return;
-			}
+				goto close;
 		}
-	} while (toRecv);
-	std::cout << s << std::endl;
-	send(client, http.c_str(), http.size(), 0);
+		request = parser.get();
+		if (request.generalHeader.connection.empty() || request.generalHeader.connection == "close")
+			goto close;
+		std::string http = http_header + http_content;
+		send(client, http.c_str(), (int)http.size(), 0);
+	}
+close:
 	SocketUtils::shutdown(client);
 	SocketUtils::close(client);
 }

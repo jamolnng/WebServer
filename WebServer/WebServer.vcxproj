@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="config.cpp" />
+    <ClCompile Include="request_parser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="plugin.cpp" />
     <ClCompile Include="plugin_manager.cpp" />
@@ -142,7 +143,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
+    <ClInclude Include="entity_header.h" />
     <ClInclude Include="file_utils.h" />
+    <ClInclude Include="general_header.h" />
+    <ClInclude Include="request_parser.h" />
+    <ClInclude Include="request.h" />
+    <ClInclude Include="request_header.h" />
+    <ClInclude Include="request_line.h" />
     <ClInclude Include="lib_utils.h" />
     <ClInclude Include="plugin.h" />
     <ClInclude Include="plugin_manager.h" />

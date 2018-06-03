@@ -31,11 +31,32 @@
     <Filter Include="Source Files\config">
       <UniqueIdentifier>{b4c73519-a775-4108-a887-de2db5c75c7e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\http">
+      <UniqueIdentifier>{72d7e872-e6a4-4c15-ae32-ec603c5dc931}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\http">
+      <UniqueIdentifier>{5900e995-92f4-4a2a-a2d8-8274aa5bd74a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\http\request">
+      <UniqueIdentifier>{9fd3af29-13e2-4d66-999f-a8266f3ee330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\http\response">
+      <UniqueIdentifier>{fe664f50-9ab9-4e3e-af8b-21ad69c66362}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\http\request">
+      <UniqueIdentifier>{c4720c18-4fc5-4003-8711-39306004752d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\http\response">
+      <UniqueIdentifier>{9797a83a-d6a4-4a4c-b699-e1a8bed08493}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\http\message">
+      <UniqueIdentifier>{b430c769-080a-4194-8ea4-3ace655427db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\http\entity">
+      <UniqueIdentifier>{7d97f884-965a-42a6-b007-941e583ff67b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sock_utils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
@@ -56,6 +77,12 @@
     </ClCompile>
     <ClCompile Include="string_utils.cpp">
       <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="request_parser.cpp">
+      <Filter>Source Files\http\request</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +112,24 @@
     </ClInclude>
     <ClInclude Include="webserver.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="request.h">
+      <Filter>Header Files\http\request</Filter>
+    </ClInclude>
+    <ClInclude Include="request_line.h">
+      <Filter>Header Files\http\request</Filter>
+    </ClInclude>
+    <ClInclude Include="request_header.h">
+      <Filter>Header Files\http\request</Filter>
+    </ClInclude>
+    <ClInclude Include="general_header.h">
+      <Filter>Header Files\http\message</Filter>
+    </ClInclude>
+    <ClInclude Include="entity_header.h">
+      <Filter>Header Files\http\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="request_parser.h">
+      <Filter>Header Files\http\request</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
