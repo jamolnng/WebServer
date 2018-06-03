@@ -55,6 +55,18 @@ namespace webserver
 				return ::close(sock);
 #endif
 			}
+
+			static int ioctl(SOCKET sock, long cmd, int* argp)
+			{
+#ifdef _WIN32
+				unsigned long ul;
+				int ret = ioctlsocket(sock, cmd, &ul);
+				*argp = (int)ul;
+				return ret;
+#else
+				return ::ioctl(sock, cmd, argp);
+#endif
+			}
 		};
 	}
 }

@@ -1,5 +1,6 @@
 #include "webserver.h"
 #include <string>
+#include <iostream>
 
 using namespace webserver;
 using webserver::utils::SocketUtils;
@@ -93,9 +94,21 @@ void WebServer::handle_client(SOCKET client)
 		"Hello, World!\r\n"
 		"</body>\r\n"
 		"</html>\r\n";
-	int buffer_size = 1024;
+	int buffer_size = 256;
 	std::vector<char> buffer(buffer_size, 0);
-	int bytes = recv(client, &buffer[0], (int)buffer.size(), NULL);
+	std::string s;
+	int toRecv;
+	do
+	{
+		SocketUtils::ioctl(client, FIONREAD, &toRecv);
+		if (toRecv)
+		{
+			std::fill(buffer.begin(), buffer.end(), 0);
+			int bytes = recv(client, &buffer[0], (int)buffer.size(), NULL);
+			s += std::string(buffer.begin(), buffer.begin() + bytes);
+		}
+	} while (toRecv);
+	std::cout << std::hex << s << std::endl;
 	send(client, http.c_str(), http.size(), 0);
 	SocketUtils::shutdown(client);
 	SocketUtils::close(client);
