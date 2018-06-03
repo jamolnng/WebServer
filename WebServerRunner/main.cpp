@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 		std::cout << "Failed to load DLL" << std::endl;
 	main = (webserverMain)GetProcAddress(dll, "webserverMain");
 #else
-	p = p.stem() / "WebServer.so";
+	p = p.parent_path() / "WebServer.so";
 	void *lib = ::dlopen(p.generic_string().c_str());
 	if (!lib)
 		std::cout << "Failed to load library" << std::endl;

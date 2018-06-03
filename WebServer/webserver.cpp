@@ -108,7 +108,6 @@ void WebServer::handle_client(SOCKET client)
 			s += std::string(buffer.begin(), buffer.begin() + bytes);
 		}
 	} while (toRecv);
-	std::cout << std::hex << s << std::endl;
 	send(client, http.c_str(), http.size(), 0);
 	SocketUtils::shutdown(client);
 	SocketUtils::close(client);
