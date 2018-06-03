@@ -28,7 +28,7 @@ namespace webserver
 #else
 			std::vector<void*> libs;
 #endif
-			webserver::config::Config conf;
+			webserver::config::Config config;
 		};
 	}
 }

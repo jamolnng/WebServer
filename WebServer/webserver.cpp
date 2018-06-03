@@ -9,14 +9,18 @@ WebServer::WebServer(config::Config& config) :
 	config(config),
 	pluginManager(plugin::PluginManager(config))
 {
-	SocketUtils::init();
+	int init = SocketUtils::init();
+	if (init != 0)
+		throw std::runtime_error("Failed to initialize WinSock");
 	port = config.getInt("port");
 }
 
 
 WebServer::~WebServer()
 {
-	SocketUtils::quit();
+	int quit = SocketUtils::quit();
+	if (quit != 0)
+		throw std::runtime_error("Failed to shutdown WinSock");
 }
 
 void WebServer::start()
@@ -31,12 +35,28 @@ void WebServer::start()
 	hints.ai_protocol = IPPROTO_TCP;
 	hints.ai_flags = AI_PASSIVE;
 
-	getaddrinfo(NULL, std::to_string(port).c_str(), &hints, (addrinfo**)&res);
+	int status;
+	status = getaddrinfo(NULL, std::to_string(port).c_str(), &hints, (addrinfo**)&res);
+	if (status != 0)
+		throw std::runtime_error("Failed to get address info");
 
 	server = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+	if (server == INVALID_SOCKET)
+		throw std::runtime_error("Failed to create socket");
 
-	bind(server, res->ai_addr, (int)res->ai_addrlen);
-	listen(server, SOMAXCONN);
+	status = bind(server, res->ai_addr, (int)res->ai_addrlen);
+	if (status == SOCKET_ERROR)
+	{
+		SocketUtils::close(server);
+		throw std::runtime_error("Failed to bind socket");
+	}
+
+	status = listen(server, SOMAXCONN);
+	if (status == SOCKET_ERROR)
+	{
+		SocketUtils::close(server);
+		throw std::runtime_error("Failed to start listening");
+	}
 
 	running = true;
 	thread = std::thread([&](WebServer* server) { server->run(); }, this);
@@ -44,7 +64,7 @@ void WebServer::start()
 
 void WebServer::stop()
 {
-	for (std::pair<const SOCKET, std::thread> &a : client_threads)
+	for (std::pair<const SOCKET, std::thread> &a : clientThreads)
 	{
 		SocketUtils::shutdown(a.first);
 		SocketUtils::close(a.first);
@@ -67,19 +87,19 @@ void WebServer::run()
 		client = accept(server, NULL, NULL);
 		if (client != INVALID_SOCKET)
 		{
-			if (client_threads.count(client))
+			if (clientThreads.count(client))
 			{
 				SocketUtils::shutdown(client);
 				SocketUtils::close(client);
-				if (client_threads[client].joinable())
-					client_threads[client].join();
+				if (clientThreads[client].joinable())
+					clientThreads[client].join();
 			}
-			client_threads[client] = std::thread([&](WebServer* service) { service->handle_client(client); }, this);
+			clientThreads[client] = std::thread(WebServer::handleClient, client, 256);
 		}
 	}
 }
 
-void WebServer::handle_client(SOCKET client)
+void WebServer::handleClient(SOCKET client, int bufferSize)
 {
 	std::string http = \
 		"HTTP/1.1 200 OK\r\n"
@@ -94,8 +114,21 @@ void WebServer::handle_client(SOCKET client)
 		"Hello, World!\r\n"
 		"</body>\r\n"
 		"</html>\r\n";
-	int buffer_size = 256;
-	std::vector<char> buffer(buffer_size, 0);
+
+
+	sockaddr_in clientInfo;
+	socklen_t addrLen = sizeof(clientInfo);
+	int status;
+	status = getpeername(client, (sockaddr*)&clientInfo, &addrLen);
+	if (status != 0)
+	{
+		SocketUtils::shutdown(client);
+		SocketUtils::close(client);
+		return;
+	}
+	char* clientIP = inet_ntoa(clientInfo.sin_addr);
+
+	std::vector<char> buffer(bufferSize, 0);
 	std::string s;
 	int toRecv;
 	do
@@ -105,9 +138,19 @@ void WebServer::handle_client(SOCKET client)
 		{
 			std::fill(buffer.begin(), buffer.end(), 0);
 			int bytes = recv(client, &buffer[0], (int)buffer.size(), NULL);
-			s += std::string(buffer.begin(), buffer.begin() + bytes);
+			if (bytes > 0)
+			{
+				s += std::string(buffer.begin(), buffer.begin() + bytes);
+			}
+			else
+			{
+				SocketUtils::shutdown(client);
+				SocketUtils::close(client);
+				return;
+			}
 		}
 	} while (toRecv);
+	std::cout << s << std::endl;
 	send(client, http.c_str(), http.size(), 0);
 	SocketUtils::shutdown(client);
 	SocketUtils::close(client);

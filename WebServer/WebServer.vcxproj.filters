@@ -54,6 +54,9 @@
     <ClCompile Include="webserver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="string_utils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sock_utils.h">

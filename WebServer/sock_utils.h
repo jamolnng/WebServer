@@ -19,54 +19,11 @@ namespace webserver
 		class SocketUtils
 		{
 		public:
-			static int init(void)
-			{
-#ifdef _WIN32
-				WSADATA wsa_data;
-				return WSAStartup(MAKEWORD(1, 1), &wsa_data);
-#else
-				return 0;
-#endif
-			}
-
-			static int quit(void)
-			{
-#ifdef _WIN32
-				return WSACleanup();
-#else
-				return 0;
-#endif
-			}
-
-			static int shutdown(SOCKET sock)
-			{
-#ifdef _WIN32
-				return ::shutdown(sock, SD_BOTH);
-#else
-				return ::shutdown(sock, SHUT_RDWR);
-#endif
-			}
-
-			static int close(SOCKET sock)
-			{
-#ifdef _WIN32
-				return closesocket(sock);
-#else
-				return ::close(sock);
-#endif
-			}
-
-			static int ioctl(SOCKET sock, long cmd, int* argp)
-			{
-#ifdef _WIN32
-				unsigned long ul;
-				int ret = ioctlsocket(sock, cmd, &ul);
-				*argp = (int)ul;
-				return ret;
-#else
-				return ::ioctl(sock, cmd, argp);
-#endif
-			}
+			static int init(void);
+			static int quit(void);
+			static int shutdown(SOCKET sock);
+			static int close(SOCKET sock);
+			static int ioctl(SOCKET sock, long cmd, int* argp);
 		};
 	}
 }

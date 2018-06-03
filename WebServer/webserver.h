@@ -21,12 +21,12 @@ namespace webserver
 
 	private:
 		void run();
-		void handle_client(SOCKET client);
+		static void handleClient(SOCKET client, int buffer_size);
 
 		std::thread thread;
 		std::atomic<bool> running{ false };
 		SOCKET server;
-		std::map<SOCKET, std::thread> client_threads;
+		std::map<SOCKET, std::thread> clientThreads;
 		int port;
 		const config::Config& config;
 		plugin::PluginManager pluginManager;

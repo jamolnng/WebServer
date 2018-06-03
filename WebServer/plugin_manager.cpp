@@ -2,17 +2,12 @@
 #include "file_utils.h"
 #include <iostream>
 
-namespace windows
-{
-#include <Windows.h>
-}
-
 using namespace webserver::plugin;
 
 typedef Plugin*(__stdcall *CreatePlugin)();
 
 PluginManager::PluginManager(webserver::config::Config conf) :
-	conf(conf)
+	config(conf)
 {
 	std::filesystem::path plugins(conf["plugins"]);
 	if (std::filesystem::exists(plugins))
@@ -65,7 +60,7 @@ PluginManager::~PluginManager()
 void PluginManager::loadPlugin(std::string name)
 {
 	CreatePlugin create;
-	std::filesystem::path p(conf["plugins"]);
+	std::filesystem::path p(config["plugins"]);
 	p /= name;
 #ifdef _WIN32
 	std::string ext = ".dll";
@@ -76,14 +71,29 @@ void PluginManager::loadPlugin(std::string name)
 #ifdef _WIN32
 	HINSTANCE lib = LoadLibrary(p.generic_string().c_str());
 	if (!lib)
+	{
 		std::cout << "Failed to load library" << std::endl;
+		return;
+	}
 	create = (CreatePlugin)GetProcAddress(lib, "CreatePlugin");
 #else
 	void *lib = ::dlopen(p.generic_string().c_str());
 	if (!lib)
+	{
 		std::cout << "Failed to load library" << std::endl;
+		return;
+	}
 	create = (CreatePlugin)::dlsym(lib, "CreatePlugin");
 #endif
+	if (!create)
+	{
+		std::cout << "Failed to find plugin hook" << std::endl;
+#ifdef _WIN32
+		FreeLibrary(lib);
+#else
+		::dlclose(lib);
+#endif
+	}
 	plugins[name] = create();
 	libs.push_back(lib);
 }
@@ -95,7 +105,7 @@ bool PluginManager::hasPlugin(std::string name)
 
 Plugin* PluginManager::getPlugin(std::string name)
 {
-	if (plugins.find(name) != plugins.end())
+	if (hasPlugin(name))
 		return plugins[name];
 	return nullptr;
 }
