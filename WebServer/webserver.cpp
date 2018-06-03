@@ -1,6 +1,7 @@
 #include "webserver.h"
 #include <algorithm>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include "request_parser.h"
 
@@ -36,24 +37,20 @@ void WebServer::start()
 	hints.ai_protocol = IPPROTO_TCP;
 	hints.ai_flags = AI_PASSIVE;
 
-	int status;
-	status = getaddrinfo(NULL, std::to_string(port).c_str(), &hints, (addrinfo**)&res);
-	if (status != 0)
+	if (getaddrinfo(NULL, std::to_string(port).c_str(), &hints, (addrinfo**)&res) != 0)
 		throw std::runtime_error("Failed to get address info");
 
 	server = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	if (server == INVALID_SOCKET)
 		throw std::runtime_error("Failed to create socket");
 
-	status = bind(server, res->ai_addr, (int)res->ai_addrlen);
-	if (status == SOCKET_ERROR)
+	if (bind(server, res->ai_addr, (int)res->ai_addrlen) == SOCKET_ERROR)
 	{
 		SocketUtils::close(server);
 		throw std::runtime_error("Failed to bind socket");
 	}
 
-	status = listen(server, SOMAXCONN);
-	if (status == SOCKET_ERROR)
+	if (listen(server, SOMAXCONN) == SOCKET_ERROR)
 	{
 		SocketUtils::close(server);
 		throw std::runtime_error("Failed to start listening");
@@ -87,7 +84,9 @@ void WebServer::run()
 	while (running)
 	{
 		client = accept(server, NULL, NULL);
-		if (client != INVALID_SOCKET)
+		if (client == INVALID_SOCKET) // error
+			continue;
+		else
 		{
 			if (clientThreads.count(client))
 			{
@@ -96,34 +95,13 @@ void WebServer::run()
 				if (clientThreads[client].joinable())
 					clientThreads[client].join();
 			}
-			clientThreads[client] = std::thread(WebServer::handleClient,
-												client,
-												256,
-												config.getInt("timeout"));
+			clientThreads[client] = std::thread(WebServer::handleClient, client, 256, config.getInt("timeout"));
 		}
 	}
 }
 
 void WebServer::handleClient(SOCKET client, int bufferSize, int timeout)
 {
-	std::string http_content = \
-		"<!DOCTYPE html>\r\n"
-		"<html>\r\n"
-		"<head>\r\n"
-		"<title>Hello, World!</title>\r\n"
-		"</head>\r\n"
-		"<body>\r\n"
-		"Hello, World!\r\n"
-		"</body>\r\n"
-		"</html>\r\n";
-
-	std::string http_header = \
-		"HTTP/1.1 200 OK\r\n"
-		"Connection: keep-alive\r\n"
-		"Content-type: text/html\r\n"
-		"Content-length: " + std::to_string(http_content.size()) + "\r\n"
-		"\r\n";
-
 	http::request::RequestParser parser;
 	http::request::Request request;
 	std::vector<char> buffer(bufferSize, 0);
@@ -153,7 +131,7 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout)
 		while (!parser.isDone())
 		{
 			std::fill(buffer.begin(), buffer.end(), 0);
-			status = select(client, &set, 0, 0, &tv);
+			status = select((int)client, &set, 0, 0, &tv);
 			if (status == SOCKET_ERROR) // error
 				goto close;
 			else if (status == 0) // timeout
@@ -170,10 +148,50 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout)
 			}
 		}
 		request = parser.get();
-		if (request.generalHeader.connection.empty() ||
-			request.generalHeader.connection == "close")
+		if (request.generalHeader.has("Connection") &&
+			request.generalHeader["Connection"] == "close")
 			goto close;
-		std::string http = http_header + http_content;
+
+		std::string br = "<br/>";
+		std::ostringstream content;
+		content << "<!DOCTYPE html>" << std::endl;
+		content << "<html>" << std::endl;
+		content << "<head>" << std::endl;
+		content << "<title>Hello, World!</title>" << std::endl;
+		content << "</head>" << std::endl;
+		content << "<body>" << std::endl;
+		content << request.requestLine["Method"]
+	     << " " << request.requestLine["Request-URI"]
+		 << " " << request.requestLine["HTTP-Version"]
+		 << br << std::endl;
+		for (auto& a : *request.generalHeader)
+			content << a.first << ": " << a.second << br << std::endl;
+		for (auto& a : *request.requestHeader)
+			content << a.first << ": " << a.second << br << std::endl;
+		for (auto& a : *request.entityHeader)
+			content << a.first << ": " << a.second << br << std::endl;
+		content << "</body>" << std::endl;
+		content << "</html>" << std::endl;
+
+		std::string http_content = \
+			"<!DOCTYPE html>\r\n"
+			"<html>\r\n"
+			"<head>\r\n"
+			"<title>Hello, World!</title>\r\n"
+			"</head>\r\n"
+			"<body>\r\n"
+			"Hello, World!\r\n"
+			"</body>\r\n"
+			"</html>\r\n";
+
+		std::string http_header = \
+			"HTTP/1.1 200 OK\r\n"
+			"Connection: keep-alive\r\n"
+			"Content-type: text/html\r\n"
+			"Content-length: " + std::to_string(content.str().size()) + "\r\n"
+			"\r\n";
+
+		std::string http = http_header + content.str();
 		send(client, http.c_str(), (int)http.size(), 0);
 	}
 close:

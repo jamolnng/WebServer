@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "line.h"
 #include "lib_utils.h"
 #include "string_utils.h"
 
@@ -9,15 +10,11 @@ namespace webserver
 	{
 		namespace request
 		{
-			class LIBEXPORT RequestLine
+			class LIBEXPORT RequestLine :
+				public Line
 			{
 			public:
-				std::string method{};
-				std::string requestURI{};
-				std::string httpVersion{};
-
-				void clear();
-				void parse(const std::string& line);
+				RequestLine();
 			};
 		}
 	}

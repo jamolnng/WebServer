@@ -68,12 +68,24 @@ void StringUtils::trim(std::string& text, const char* toremove)
 
 std::vector<std::string> StringUtils::split(const std::string &s, char delim, size_t max)
 {
-	//if (isspace(delim))
-	//{
-	//	std::istringstream iss(s);
-	//	return std::vector<std::string>{ std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>{} };
-	//}
+	std::vector<std::string> all;
+	std::stringstream ss(s);
+	std::string line;
+	while (std::getline(ss, line, delim))
+		all.push_back(line);
+	if (max == 0)
+		max = all.size();
 	std::vector<std::string> elems;
-	_split(s, delim, std::back_inserter(elems), max);
+	if (all.size() > max)
+	{
+		elems.insert(elems.end(), all.begin(), all.begin() + max - 1);
+		std::string last;
+		for (auto it = all.begin() + max - 1; it != all.end(); ++it)
+			last += *it + std::string(1, delim);
+		last = last.substr(0, last.size() - 1);
+		elems.push_back(last);
+	}
+	else
+		elems = all;
 	return elems;
 }

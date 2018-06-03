@@ -96,6 +96,15 @@
     <ClInclude Include="request_line.h">
       <Filter>Header Files\http\request</Filter>
     </ClInclude>
+    <ClInclude Include="response.h">
+      <Filter>Header Files\http\response</Filter>
+    </ClInclude>
+    <ClInclude Include="header.h">
+      <Filter>Header Files\http</Filter>
+    </ClInclude>
+    <ClInclude Include="line.h">
+      <Filter>Header Files\http</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="plugin.cpp">
@@ -124,6 +133,15 @@
     </ClCompile>
     <ClCompile Include="request_line.cpp">
       <Filter>Source Files\http\request</Filter>
+    </ClCompile>
+    <ClCompile Include="response.cpp">
+      <Filter>Source Files\http\response</Filter>
+    </ClCompile>
+    <ClCompile Include="header.cpp">
+      <Filter>Source Files\http</Filter>
+    </ClCompile>
+    <ClCompile Include="line.cpp">
+      <Filter>Source Files\http</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

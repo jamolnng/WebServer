@@ -2,6 +2,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include "header.h"
 #include "lib_utils.h"
 #include "string_utils.h"
 
@@ -11,21 +12,11 @@ namespace webserver
 	{
 		namespace message
 		{
-			class LIBEXPORT GeneralHeader
+			class LIBEXPORT GeneralHeader :
+				public Header
 			{
 			public:
-				std::string cacheControl{};
-				std::string connection{};
-				std::string date{};
-				std::string pragma{};
-				std::string trailer{};
-				std::string transferEncoding{};
-				std::string upgrade{};
-				std::string via{};
-				std::string warning{};
-
-				void clear();
-				void parse(std::map<std::string, std::string>& parts);
+				GeneralHeader();
 			};
 		}
 	}
