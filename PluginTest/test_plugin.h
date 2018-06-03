@@ -9,7 +9,7 @@ public:
 	TestPlugin();
 };
 
-extern "C" __declspec(dllexport) webserver::plugin::Plugin* __stdcall getPlugin()
+extern "C" __declspec(dllexport) webserver::plugin::Plugin* __stdcall CreatePlugin()
 {
 	return new TestPlugin();
 }

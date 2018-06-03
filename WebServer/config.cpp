@@ -38,6 +38,8 @@ void Config::loadConfig(std::filesystem::path file)
 	}
 	if (!hasItem("plugins"))
 		config["plugins"] = "plugins";
+	if (!hasItem("port"))
+		config["port"] = "80";
 	std::filesystem::path p(config["plugins"]);
 	if (p.is_relative())
 		config["plugins"] = (file.parent_path() / p).generic_string();

@@ -5,6 +5,7 @@
 #include "plugin.h"
 #include "config.h"
 #include "file_utils.h"
+#include <Windows.h>
 
 namespace webserver
 {
@@ -22,6 +23,11 @@ namespace webserver
 
 		private:
 			std::map<std::string, Plugin*> plugins;
+#ifdef _WIN32
+			std::vector<HINSTANCE> libs;
+#else
+			std::vector<void*> libs;
+#endif
 			webserver::config::Config conf;
 		};
 	}

@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	std::filesystem::path p(argv[0]);
 #ifdef _WIN32
 	p = p.parent_path() / "WebServer.dll";
-	HINSTANCE dll = LoadLibraryW(p.c_str());
+	HINSTANCE dll = LoadLibrary(p.generic_string().c_str());
 	if (!dll)
 		std::cout << "Failed to load DLL" << std::endl;
 	main = (webserverMain)GetProcAddress(dll, "webserverMain");

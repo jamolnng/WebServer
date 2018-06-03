@@ -137,6 +137,7 @@
     <ClCompile Include="plugin_manager.cpp" />
     <ClCompile Include="plugin_utils.cpp" />
     <ClCompile Include="sock_utils.cpp" />
+    <ClCompile Include="webserver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
@@ -147,6 +148,10 @@
     <ClInclude Include="plugin_utils.h" />
     <ClInclude Include="sock_utils.h" />
     <ClInclude Include="string_utils.h" />
+    <ClInclude Include="webserver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="webserver.cfg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

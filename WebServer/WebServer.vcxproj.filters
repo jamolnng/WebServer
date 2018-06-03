@@ -51,6 +51,9 @@
     <ClCompile Include="plugin.cpp">
       <Filter>Source Files\plugin</Filter>
     </ClCompile>
+    <ClCompile Include="webserver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sock_utils.h">
@@ -77,5 +80,13 @@
     <ClInclude Include="file_utils.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="webserver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="webserver.cfg">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
