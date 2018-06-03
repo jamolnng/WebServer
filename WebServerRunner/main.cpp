@@ -1,16 +1,16 @@
 #include <iostream>
-#include <string>
-#include <algorithm>
 #include <filesystem>
 
 typedef int(__stdcall *webserverMain)(int, char*[]);
 
 #ifdef _MSC_VER
-#include <Windows.h>
 namespace std { namespace filesystem
 {
 	using namespace std::experimental::filesystem;
 }}
+#endif
+#ifdef _WIN32
+#include <Windows.h>
 #else
 #include <dlfcn.h>
 #endif
@@ -21,13 +21,13 @@ int main(int argc, char* argv[])
 	std::filesystem::path p(argv[0]);
 #ifdef _WIN32
 	p = p.parent_path() / "WebServer.dll";
-	HINSTANCE dll = LoadLibrary(p.generic_string().c_str());
-	if (!dll)
+	HINSTANCE lib = LoadLibrary(p.generic_string().c_str());
+	if (!lib)
 	{
 		std::cout << "Failed to load DLL" << std::endl;
 		return -1;
 	}
-	main = (webserverMain)GetProcAddress(dll, "webserverMain");
+	main = (webserverMain)GetProcAddress(lib, "webserverMain");
 #else
 	p = p.parent_path() / "WebServer.so";
 	void *lib = ::dlopen(p.generic_string().c_str());
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 	{
 		std::cout << "Failed to find hook" << std::endl;
 #ifdef _WIN32
-		FreeLibrary(dll);
+		FreeLibrary(lib);
 #else
 		::dlclose(lib);
 #endif
@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 	}
 	int ret = main(argc, argv);
 #ifdef _WIN32
-	FreeLibrary(dll);
+	FreeLibrary(lib);
 #else
 	::dlclose(lib);
 #endif

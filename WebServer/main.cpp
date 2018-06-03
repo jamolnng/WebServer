@@ -8,7 +8,15 @@ extern "C" __declspec(dllexport) int webserverMain(int argc, char* argv[])
 	webserver::config::Config c(p);
 
 	webserver::WebServer server(c);
-	server.start();
+	try
+	{
+		server.start();
+	}
+	catch (std::runtime_error& err)
+	{
+		std::cout << "Failed to start server: " << err.what() << std::endl;
+		return -1;
+	}
 
 	std::string line;
 	while (server.isRunning() && std::getline(std::cin, line))

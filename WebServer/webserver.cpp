@@ -7,12 +7,12 @@ using webserver::utils::SocketUtils;
 
 WebServer::WebServer(config::Config& config) :
 	config(config),
-	pluginManager(plugin::PluginManager(config))
+	pluginManager(plugin::PluginManager(config)),
+	port(config.getInt("port"))
 {
 	int init = SocketUtils::init();
 	if (init != 0)
 		throw std::runtime_error("Failed to initialize WinSock");
-	port = config.getInt("port");
 }
 
 
@@ -81,9 +81,9 @@ void WebServer::stop()
 
 void WebServer::run()
 {
+	SOCKET client;
 	while (running)
 	{
-		SOCKET client;
 		client = accept(server, NULL, NULL);
 		if (client != INVALID_SOCKET)
 		{
