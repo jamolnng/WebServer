@@ -34,20 +34,8 @@
     <Filter Include="Header Files\http\request">
       <UniqueIdentifier>{9fd3af29-13e2-4d66-999f-a8266f3ee330}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\http\response">
-      <UniqueIdentifier>{fe664f50-9ab9-4e3e-af8b-21ad69c66362}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\http\request">
       <UniqueIdentifier>{c4720c18-4fc5-4003-8711-39306004752d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\http\response">
-      <UniqueIdentifier>{9797a83a-d6a4-4a4c-b699-e1a8bed08493}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\http\message">
-      <UniqueIdentifier>{b430c769-080a-4194-8ea4-3ace655427db}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\http\entity">
-      <UniqueIdentifier>{7d97f884-965a-42a6-b007-941e583ff67b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -76,21 +64,6 @@
     </ClInclude>
     <ClInclude Include="webserver.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="request.h">
-      <Filter>Header Files\http\request</Filter>
-    </ClInclude>
-    <ClInclude Include="request_line.h">
-      <Filter>Header Files\http\request</Filter>
-    </ClInclude>
-    <ClInclude Include="request_header.h">
-      <Filter>Header Files\http\request</Filter>
-    </ClInclude>
-    <ClInclude Include="general_header.h">
-      <Filter>Header Files\http\message</Filter>
-    </ClInclude>
-    <ClInclude Include="entity_header.h">
-      <Filter>Header Files\http\entity</Filter>
     </ClInclude>
     <ClInclude Include="request_parser.h">
       <Filter>Header Files\http\request</Filter>

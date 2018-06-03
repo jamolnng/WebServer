@@ -20,8 +20,8 @@ namespace webserver
 				const bool isDone() const;
 				const Request get() const;
 
-				std::string requestStr{};
 			private:
+				std::string requestStr{};
 				Request request{};
 				bool done{ false };
 			};

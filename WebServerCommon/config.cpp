@@ -38,8 +38,12 @@ void Config::loadConfig(std::filesystem::path file)
 	}
 	if (!hasItem("plugins"))
 		config["plugins"] = "plugins";
+	if (!hasItem("sites"))
+		config["sites"] = "sites";
 	if (!hasItem("port"))
 		config["port"] = "80";
+	if (!hasItem("timeout"))
+		config["timeout"] = 5;
 	std::filesystem::path p(config["plugins"]);
 	if (p.is_relative())
 		config["plugins"] = (file.parent_path() / p).generic_string();

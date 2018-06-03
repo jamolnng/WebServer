@@ -31,6 +31,36 @@
     <Filter Include="Source Files\config">
       <UniqueIdentifier>{ce533e65-c550-4a02-ae46-e6513f0508b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\http">
+      <UniqueIdentifier>{884b9ab1-6da9-43b8-81f7-5006caacb358}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\http\message">
+      <UniqueIdentifier>{47f44169-17c1-4f14-934c-e3fa5921c9fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\http\entity">
+      <UniqueIdentifier>{693671c6-793c-4798-b767-5330dc755da2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\http\request">
+      <UniqueIdentifier>{db927fc8-87f0-49a4-97ce-2454b9c0d49d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\http\response">
+      <UniqueIdentifier>{c3caeac3-fe7d-4e3c-9010-da224b1f6578}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\http">
+      <UniqueIdentifier>{23a3b2f3-81aa-4b4f-aeb9-83a669e84cf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\http\message">
+      <UniqueIdentifier>{b9cf537b-3148-4f53-a8d1-853b4a3c5f6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\http\entity">
+      <UniqueIdentifier>{9452b143-876d-4055-bbf7-439fca13a0d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\http\request">
+      <UniqueIdentifier>{1ba4570e-191c-4afd-9ea3-3acba205cb7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\http\response">
+      <UniqueIdentifier>{cf0cc9e6-3da9-4307-b643-10ce7eea5888}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="plugin.h">
@@ -51,6 +81,21 @@
     <ClInclude Include="file_utils.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="general_header.h">
+      <Filter>Header Files\http\message</Filter>
+    </ClInclude>
+    <ClInclude Include="entity_header.h">
+      <Filter>Header Files\http\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="request.h">
+      <Filter>Header Files\http\request</Filter>
+    </ClInclude>
+    <ClInclude Include="request_header.h">
+      <Filter>Header Files\http\request</Filter>
+    </ClInclude>
+    <ClInclude Include="request_line.h">
+      <Filter>Header Files\http\request</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="plugin.cpp">
@@ -64,6 +109,21 @@
     </ClCompile>
     <ClCompile Include="config.cpp">
       <Filter>Source Files\config</Filter>
+    </ClCompile>
+    <ClCompile Include="general_header.cpp">
+      <Filter>Source Files\http\message</Filter>
+    </ClCompile>
+    <ClCompile Include="entity_header.cpp">
+      <Filter>Source Files\http\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="request.cpp">
+      <Filter>Source Files\http\request</Filter>
+    </ClCompile>
+    <ClCompile Include="request_header.cpp">
+      <Filter>Source Files\http\request</Filter>
+    </ClCompile>
+    <ClCompile Include="request_line.cpp">
+      <Filter>Source Files\http\request</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

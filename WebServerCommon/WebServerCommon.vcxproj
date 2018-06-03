@@ -120,16 +120,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
+    <ClInclude Include="entity_header.h" />
     <ClInclude Include="file_utils.h" />
+    <ClInclude Include="general_header.h" />
     <ClInclude Include="lib_utils.h" />
     <ClInclude Include="plugin.h" />
     <ClInclude Include="plugin_utils.h" />
+    <ClInclude Include="request.h" />
+    <ClInclude Include="request_header.h" />
+    <ClInclude Include="request_line.h" />
     <ClInclude Include="string_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="config.cpp" />
+    <ClCompile Include="entity_header.cpp" />
+    <ClCompile Include="general_header.cpp" />
     <ClCompile Include="plugin.cpp" />
     <ClCompile Include="plugin_utils.cpp" />
+    <ClCompile Include="request.cpp" />
+    <ClCompile Include="request_header.cpp" />
+    <ClCompile Include="request_line.cpp" />
     <ClCompile Include="string_utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

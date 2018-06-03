@@ -142,12 +142,7 @@
     <ClCompile Include="webserver.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="entity_header.h" />
-    <ClInclude Include="general_header.h" />
     <ClInclude Include="request_parser.h" />
-    <ClInclude Include="request.h" />
-    <ClInclude Include="request_header.h" />
-    <ClInclude Include="request_line.h" />
     <ClInclude Include="plugin_manager.h" />
     <ClInclude Include="sock_utils.h" />
     <ClInclude Include="webserver.h" />

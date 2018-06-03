@@ -1,7 +1,7 @@
 #include "webserver.h"
-#include <string>
-#include <iostream>
 #include <algorithm>
+#include <iostream>
+#include <string>
 #include "request_parser.h"
 
 using namespace webserver;
@@ -96,12 +96,15 @@ void WebServer::run()
 				if (clientThreads[client].joinable())
 					clientThreads[client].join();
 			}
-			clientThreads[client] = std::thread(WebServer::handleClient, client, 256);
+			clientThreads[client] = std::thread(WebServer::handleClient,
+												client,
+												256,
+												config.getInt("timeout"));
 		}
 	}
 }
 
-void WebServer::handleClient(SOCKET client, int bufferSize)
+void WebServer::handleClient(SOCKET client, int bufferSize, int timeout)
 {
 	std::string http_content = \
 		"<!DOCTYPE html>\r\n"
@@ -122,18 +125,27 @@ void WebServer::handleClient(SOCKET client, int bufferSize)
 		"\r\n";
 
 	http::request::RequestParser parser;
-	sockaddr_in clientInfo;
+	http::request::Request request;
+	std::vector<char> buffer(bufferSize, 0);
+
+	/*sockaddr_in clientInfo;
 	socklen_t addrLen = sizeof(clientInfo);
 	char* clientIP;
-
-	std::vector<char> buffer(bufferSize, 0);
-	int bytes;
-	bool keepAlive = true;
-	http::request::Request request;
 	
 	if (getpeername(client, (sockaddr*)&clientInfo, &addrLen) != 0)
 		goto close;
-	clientIP = inet_ntoa(clientInfo.sin_addr);
+	clientIP = inet_ntoa(clientInfo.sin_addr);*/
+
+	fd_set set;
+	struct timeval tv;
+	FD_ZERO(&set);
+	FD_SET(client, &set);
+	tv.tv_sec = 5;
+	tv.tv_usec = 0;
+
+	int status;
+	int bytes;
+
 	
 	while (true)
 	{
@@ -141,14 +153,25 @@ void WebServer::handleClient(SOCKET client, int bufferSize)
 		while (!parser.isDone())
 		{
 			std::fill(buffer.begin(), buffer.end(), 0);
-			bytes = recv(client, &buffer[0], (int)buffer.size(), NULL);
-			if (bytes > 0)
-				parser.parse(std::string(&buffer[0], bytes));
-			else
+			status = select(client, &set, 0, 0, &tv);
+			if (status == SOCKET_ERROR) // error
 				goto close;
+			else if (status == 0) // timeout
+				goto close;
+			else
+			{
+				bytes = recv(client, &buffer[0], (int)buffer.size(), NULL);
+				if (bytes == SOCKET_ERROR) // error
+					goto close;
+				else if (bytes == 0) // peer disconnect
+					goto close;
+				else
+					parser.parse(std::string(&buffer[0], bytes));
+			}
 		}
 		request = parser.get();
-		if (request.generalHeader.connection.empty() || request.generalHeader.connection == "close")
+		if (request.generalHeader.connection.empty() ||
+			request.generalHeader.connection == "close")
 			goto close;
 		std::string http = http_header + http_content;
 		send(client, http.c_str(), (int)http.size(), 0);
