@@ -9,7 +9,7 @@ namespace webserver
 	{
 		namespace request
 		{
-			class LIBEXPORT RequestHeader
+			class RequestHeader
 			{
 			public:
 				std::string accept{};

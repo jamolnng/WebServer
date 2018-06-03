@@ -8,13 +8,14 @@
 #include <locale>
 #include <codecvt>
 #include <iterator>
+#include "lib_utils.h"
 
 
 namespace webserver
 {
 	namespace utils
 	{
-		class StringUtils
+		class LIBEXPORT StringUtils
 		{
 		public:
 			static void upper(std::string& text);

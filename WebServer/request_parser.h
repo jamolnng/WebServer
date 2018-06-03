@@ -9,7 +9,7 @@ namespace webserver
 	{
 		namespace request
 		{
-			class LIBEXPORT RequestParser
+			class RequestParser
 			{
 			public:
 				RequestParser();

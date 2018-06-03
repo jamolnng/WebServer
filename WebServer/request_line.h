@@ -7,7 +7,7 @@ namespace webserver
 {
 	namespace http
 	{
-		class LIBEXPORT RequestLine
+		class RequestLine
 		{
 		public:
 			std::string method{};

@@ -9,7 +9,7 @@ namespace webserver
 	{
 		namespace entity
 		{
-			class LIBEXPORT EntityHeader
+			class EntityHeader
 			{
 			public:
 				std::string allow{};

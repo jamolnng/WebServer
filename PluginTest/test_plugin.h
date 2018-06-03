@@ -1,15 +1,15 @@
 #pragma once
 #include <string>
-#include "plugin.h"
+#include "plugin_utils.h"
+
+using webserver::plugin::Plugin;
+using webserver::config::Config;
 
 class TestPlugin :
 	public webserver::plugin::Plugin
 {
 public:
-	TestPlugin();
+	TestPlugin(const webserver::config::Config* config);
 };
 
-extern "C" __declspec(dllexport) webserver::plugin::Plugin* __stdcall CreatePlugin()
-{
-	return new TestPlugin();
-}
+REGISTER_PLUGIN(TestPlugin);

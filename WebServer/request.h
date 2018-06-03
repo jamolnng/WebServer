@@ -13,7 +13,7 @@ namespace webserver
 	{
 		namespace request
 		{
-			class LIBEXPORT Request
+			class Request
 			{
 			public:
 				RequestLine requestLine{};

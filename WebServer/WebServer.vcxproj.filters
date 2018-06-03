@@ -25,12 +25,6 @@
     <Filter Include="Source Files\plugin">
       <UniqueIdentifier>{056686c8-685b-4d2d-861f-684e3375b9d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\config">
-      <UniqueIdentifier>{6399aae0-7940-47cb-be79-dd285773fcb9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\config">
-      <UniqueIdentifier>{b4c73519-a775-4108-a887-de2db5c75c7e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\http">
       <UniqueIdentifier>{72d7e872-e6a4-4c15-ae32-ec603c5dc931}</UniqueIdentifier>
     </Filter>
@@ -60,23 +54,11 @@
     <ClCompile Include="sock_utils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="plugin_utils.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
     <ClCompile Include="plugin_manager.cpp">
-      <Filter>Source Files\plugin</Filter>
-    </ClCompile>
-    <ClCompile Include="config.cpp">
-      <Filter>Source Files\config</Filter>
-    </ClCompile>
-    <ClCompile Include="plugin.cpp">
       <Filter>Source Files\plugin</Filter>
     </ClCompile>
     <ClCompile Include="webserver.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="string_utils.cpp">
-      <Filter>Source Files\utils</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files\utils</Filter>
@@ -89,26 +71,8 @@
     <ClInclude Include="sock_utils.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="plugin_utils.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
     <ClInclude Include="plugin_manager.h">
       <Filter>Header Files\plugin</Filter>
-    </ClInclude>
-    <ClInclude Include="plugin.h">
-      <Filter>Header Files\plugin</Filter>
-    </ClInclude>
-    <ClInclude Include="config.h">
-      <Filter>Header Files\config</Filter>
-    </ClInclude>
-    <ClInclude Include="string_utils.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_utils.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="file_utils.h">
-      <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="webserver.h">
       <Filter>Header Files</Filter>

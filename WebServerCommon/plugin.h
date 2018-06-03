@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "lib_utils.h"
+#include "config.h"
 
 namespace webserver
 {
@@ -9,12 +10,10 @@ namespace webserver
 		class LIBEXPORT Plugin
 		{
 		public:
-			Plugin(std::string name);
-
-			const std::string& getName() const;
+			Plugin(const webserver::config::Config* config);
 
 		private:
-			std::string name;
+			const config::Config* config;
 		};
 	}
 }

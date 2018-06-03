@@ -1,7 +1,7 @@
 #include "webserver.h"
 #include <iostream>
 
-extern "C" __declspec(dllexport) int webserverMain(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 	std::filesystem::path p(argv[0]);
 	p = p.parent_path() / "webserver.cfg";

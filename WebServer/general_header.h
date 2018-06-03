@@ -10,7 +10,7 @@ namespace webserver
 	{
 		namespace message
 		{
-			class LIBEXPORT GeneralHeader
+			class GeneralHeader
 			{
 			public:
 				std::string cacheControl{};
