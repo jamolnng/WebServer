@@ -93,6 +93,7 @@ void PluginManager::loadPlugin(std::string name)
 #else
 		::dlclose(lib);
 #endif
+		return;
 	}
 	plugins[name] = create();
 	libs.push_back(lib);
