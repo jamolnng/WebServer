@@ -72,7 +72,10 @@ std::vector<std::string> StringUtils::split(const std::string &s, char delim, si
 	std::stringstream ss(s);
 	std::string line;
 	while (std::getline(ss, line, delim))
+	{
+		trim(line);
 		all.push_back(line);
+	}
 	if (max == 0)
 		max = all.size();
 	std::vector<std::string> elems;
@@ -83,6 +86,7 @@ std::vector<std::string> StringUtils::split(const std::string &s, char delim, si
 		for (auto it = all.begin() + max - 1; it != all.end(); ++it)
 			last += *it + std::string(1, delim);
 		last = last.substr(0, last.size() - 1);
+		trim(last);
 		elems.push_back(last);
 	}
 	else

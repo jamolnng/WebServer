@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include "request_parser.h"
+#include "response.h"
 
 using namespace webserver;
 using webserver::utils::SocketUtils;
@@ -104,6 +105,7 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout)
 {
 	http::request::RequestParser parser;
 	http::request::Request request;
+	http::response::Response response;
 	std::vector<char> buffer(bufferSize, 0);
 
 	/*sockaddr_in clientInfo;
@@ -128,6 +130,7 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout)
 	while (true)
 	{
 		parser.clear();
+		response.clear();
 		while (!parser.isDone())
 		{
 			std::fill(buffer.begin(), buffer.end(), 0);
@@ -173,25 +176,17 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout)
 		content << "</body>" << std::endl;
 		content << "</html>" << std::endl;
 
-		std::string http_content = \
-			"<!DOCTYPE html>\r\n"
-			"<html>\r\n"
-			"<head>\r\n"
-			"<title>Hello, World!</title>\r\n"
-			"</head>\r\n"
-			"<body>\r\n"
-			"Hello, World!\r\n"
-			"</body>\r\n"
-			"</html>\r\n";
+		response.statusLine["HTTP-Version"] = request.requestLine["HTTP-Version"];
+		response.statusLine["Status-Code"] = "200";
+		response.statusLine["Reason-Phrase"] = "OK";
 
-		std::string http_header = \
-			"HTTP/1.1 200 OK\r\n"
-			"Connection: keep-alive\r\n"
-			"Content-type: text/html\r\n"
-			"Content-length: " + std::to_string(content.str().size()) + "\r\n"
-			"\r\n";
+		response.generalHeader["Connection"] = request.generalHeader["Connection"];
+		response.generalHeader["Content-Type"] = "text/html";
+		response.generalHeader["Content-Length"] = std::to_string(content.str().size());
 
+		std::string http_header = response.build();
 		std::string http = http_header + content.str();
+
 		send(client, http.c_str(), (int)http.size(), 0);
 	}
 close:

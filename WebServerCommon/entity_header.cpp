@@ -1,5 +1,5 @@
 #include "entity_header.h"
-#include <iostream>
+#include <sstream>
 
 using namespace webserver::http::entity;
 
@@ -23,4 +23,12 @@ EntityHeader::EntityHeader() :
 void EntityHeader::parse(std::map<std::string, std::string>& parts)
 {
 	items.insert(parts.begin(), parts.end());
+}
+
+std::string EntityHeader::build()
+{
+	std::ostringstream oss;
+	for (auto& p : items)
+		oss << p.first << ": " << p.second << std::endl;
+	return oss.str();
 }

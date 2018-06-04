@@ -10,11 +10,12 @@ namespace webserver
 		class LIBEXPORT Line
 		{
 		public:
-			std::string const& operator[](std::string item) const;
-			std::string& operator[](std::string item);
+			std::string& operator[](const std::string& item);
+			std::string& operator[](std::string&& item);
 			const std::map<std::string, std::string>& operator*() const;
 			void clear();
 			void parse(const std::string& line);
+			virtual std::string build();
 
 		protected:
 			std::vector<std::string> names;

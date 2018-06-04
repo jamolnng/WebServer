@@ -1,4 +1,5 @@
 #include "header.h"
+#include <sstream>
 
 using namespace webserver::http;
 
@@ -12,14 +13,14 @@ const std::map<std::string, std::string>& Header::operator*() const
 	return items;
 }
 
-std::string const& Header::operator[](std::string item) const
+std::string& Header::operator[](const std::string& item)
 {
-	return items.at(item);
+	return items.insert(std::make_pair(item, std::string())).first->second;
 }
 
-std::string& Header::operator[](std::string item)
+std::string& Header::operator[](std::string&& item)
 {
-	return items[item];
+	return items.try_emplace(std::move(item)).first->second;
 }
 
 void Header::clear()
@@ -50,4 +51,12 @@ bool Header::has(std::string item)
 bool Header::isValid(const std::string& val)
 {
 	return Header::inContainer<std::set<std::string>>(val, valid);
+}
+
+std::string Header::build()
+{
+	std::ostringstream oss;
+	for (auto& p : items)
+		oss << p.first << ": " << p.second << std::endl;
+	return oss.str();
 }

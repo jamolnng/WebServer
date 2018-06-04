@@ -105,6 +105,12 @@
     <ClInclude Include="line.h">
       <Filter>Header Files\http</Filter>
     </ClInclude>
+    <ClInclude Include="status_line.h">
+      <Filter>Header Files\http\response</Filter>
+    </ClInclude>
+    <ClInclude Include="response_header.h">
+      <Filter>Header Files\http\response</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="plugin.cpp">
@@ -142,6 +148,12 @@
     </ClCompile>
     <ClCompile Include="line.cpp">
       <Filter>Source Files\http</Filter>
+    </ClCompile>
+    <ClCompile Include="status_line.cpp">
+      <Filter>Source Files\http\response</Filter>
+    </ClCompile>
+    <ClCompile Include="response_header.cpp">
+      <Filter>Source Files\http\response</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

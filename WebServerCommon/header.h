@@ -10,12 +10,13 @@ namespace webserver
 		class LIBEXPORT Header
 		{
 		public:
-			std::string const& operator[](std::string item) const;
-			std::string& operator[](std::string item);
+			std::string& operator[](const std::string& item);
+			std::string& operator[](std::string&& item);
 			void clear();
 			bool has(std::string item);
 			const std::map<std::string, std::string>& operator*() const;
 			virtual void parse(std::map<std::string, std::string>& parts);
+			virtual std::string build();
 
 		protected:
 			std::map<std::string, std::string> items;
