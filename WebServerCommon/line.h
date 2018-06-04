@@ -22,6 +22,14 @@ namespace webserver
 			std::map<std::string, std::string> items;
 
 			Line(std::vector<std::string> names);
+
+			bool isValid(const std::string& val);
+
+			template<typename Container>
+			static bool inContainer(const std::string val, const Container& cont)
+			{
+				return std::find(cont.begin(), cont.end(), val) != cont.end();
+			}
 		};
 	}
 }

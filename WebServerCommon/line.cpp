@@ -40,6 +40,12 @@ std::string Line::build()
 {
 	std::stringstream oss;
 	for (auto& n : names)
-		oss << items[n] << " ";
+		if(isValid(n))
+			oss << items[n] << " ";
 	return oss.str().substr(0, oss.str().size() - 1);
+}
+
+bool Line::isValid(const std::string& val)
+{
+	return Line::inContainer<std::vector<std::string>>(val, names);
 }

@@ -57,6 +57,7 @@ std::string Header::build()
 {
 	std::ostringstream oss;
 	for (auto& p : items)
-		oss << p.first << ": " << p.second << std::endl;
+		if(isValid(p.first))
+			oss << p.first << ": " << p.second << std::endl;
 	return oss.str();
 }

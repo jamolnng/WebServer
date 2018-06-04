@@ -181,8 +181,9 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout)
 		response.statusLine["Reason-Phrase"] = "OK";
 
 		response.generalHeader["Connection"] = request.generalHeader["Connection"];
-		response.generalHeader["Content-Type"] = "text/html";
-		response.generalHeader["Content-Length"] = std::to_string(content.str().size());
+		
+		response.entityHeader["Content-Type"] = "text/html";
+		response.entityHeader["Content-Length"] = std::to_string(content.str().size());
 
 		std::string http_header = response.build();
 		std::string http = http_header + content.str();
