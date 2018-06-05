@@ -13,9 +13,9 @@ namespace webserver
 		class LIBEXPORT PluginUtils
 		{
 #define REGISTER_PLUGIN(plugin) \
-extern "C" __declspec(dllexport) Plugin* __stdcall CreatePlugin(Config* config) \
+extern "C" __declspec(dllexport) Plugin* __stdcall CreatePlugin() \
 { \
-	return new plugin(config); \
+	return new plugin(); \
 }
 
 		private:

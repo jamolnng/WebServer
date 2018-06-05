@@ -12,7 +12,7 @@ using webserver::utils::SocketUtils;
 WebServer::WebServer(config::Config& config) :
 	config(config),
 	pluginManager(plugin::PluginManager(config)),
-	port(config.getInt("port"))
+	port(config.get<int>("port"))
 {
 	int init = SocketUtils::init();
 	if (init != 0)
@@ -96,7 +96,7 @@ void WebServer::run()
 				if (clientThreads[client].joinable())
 					clientThreads[client].join();
 			}
-			clientThreads[client] = std::thread(WebServer::handleClient, client, 256, config.getInt("timeout"));
+			clientThreads[client] = std::thread(WebServer::handleClient, client, 256, config.get<int>("timeout"));
 		}
 	}
 }

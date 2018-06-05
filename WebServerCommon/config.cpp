@@ -5,10 +5,18 @@ using namespace webserver::config;
 
 Config::Config(std::filesystem::path file)
 {
-	loadConfig(file);
+	load(file);
 }
 
-void Config::loadConfig(std::filesystem::path file)
+Config::Config(std::filesystem::path file, std::map<std::string, std::string> defaults)
+{
+	for (auto& a : defaults)
+		std::cout << a.first << ": " << a.second << std::endl;
+	config.insert(defaults.begin(), defaults.end());
+	load(file);
+}
+
+void Config::load(std::filesystem::path file)
 {
 	std::ifstream in(file, std::ios::binary);
 	if (in)
@@ -36,45 +44,19 @@ void Config::loadConfig(std::filesystem::path file)
 		}
 		in.close();
 	}
-	if (!hasItem("plugins"))
-		config["plugins"] = "plugins";
-	if (!hasItem("sites"))
-		config["sites"] = "sites";
-	if (!hasItem("port"))
-		config["port"] = "80";
-	if (!hasItem("timeout"))
-		config["timeout"] = 5;
-	std::filesystem::path p(config["plugins"]);
-	if (p.is_relative())
-		config["plugins"] = (file.parent_path() / p).generic_string();
 }
 
-inline bool Config::hasItem(std::string item)
+inline bool Config::has(std::string item)
 {
 	return config.find(item) != config.end();
 }
 
-inline bool Config::getBool(std::string item)
+std::string& Config::operator[](const std::string& item)
 {
-	return config[item] == "true";
+	return config.insert(std::make_pair(item, std::string())).first->second;
 }
 
-inline double Config::getDouble(std::string item)
+std::string& Config::operator[](std::string&& item)
 {
-	return std::stod(config[item]);
-}
-
-inline int Config::getInt(std::string item)
-{
-	return std::stoi(config[item]);
-}
-
-inline std::string Config::getString(std::string item)
-{
-	return config[item];
-}
-
-std::string& Config::operator[](std::string item)
-{
-	return config[item];
+	return config.try_emplace(std::move(item)).first->second;
 }

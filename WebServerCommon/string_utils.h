@@ -26,6 +26,7 @@ namespace webserver
 			static void trim(std::string& text);
 			static void trim(std::string& text, const char* toremove);
 			static std::vector<std::string> split(const std::string &s, char delim, size_t max = 0);
+			static std::string strerror(int errnum);
 
 			template <typename Iter>
 			static std::string join(Iter begin, Iter end, std::string const& separator)

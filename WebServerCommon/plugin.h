@@ -10,10 +10,7 @@ namespace webserver
 		class LIBEXPORT Plugin
 		{
 		public:
-			Plugin(const webserver::config::Config* config);
-
-		private:
-			const config::Config* config;
+			Plugin();
 		};
 	}
 }

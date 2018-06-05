@@ -111,6 +111,9 @@
     <ClInclude Include="response_header.h">
       <Filter>Header Files\http\response</Filter>
     </ClInclude>
+    <ClInclude Include="win_utils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="plugin.cpp">
@@ -154,6 +157,12 @@
     </ClCompile>
     <ClCompile Include="response_header.cpp">
       <Filter>Source Files\http\response</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_utils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="win_utils.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

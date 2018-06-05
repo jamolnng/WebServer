@@ -9,7 +9,7 @@ class TestPlugin :
 	public webserver::plugin::Plugin
 {
 public:
-	TestPlugin(const webserver::config::Config* config);
+	TestPlugin();
 };
 
 REGISTER_PLUGIN(TestPlugin);

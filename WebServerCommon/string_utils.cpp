@@ -93,3 +93,8 @@ std::vector<std::string> StringUtils::split(const std::string &s, char delim, si
 		elems = all;
 	return elems;
 }
+
+std::string StringUtils::strerror(int errnum)
+{
+	return std::string(std::strerror(errnum));
+}

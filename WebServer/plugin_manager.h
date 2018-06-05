@@ -5,7 +5,7 @@
 #include "plugin.h"
 #include "config.h"
 #include "file_utils.h"
-#include <Windows.h>
+#include "lib_utils.h"
 
 namespace webserver
 {
@@ -14,20 +14,15 @@ namespace webserver
 		class PluginManager
 		{
 		public:
-			PluginManager(webserver::config::Config config);
+			PluginManager(const webserver::config::Config& config);
 			~PluginManager();
 
-			void loadPlugin(std::string name);
-			bool hasPlugin(std::string name);
-			Plugin* getPlugin(std::string name);
+			void loadPlugin(const std::string& name);
+			bool hasPlugin(const std::string& name);
+			const Plugin& getPlugin(const std::string& name);
 
 		private:
-			std::map<std::string, Plugin*> plugins;
-#ifdef _WIN32
-			std::vector<HINSTANCE> libs;
-#else
-			std::vector<void*> libs;
-#endif
+			std::map<std::string, std::pair<utils::LibUtils::LIBHANDLE, Plugin*>> plugins;
 			webserver::config::Config config;
 		};
 	}
