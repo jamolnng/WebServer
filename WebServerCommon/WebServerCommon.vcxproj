@@ -133,6 +133,7 @@
     <ClInclude Include="request_line.h" />
     <ClInclude Include="response.h" />
     <ClInclude Include="response_header.h" />
+    <ClInclude Include="status_code.h" />
     <ClInclude Include="status_line.h" />
     <ClInclude Include="string_utils.h" />
     <ClInclude Include="win_utils.h" />
@@ -151,6 +152,7 @@
     <ClCompile Include="request_line.cpp" />
     <ClCompile Include="response.cpp" />
     <ClCompile Include="response_header.cpp" />
+    <ClCompile Include="status_code.cpp" />
     <ClCompile Include="status_line.cpp" />
     <ClCompile Include="string_utils.cpp" />
     <ClCompile Include="win_utils.cpp" />

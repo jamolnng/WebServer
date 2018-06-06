@@ -114,6 +114,9 @@
     <ClInclude Include="win_utils.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="status_code.h">
+      <Filter>Header Files\http\response</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="plugin.cpp">
@@ -163,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="win_utils.cpp">
       <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="status_code.cpp">
+      <Filter>Source Files\http\response</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
