@@ -57,7 +57,7 @@ namespace webserver
 				static std::string getString(int code);
 				static void insert(int code, const std::string& str);
 			private:
-				StatusCode() {};
+				StatusCode() noexcept {};
 			};
 		}
 	}

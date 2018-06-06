@@ -3,7 +3,7 @@
 
 using namespace webserver::http::entity;
 
-EntityHeader::EntityHeader() :
+EntityHeader::EntityHeader() noexcept :
 	Header(
 		{
 			"Allow",

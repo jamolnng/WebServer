@@ -12,7 +12,8 @@ using webserver::utils::SocketUtils;
 WebServer::WebServer(config::Config& config) :
 	config(config),
 	pluginManager(plugin::PluginManager(config)),
-	port(config.get<int>("port"))
+	port(config.get<int>("port")),
+	server(SOCKET())
 {
 	int init = SocketUtils::init();
 	if (init != 0)

@@ -9,7 +9,7 @@ class TestPlugin :
 	public webserver::plugin::Plugin
 {
 public:
-	TestPlugin();
+	TestPlugin() noexcept;
 };
 
 REGISTER_PLUGIN(TestPlugin);

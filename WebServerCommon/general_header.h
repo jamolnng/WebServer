@@ -16,7 +16,7 @@ namespace webserver
 				public Header
 			{
 			public:
-				GeneralHeader();
+				GeneralHeader() noexcept;
 			};
 		}
 	}

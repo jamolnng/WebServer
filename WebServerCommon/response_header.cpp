@@ -2,7 +2,7 @@
 
 using namespace webserver::http::response;
 
-ResponseHeader::ResponseHeader() :
+ResponseHeader::ResponseHeader() noexcept :
 	Header(
 		{
 			"Accept-Ranges",

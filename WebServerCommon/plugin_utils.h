@@ -19,7 +19,7 @@ extern "C" __declspec(dllexport) Plugin* __stdcall CreatePlugin() \
 }
 
 		private:
-			PluginUtils() {}
+			PluginUtils() noexcept {}
 		
 		};
 	}

@@ -14,7 +14,7 @@ namespace webserver
 				public Header
 			{
 			public:
-				EntityHeader();
+				EntityHeader() noexcept;
 
 				void parse(std::map<std::string, std::string>& parts) override;
 				std::string build() override;

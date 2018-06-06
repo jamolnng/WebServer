@@ -11,7 +11,7 @@ namespace webserver
 				public Line
 			{
 			public:
-				StatusLine();
+				StatusLine() noexcept;
 			};
 		}
 	}

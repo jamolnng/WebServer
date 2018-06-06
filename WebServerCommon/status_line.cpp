@@ -2,7 +2,7 @@
 
 using namespace webserver::http::response;
 
-StatusLine::StatusLine() :
+StatusLine::StatusLine() noexcept :
 	Line(
 		{
 			"HTTP-Version",

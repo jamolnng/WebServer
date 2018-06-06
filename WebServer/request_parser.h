@@ -12,7 +12,7 @@ namespace webserver
 			class RequestParser
 			{
 			public:
-				RequestParser();
+				RequestParser() noexcept;
 				~RequestParser();
 
 				void parse(std::string part);

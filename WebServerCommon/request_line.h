@@ -14,7 +14,7 @@ namespace webserver
 				public Line
 			{
 			public:
-				RequestLine();
+				RequestLine() noexcept;
 			};
 		}
 	}

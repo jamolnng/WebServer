@@ -2,7 +2,7 @@
 
 using namespace webserver::http::request;
 
-RequestHeader::RequestHeader() :
+RequestHeader::RequestHeader() noexcept :
 	Header(
 		{
 			"Accept",

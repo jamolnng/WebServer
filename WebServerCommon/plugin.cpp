@@ -2,6 +2,6 @@
 
 using namespace webserver::plugin;
 
-Plugin::Plugin()
+Plugin::Plugin() noexcept
 {
 }

@@ -42,7 +42,7 @@ int SocketUtils::close(SOCKET sock)
 int SocketUtils::ioctl(SOCKET sock, long cmd, int* argp)
 {
 #ifdef _WIN32
-	unsigned long ul;
+	unsigned long ul = 0;
 	int ret = ioctlsocket(sock, cmd, &ul);
 	*argp = (int)ul;
 	return ret;

@@ -2,7 +2,7 @@
 
 using namespace webserver::http::message;
 
-GeneralHeader::GeneralHeader() :
+GeneralHeader::GeneralHeader() noexcept :
 	Header(
 		{
 			"Cache-Control",

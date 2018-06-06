@@ -10,7 +10,7 @@ namespace webserver
 				public Header
 			{
 			public:
-				ResponseHeader();
+				ResponseHeader() noexcept;
 			};
 		}
 	}

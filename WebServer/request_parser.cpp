@@ -3,7 +3,7 @@
 
 using namespace webserver::http::request;
 
-RequestParser::RequestParser()
+RequestParser::RequestParser() noexcept
 {
 }
 
