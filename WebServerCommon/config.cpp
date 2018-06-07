@@ -10,8 +10,6 @@ Config::Config(std::filesystem::path file)
 
 Config::Config(std::filesystem::path file, std::map<std::string, std::string> defaults)
 {
-	for (auto& a : defaults)
-		std::cout << a.first << ": " << a.second << std::endl;
 	config.insert(defaults.begin(), defaults.end());
 	load(file);
 }

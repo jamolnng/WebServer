@@ -5,9 +5,11 @@
 #include <string>
 #include "request_parser.h"
 #include "response.h"
+#include "status_code.h"
 
 using namespace webserver;
 using webserver::utils::SocketUtils;
+using webserver::http::response::StatusCode;
 
 WebServer::WebServer(config::Config& config) :
 	config(config),
@@ -15,8 +17,7 @@ WebServer::WebServer(config::Config& config) :
 	port(config.get<int>("port")),
 	server(SOCKET())
 {
-	int init = SocketUtils::init();
-	if (init != 0)
+	if (SocketUtils::init() != 0)
 		throw std::runtime_error("Failed to initialize WinSock");
 }
 
@@ -135,7 +136,7 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout)
 		while (!parser.isDone())
 		{
 			std::fill(buffer.begin(), buffer.end(), 0);
-			status = select((int)client, &set, 0, 0, &tv);
+			status = select((int)client, &set, NULL, NULL, &tv);
 			if (status == SOCKET_ERROR) // error
 				goto close;
 			else if (status == 0) // timeout
@@ -178,8 +179,8 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout)
 		content << "</html>" << std::endl;
 
 		response.statusLine["HTTP-Version"] = request.requestLine["HTTP-Version"];
-		response.statusLine["Status-Code"] = "200";
-		response.statusLine["Reason-Phrase"] = "OK";
+		response.statusLine["Status-Code"] = StatusCode::OK;
+		response.statusLine["Reason-Phrase"] = StatusCode::getString(StatusCode::OK);
 
 		response.generalHeader["Connection"] = request.generalHeader["Connection"];
 		
