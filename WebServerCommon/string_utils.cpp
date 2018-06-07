@@ -66,10 +66,9 @@ void StringUtils::trim(std::string& text, const char* toremove)
 	trimr(text, toremove);
 }
 
-std::vector<std::string> StringUtils::split(const std::string &s, char delim, size_t max)
+std::vector<std::string> StringUtils::split(std::istringstream& ss, char delim, size_t max)
 {
 	std::vector<std::string> all;
-	std::stringstream ss(s);
 	std::string line;
 	while (std::getline(ss, line, delim))
 	{
@@ -92,6 +91,12 @@ std::vector<std::string> StringUtils::split(const std::string &s, char delim, si
 	else
 		elems = all;
 	return elems;
+}
+
+std::vector<std::string> StringUtils::split(const std::string &s, char delim, size_t max)
+{
+	std::istringstream iss(s);
+	return split(iss, delim, max);
 }
 
 std::string StringUtils::strerror(int errnum)

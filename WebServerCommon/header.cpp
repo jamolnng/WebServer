@@ -1,5 +1,6 @@
 #include "header.h"
 #include <sstream>
+#include <iostream>
 
 using namespace webserver::http;
 

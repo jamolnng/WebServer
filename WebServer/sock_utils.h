@@ -24,6 +24,9 @@ namespace webserver
 			static int shutdown(SOCKET sock);
 			static int close(SOCKET sock);
 			static int ioctl(SOCKET sock, long cmd, int* argp);
+
+		private:
+			SocketUtils() = delete;
 		};
 	}
 }

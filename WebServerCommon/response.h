@@ -14,13 +14,21 @@ namespace webserver
 			class LIBEXPORT Response
 			{
 			public:
+				Response() = default;
+
+				void clear();
+				std::string build();
+
+				StatusLine& getStatusLine();
+				message::GeneralHeader& getGeneralHeader();
+				ResponseHeader& getResponseHeader();
+				entity::EntityHeader& getEntityHeader();
+
+			private:
 				StatusLine statusLine{};
 				message::GeneralHeader generalHeader{};
 				ResponseHeader responseHeader{};
 				entity::EntityHeader entityHeader{};
-
-				void clear();
-				std::string build();
 			};
 		}
 	}

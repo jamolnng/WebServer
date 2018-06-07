@@ -10,7 +10,7 @@ namespace webserver
 		class LIBEXPORT Plugin
 		{
 		public:
-			Plugin() noexcept;
+			Plugin() = default;
 		};
 	}
 }

@@ -25,6 +25,7 @@ namespace webserver
 			static void trimr(std::string& text, const char* toremove);
 			static void trim(std::string& text);
 			static void trim(std::string& text, const char* toremove);
+			static std::vector<std::string> split(std::istringstream& s, char delim, size_t max = 0);
 			static std::vector<std::string> split(const std::string &s, char delim, size_t max = 0);
 			static std::string strerror(int errnum);
 
@@ -38,6 +39,9 @@ namespace webserver
 					result << separator << *begin++;
 				return result.str();
 			}
+
+		private:
+			StringUtils() = delete;
 		};
 	}
 }

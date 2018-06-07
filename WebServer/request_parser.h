@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <sstream>
 #include "request.h"
 #include "lib_utils.h"
 
@@ -12,19 +13,22 @@ namespace webserver
 			class RequestParser
 			{
 			public:
-				RequestParser() noexcept;
-				~RequestParser();
+				RequestParser() noexcept = default;
 
-				void parse(std::string part);
+				void parse(const std::string& str);
 				void clear();
 				const bool isDone() const;
-				const Request get() const;
+				const Request& get() const;
+				bool operator!();
+				RequestParser& operator<<(const std::string& str);
 
 			private:
-				std::string requestStr{};
+				std::string buf{};
 				Request request{};
+				size_t offset{ 0 };
 				bool done{ false };
 			};
+
 		}
 	}
 }

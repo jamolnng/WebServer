@@ -16,13 +16,21 @@ namespace webserver
 			class LIBEXPORT Request
 			{
 			public:
+				Request() = default;
+
+				void clear();
+				void parse(std::vector<std::string>& lines);
+
+				RequestLine& getRequestLine();
+				message::GeneralHeader& getGeneralHeader();
+				RequestHeader& getRequestHeader();
+				entity::EntityHeader& getEntityHeader();
+			
+			private:
 				RequestLine requestLine{};
 				message::GeneralHeader generalHeader{};
 				RequestHeader requestHeader{};
 				entity::EntityHeader entityHeader{};
-
-				void clear();
-				void parse(std::vector<std::string>& lines);
 			};
 		}
 	}

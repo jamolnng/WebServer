@@ -11,7 +11,7 @@ namespace webserver
 		public:
 			static std::string GetLastErrorAsString();
 		private:
-			WinUtils() noexcept {};
+			WinUtils() = delete;
 		};
 	}
 }

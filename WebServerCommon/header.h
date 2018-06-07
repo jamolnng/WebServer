@@ -10,6 +10,8 @@ namespace webserver
 		class LIBEXPORT Header
 		{
 		public:
+			Header() = default;
+
 			std::string& operator[](const std::string& item);
 			std::string& operator[](std::string&& item);
 			void clear();

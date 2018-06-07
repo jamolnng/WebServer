@@ -21,3 +21,23 @@ std::string Response::build()
 	oss << std::endl;
 	return oss.str();
 }
+
+StatusLine & webserver::http::response::Response::getStatusLine()
+{
+	return statusLine;
+}
+
+webserver::http::message::GeneralHeader & webserver::http::response::Response::getGeneralHeader()
+{
+	return generalHeader;
+}
+
+ResponseHeader & webserver::http::response::Response::getResponseHeader()
+{
+	return responseHeader;
+}
+
+webserver::http::entity::EntityHeader & webserver::http::response::Response::getEntityHeader()
+{
+	return entityHeader;
+}

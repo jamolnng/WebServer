@@ -33,3 +33,23 @@ void Request::parse(std::vector<std::string>& lines)
 	requestHeader.parse(parts);
 	entityHeader.parse(parts);
 }
+
+RequestLine & webserver::http::request::Request::getRequestLine()
+{
+	return requestLine;
+}
+
+webserver::http::message::GeneralHeader & webserver::http::request::Request::getGeneralHeader()
+{
+	return generalHeader;
+}
+
+RequestHeader & webserver::http::request::Request::getRequestHeader()
+{
+	return requestHeader;
+}
+
+webserver::http::entity::EntityHeader & webserver::http::request::Request::getEntityHeader()
+{
+	return entityHeader;
+}

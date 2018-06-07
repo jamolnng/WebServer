@@ -125,17 +125,16 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout)
 	tv.tv_sec = 5;
 	tv.tv_usec = 0;
 
-	int status;
-	int bytes;
-
+	int status = 0;
+	int bytes = 0;
 	
 	while (true)
 	{
 		parser.clear();
 		response.clear();
-		while (!parser.isDone())
+		while (!parser)
 		{
-			std::fill(buffer.begin(), buffer.end(), 0);
+			std::fill(buffer.begin(), buffer.begin() + bytes, 0);
 			status = select((int)client, &set, NULL, NULL, &tv);
 			if (status == SOCKET_ERROR) // error
 				goto close;
@@ -149,14 +148,15 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout)
 				else if (bytes == 0) // peer disconnect
 					goto close;
 				else
-					parser.parse(std::string(&buffer[0], bytes));
+					parser << std::string(&buffer[0], bytes);
 			}
 		}
 		request = parser.get();
-		if (request.generalHeader.has("Connection") &&
-			request.generalHeader["Connection"] == "close")
+		if (request.getGeneralHeader().has("Connection") &&
+			request.getGeneralHeader()["Connection"] == "close")
 			goto close;
 
+		///*
 		std::string br = "<br/>";
 		std::ostringstream content;
 		content << "<!DOCTYPE html>" << std::endl;
@@ -165,32 +165,33 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout)
 		content << "<title>Hello, World!</title>" << std::endl;
 		content << "</head>" << std::endl;
 		content << "<body>" << std::endl;
-		content << request.requestLine["Method"]
-	     << " " << request.requestLine["Request-URI"]
-		 << " " << request.requestLine["HTTP-Version"]
+		content << request.getRequestLine()["Method"]
+	     << " " << request.getRequestLine()["Request-URI"]
+		 << " " << request.getRequestLine()["HTTP-Version"]
 		 << br << std::endl;
-		for (auto& a : *request.generalHeader)
+		for (auto& a : *request.getGeneralHeader())
 			content << a.first << ": " << a.second << br << std::endl;
-		for (auto& a : *request.requestHeader)
+		for (auto& a : *request.getRequestHeader())
 			content << a.first << ": " << a.second << br << std::endl;
-		for (auto& a : *request.entityHeader)
+		for (auto& a : *request.getEntityHeader())
 			content << a.first << ": " << a.second << br << std::endl;
 		content << "</body>" << std::endl;
 		content << "</html>" << std::endl;
 
-		response.statusLine["HTTP-Version"] = request.requestLine["HTTP-Version"];
-		response.statusLine["Status-Code"] = StatusCode::OK;
-		response.statusLine["Reason-Phrase"] = StatusCode::getString(StatusCode::OK);
+		response.getStatusLine()["HTTP-Version"] = request.getRequestLine()["HTTP-Version"];
+		response.getStatusLine()["Status-Code"] = std::to_string(StatusCode::OK);
+		response.getStatusLine()["Reason-Phrase"] = StatusCode::getString(StatusCode::OK);
 
-		response.generalHeader["Connection"] = request.generalHeader["Connection"];
+		response.getGeneralHeader()["Connection"] = request.getGeneralHeader()["Connection"];
 		
-		response.entityHeader["Content-Type"] = "text/html";
-		response.entityHeader["Content-Length"] = std::to_string(content.str().size());
+		response.getEntityHeader()["Content-Type"] = "text/html";
+		response.getEntityHeader()["Content-Length"] = std::to_string(content.str().size());
 
 		std::string http_header = response.build();
 		std::string http = http_header + content.str();
 
 		send(client, http.c_str(), (int)http.size(), 0);
+		//*/
 	}
 close:
 	SocketUtils::shutdown(client);

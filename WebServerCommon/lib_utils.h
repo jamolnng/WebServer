@@ -43,7 +43,7 @@ namespace webserver
 			static LIBFCNPTR dlsym(LIBHANDLE handle, const std::string& symbol);
 			static std::string dlerror();
 		private:
-			LibUtils() noexcept {}
+			LibUtils() = delete;
 		};
 	}
 }
