@@ -44,7 +44,7 @@ void Header::parse(std::map<std::string, std::string>& parts)
 	}
 }
 
-bool Header::has(std::string item)
+bool Header::has(const std::string& item)
 {
 	return items.find(item) != items.end();
 }

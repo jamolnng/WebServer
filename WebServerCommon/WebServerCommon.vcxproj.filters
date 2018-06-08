@@ -22,12 +22,6 @@
     <Filter Include="Source Files\utils">
       <UniqueIdentifier>{e66e4117-b2bd-48ab-b6c4-0ff1ebd652fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\config">
-      <UniqueIdentifier>{d96a875a-918b-4878-967d-7a16699c9e05}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\config">
-      <UniqueIdentifier>{ce533e65-c550-4a02-ae46-e6513f0508b7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\http">
       <UniqueIdentifier>{884b9ab1-6da9-43b8-81f7-5006caacb358}</UniqueIdentifier>
     </Filter>
@@ -58,6 +52,15 @@
     <Filter Include="Source Files\http\response">
       <UniqueIdentifier>{cf0cc9e6-3da9-4307-b643-10ce7eea5888}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\plugin">
+      <UniqueIdentifier>{9a38380c-19bd-455f-8245-9f47ff264027}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\http\error">
+      <UniqueIdentifier>{c3171d27-b9d7-4fb7-ba33-9cc1762cd58b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\http\error">
+      <UniqueIdentifier>{de4f661e-a43a-44b3-ba93-720b562bc002}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="plugin.h">
@@ -71,9 +74,6 @@
     </ClInclude>
     <ClInclude Include="lib_utils.h">
       <Filter>Header Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="config.h">
-      <Filter>Header Files\config</Filter>
     </ClInclude>
     <ClInclude Include="file_utils.h">
       <Filter>Header Files\utils</Filter>
@@ -114,6 +114,12 @@
     <ClInclude Include="status_code.h">
       <Filter>Header Files\http\response</Filter>
     </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="error.h">
+      <Filter>Header Files\http\error</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="plugin_utils.cpp">
@@ -121,9 +127,6 @@
     </ClCompile>
     <ClCompile Include="string_utils.cpp">
       <Filter>Source Files\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="config.cpp">
-      <Filter>Source Files\config</Filter>
     </ClCompile>
     <ClCompile Include="general_header.cpp">
       <Filter>Source Files\http\message</Filter>
@@ -163,6 +166,15 @@
     </ClCompile>
     <ClCompile Include="status_code.cpp">
       <Filter>Source Files\http\response</Filter>
+    </ClCompile>
+    <ClCompile Include="config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="plugin.cpp">
+      <Filter>Source Files\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="error.cpp">
+      <Filter>Source Files\http\error</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

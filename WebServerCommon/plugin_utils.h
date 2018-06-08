@@ -9,7 +9,6 @@ namespace webserver
 	namespace utils
 	{
 		using plugin::Plugin;
-		using config::Config;
 		class LIBEXPORT PluginUtils
 		{
 #define REGISTER_PLUGIN(plugin) \

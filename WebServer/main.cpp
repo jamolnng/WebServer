@@ -5,7 +5,7 @@ int main(int argc, char* argv[])
 {
 	std::filesystem::path p(argv[0]);
 	p = p.parent_path() / "webserver.cfg";
-	webserver::config::Config c(p, { { "plugins", "plugins" }, { "sites", "sites" }, { "port", "80" }, { "timeout", "5" } });
+	webserver::Config c(p, { { "plugins", "plugins" }, { "sites", "sites" }, { "port", "80" }, { "timeout", "5" } });
 
 	webserver::WebServer server(c);
 	try

@@ -15,7 +15,7 @@ namespace webserver
 			std::string& operator[](const std::string& item);
 			std::string& operator[](std::string&& item);
 			void clear();
-			bool has(std::string item);
+			bool has(const std::string& item);
 			const std::map<std::string, std::string>& operator*() const;
 			virtual void parse(std::map<std::string, std::string>& parts);
 			virtual std::string build();

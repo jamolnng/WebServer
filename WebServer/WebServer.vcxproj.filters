@@ -37,6 +37,12 @@
     <Filter Include="Source Files\http\request">
       <UniqueIdentifier>{c4720c18-4fc5-4003-8711-39306004752d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\site">
+      <UniqueIdentifier>{7e511f7e-7946-414e-bd0c-dd95c4826f1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\site">
+      <UniqueIdentifier>{6c8af79c-7612-4eff-8dbe-20b7a30008a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sock_utils.cpp">
@@ -54,6 +60,12 @@
     <ClCompile Include="request_parser.cpp">
       <Filter>Source Files\http\request</Filter>
     </ClCompile>
+    <ClCompile Include="site.cpp">
+      <Filter>Source Files\site</Filter>
+    </ClCompile>
+    <ClCompile Include="site_manager.cpp">
+      <Filter>Source Files\site</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sock_utils.h">
@@ -67,6 +79,12 @@
     </ClInclude>
     <ClInclude Include="request_parser.h">
       <Filter>Header Files\http\request</Filter>
+    </ClInclude>
+    <ClInclude Include="site.h">
+      <Filter>Header Files\site</Filter>
+    </ClInclude>
+    <ClInclude Include="site_manager.h">
+      <Filter>Header Files\site</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

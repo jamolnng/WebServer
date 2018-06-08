@@ -121,6 +121,7 @@
   <ItemGroup>
     <ClInclude Include="config.h" />
     <ClInclude Include="entity_header.h" />
+    <ClInclude Include="error.h" />
     <ClInclude Include="file_utils.h" />
     <ClInclude Include="general_header.h" />
     <ClInclude Include="header.h" />
@@ -141,10 +142,12 @@
   <ItemGroup>
     <ClCompile Include="config.cpp" />
     <ClCompile Include="entity_header.cpp" />
+    <ClCompile Include="error.cpp" />
     <ClCompile Include="general_header.cpp" />
     <ClCompile Include="header.cpp" />
     <ClCompile Include="lib_utils.cpp" />
     <ClCompile Include="line.cpp" />
+    <ClCompile Include="plugin.cpp" />
     <ClCompile Include="plugin_utils.cpp" />
     <ClCompile Include="request.cpp" />
     <ClCompile Include="request_header.cpp" />

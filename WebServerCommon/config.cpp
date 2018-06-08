@@ -1,7 +1,7 @@
 #include "config.h"
 #include <iostream>
 
-using namespace webserver::config;
+using namespace webserver;
 
 Config::Config(std::filesystem::path file)
 {
@@ -16,6 +16,7 @@ Config::Config(std::filesystem::path file, std::map<std::string, std::string> de
 
 void Config::load(std::filesystem::path file)
 {
+	parent = file.parent_path();
 	std::ifstream in(file, std::ios::binary);
 	if (in)
 	{

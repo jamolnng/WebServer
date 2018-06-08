@@ -3,7 +3,7 @@
 #include "plugin_utils.h"
 
 using webserver::plugin::Plugin;
-using webserver::config::Config;
+using webserver::Config;
 
 class TestPlugin :
 	public webserver::plugin::Plugin

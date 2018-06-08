@@ -50,7 +50,9 @@ static std::map<int, std::string> map =
 
 std::string StatusCode::getString(int code)
 {
-	return map[code];
+	if(map.find(code) != map.end())
+		return map[code];
+	return "Unknown";
 }
 
 void StatusCode::insert(int code, const std::string& str)
