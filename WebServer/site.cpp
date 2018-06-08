@@ -52,7 +52,11 @@ const std::string Site::getDefaultResponseMessage(http::request::Request & reque
 	std::ifstream in(path, std::ios::binary);
 	if (!in)
 		throw error::Error(http::response::StatusCode::INTERNAL_SERVER_ERROR);
-	std::string str((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+	std::string str;
+	in.seekg(0, std::ios::end);
+	str.reserve(in.tellg());
+	in.seekg(0, std::ios::beg);
+	str.assign((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
 	in.close();
 	return str;
 }
