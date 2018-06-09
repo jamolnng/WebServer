@@ -1,13 +1,10 @@
+/*
+Copyright 2018 Jesse Laning
+*/
+
 #include "status_line.h"
 
-using namespace webserver::http::response;
+using webserver::http::response::StatusLine;
 
-StatusLine::StatusLine() noexcept :
-	Line(
-		{
-			"HTTP-Version",
-			"Status-Code",
-			"Reason-Phrase"
-		})
-{
-}
+StatusLine::StatusLine() noexcept
+    : Line({"HTTP-Version", "Status-Code", "Reason-Phrase"}) {}

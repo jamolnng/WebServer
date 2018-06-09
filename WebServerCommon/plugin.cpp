@@ -1,23 +1,22 @@
+/*
+Copyright 2018 Jesse Laning
+*/
+
 #include "plugin.h"
 
-using namespace webserver::plugin;
+using webserver::http::request::Request;
+using webserver::http::response::Response;
+using webserver::plugin::Plugin;
 
-bool Plugin::modifyRequestHeader(webserver::http::request::Request & request)
-{
-	return false;
+bool Plugin::modifyRequest(Request& request) { return false; }
+
+bool Plugin::getMessage(std::string& body, const Request& request) {
+  return false;
 }
 
-bool Plugin::getResponseMessage(std::string & body, const webserver::http::request::Request& request)
-{
-	return false;
+bool Plugin::getErrorMessage(int code, std::string& body,
+                             const Request& request) {
+  return false;
 }
 
-bool Plugin::getErrorResponseMessage(int code, std::string & body, const webserver::http::request::Request & request)
-{
-	return false;
-}
-
-bool Plugin::getReponseHeader(webserver::http::response::Response & response)
-{
-	return false;
-}
+bool Plugin::getResponse(Response& response) { return false; }

@@ -1,18 +1,20 @@
+/*
+Copyright 2018 Jesse Laning
+*/
+
 #pragma once
 #ifdef _WIN32
-#include <string>
 #include <Windows.h>
-namespace webserver
-{
-	namespace utils
-	{
-		class WinUtils
-		{
-		public:
-			static std::string GetLastErrorAsString();
-		private:
-			WinUtils() = delete;
-		};
-	}
-}
+#include <string>
+namespace webserver {
+namespace utils {
+class WinUtils {
+ public:
+  static std::string GetLastErrorAsString();
+
+ private:
+  WinUtils() = delete;
+};
+}  // namespace utils
+}  // namespace webserver
 #endif

@@ -1,58 +1,53 @@
+/*
+Copyright 2018 Jesse Laning
+*/
+
 #pragma once
-#include <string>
-#include <fstream>
+#include <filesystem>
 #include <map>
-#include <type_traits>
+#include <string>
 #include <vector>
-#include "string_utils.h"
 #include "lib_utils.h"
-#include "file_utils.h"
 
-namespace webserver
-{
-	class LIBEXPORT Config
-	{
-	public:
-		Config(std::filesystem::path file);
-		Config(std::filesystem::path file, std::map<std::string, std::string> defaults);
+namespace webserver {
+class LIBEXPORT Config {
+ public:
+  explicit Config(std::filesystem::path file);
+  Config(std::filesystem::path file,
+         std::map<std::string, std::string> defaults);
 
-		void load(std::filesystem::path file);
-		inline bool has(std::string item);
-		std::string& operator[](const std::string& item);
-		std::string& operator[](std::string&& item);
-		const std::filesystem::path& getParent()
-		{
-			return parent;
-		}
+  void load(std::filesystem::path file);
+  inline bool has(std::string item);
+  std::string& operator[](const std::string& item);
+  std::string& operator[](std::string&& item);
 
-		template<typename T> T get(const std::string& item);
+  const std::filesystem::path& getParent() { return parent; }
 
-		template<>
-		bool get<bool>(const std::string& item)
-		{
-			return config[item] == "true";
-		}
+  template <typename T>
+  T get(const std::string& item);
 
-		template<>
-		double get<double>(const std::string& item)
-		{
-			return std::stod(config[item]);
-		}
+  template <>
+  bool get<bool>(const std::string& item) {
+    return config[item] == "true";
+  }
 
-		template<>
-		int get<int>(const std::string& item)
-		{
-			return std::stoi(config[item]);
-		}
+  template <>
+  double get<double>(const std::string& item) {
+    return std::stod(config[item]);
+  }
 
-		template<>
-		std::string get<std::string>(const std::string& item)
-		{
-			return config[item];
-		}
+  template <>
+  int get<int>(const std::string& item) {
+    return std::stoi(config[item]);
+  }
 
-	private:
-		std::map<std::string, std::string> config;
-		std::filesystem::path parent;
-	};
-}
+  template <>
+  std::string get<std::string>(const std::string& item) {
+    return config[item];
+  }
+
+ private:
+  std::map<std::string, std::string> config;
+  std::filesystem::path parent;
+};
+}  // namespace webserver

@@ -1,13 +1,10 @@
+/*
+Copyright 2018 Jesse Laning
+*/
+
 #include "request_line.h"
 
-using namespace webserver::http::request;
+using webserver::http::request::RequestLine;
 
-RequestLine::RequestLine() noexcept :
-	Line(
-		{
-			"Method",
-			"Request-URI",
-			"HTTP-Version"
-		})
-{
-}
+RequestLine::RequestLine() noexcept
+    : Line({"Method", "Request-URI", "HTTP-Version"}) {}

@@ -1,6 +1,7 @@
-#include "test_plugin.h"
-#include <iostream>
+/*
+Copyright 2018 Jesse Laning
+*/
 
-TestPlugin::TestPlugin() noexcept
-{
-}
+#include "test_plugin.h"
+
+TestPlugin::TestPlugin() noexcept {}

@@ -1,3 +1,5 @@
-#include "plugin_utils.h"
+/*
+Copyright 2018 Jesse Laning
+*/
 
-using namespace webserver::utils;
+#include "plugin_utils.h"

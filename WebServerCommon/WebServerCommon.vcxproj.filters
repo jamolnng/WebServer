@@ -176,5 +176,8 @@
     <ClCompile Include="error.cpp">
       <Filter>Source Files\http\error</Filter>
     </ClCompile>
+    <ClCompile Include="file_utils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
