@@ -180,4 +180,9 @@
       <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="mime.types">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
