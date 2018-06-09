@@ -58,8 +58,8 @@ const std::string Site::getDefaultErrorMessage(int code,
                                                Request& request) noexcept {
   http::request::RequestLine& line = request.getRequestLine();
   return "Error " + std::to_string(code) + ": " + StatusCode::getString(code) +
-         "<br/>\n" + line["Method"] + " " + line["Request-URI"] + " " +
-         line["HTTP-Version"];
+         "\n" + line["Method"] + " \| " + name + line["Request-URI"] + " \| " +
+         line["HTTP-Version"] + "\n" + "WS/0.0.1 WSCommon/0.0.1";
 }
 
 const std::string Site::getMessage(Request& request,

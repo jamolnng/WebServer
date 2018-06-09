@@ -182,7 +182,7 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
     try {
       responseMessage = site.getMessage(request, plugins);
     } catch (Error& messageError) {
-      response.getStatusLine()["Status-Code"] = messageError.code();
+      response.getStatusLine()["Status-Code"] = std::to_string(messageError.code());
       response.getStatusLine()["Reason-Phrase"] = messageError.what();
       try {
         responseMessage =
