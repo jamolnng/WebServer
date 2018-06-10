@@ -162,7 +162,9 @@
     <ClInclude Include="status_line.h" />
     <ClInclude Include="stl_utils.h" />
     <ClInclude Include="string_utils.h" />
+    <ClInclude Include="versioning.h" />
     <ClInclude Include="win_utils.h" />
+    <ClInclude Include="wsc_version.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="config.cpp" />

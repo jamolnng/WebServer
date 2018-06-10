@@ -16,6 +16,7 @@ Copyright 2018 Jesse Laning
 #include "response.h"
 #include "site.h"
 #include "status_code.h"
+#include "ws_version.h"
 
 using std::chrono::system_clock;
 using webserver::Config;
@@ -204,7 +205,7 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
     date << std::put_time(std::gmtime(&now_c), "%a, %e %b %Y %T GMT");
     response.getGeneralHeader()["Date"] = date.str();
 
-    response.getResponseHeader()["Server"] = "WS/0.0.1 WSCommon/0.0.1";
+    response.getResponseHeader()["Server"] = WS_VER_PRETTY;
 
     std::string http = response.build() + responseMessage;
     send(client, http.c_str(), static_cast<int>(http.size()), 0);

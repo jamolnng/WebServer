@@ -92,6 +92,9 @@
     <ClInclude Include="mime_types.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="ws_version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="webserver.cfg">

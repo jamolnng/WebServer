@@ -164,6 +164,7 @@ xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"</Command>
     <ClInclude Include="site_manager.h" />
     <ClInclude Include="sock_utils.h" />
     <ClInclude Include="webserver.h" />
+    <ClInclude Include="ws_version.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="mime.types" />

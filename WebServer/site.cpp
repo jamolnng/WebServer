@@ -11,6 +11,7 @@ Copyright 2018 Jesse Laning
 #include "file_utils.h"
 #include "site.h"
 #include "status_code.h"
+#include "ws_version.h"
 
 using webserver::http::error::Error;
 using webserver::http::request::Request;
@@ -80,7 +81,7 @@ const std::string Site::getDefaultErrorMessage(int code, Request& request,
   http::request::RequestLine& line = request.getRequestLine();
   return "Error " + std::to_string(code) + ": " + StatusCode::getString(code) +
          "\n" + line["Method"] + " | " + name + line["Request-URI"] + " | " +
-         line["HTTP-Version"] + "\n" + "WS/0.0.1 WSCommon/0.0.1";
+         line["HTTP-Version"] + "\n" + WS_VER_PRETTY;
 }
 
 const std::string Site::getMessage(Request& request, Response& response,
