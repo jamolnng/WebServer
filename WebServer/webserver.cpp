@@ -28,8 +28,8 @@ using webserver::http::response::StatusCode;
 using webserver::plugin::Plugin;
 using webserver::plugin::PluginManager;
 using webserver::site::SiteManager;
-using webserver::utils::SocketUtils;
 using webserver::utils::MimeTypes;
+using webserver::utils::SocketUtils;
 
 WebServer::WebServer(const Config& config)
     : config(config),

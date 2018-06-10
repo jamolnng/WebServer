@@ -2,7 +2,10 @@
 Copyright 2018 Jesse Laning
 */
 
+#include <chrono>
 #include <fstream>
+#include <iomanip>
+#include <sstream>
 #include <streambuf>
 #include "error.h"
 #include "file_utils.h"
@@ -55,6 +58,15 @@ const std::string Site::getDefaultMessage(Request& request,
   str.assign((std::istreambuf_iterator<char>(in)),
              std::istreambuf_iterator<char>());
   in.close();
+
+  auto s = std::chrono::duration_cast<std::chrono::seconds>(
+      std::filesystem::last_write_time(path).time_since_epoch());
+  auto lwt = std::chrono::time_point<std::chrono::system_clock>(s);
+  auto lwt_c = std::chrono::system_clock::to_time_t(lwt);
+  std::stringstream date;
+  date << std::put_time(std::gmtime(&lwt_c), "%a, %e %b %Y %T GMT");
+  response.getEntityHeader()["Last-Modified"] = date.str();
+
   std::string ext = path.extension().string().substr(1);
   if (mimeTypes->has(ext))
     response.getEntityHeader()["Content-Type"] = (*mimeTypes)[ext];
