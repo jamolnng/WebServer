@@ -17,18 +17,20 @@ namespace webserver {
 namespace plugin {
 class PluginManager {
  public:
-  explicit PluginManager(const webserver::Config& config);
+  explicit PluginManager(const StrStrConfig<>& config);
   ~PluginManager();
 
   void load(const std::string& name);
   bool has(const std::string& name);
   Plugin& get(const std::string& name);
   Plugin& operator[](const std::string& item);
-  std::vector<Plugin*> operator*();
+  std::vector<std::shared_ptr<Plugin>> operator*();
 
  private:
-  std::map<std::string, std::pair<utils::LibUtils::LIBHANDLE, Plugin*>> plugins;
-  webserver::Config config;
+  std::map<std::string,
+           std::pair<utils::LibUtils::LIBHANDLE, std::shared_ptr<Plugin>>>
+      plugins;
+  StrStrConfig<> config;
 };
 }  // namespace plugin
 }  // namespace webserver

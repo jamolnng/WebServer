@@ -31,11 +31,11 @@ Site::Site(const fs::path& site, MimeTypes* mimeTypes)
                     {"port", "80"},
                     {"root", ""},
                     {"default", "false"}}),
-      mimeTypes(mimeTypes) {
-  name = config["name"];
-  port = config.get<int>("port");
-  root = config["root"];
-  defaultSite = config.get<bool>("default");
+      mimeTypes(mimeTypes),
+      name(config["name"]),
+      port(config.get<int>("port")),
+      root(config["root"]),
+      defaultSite(config.get<bool>("default")) {
   if (root.is_relative())
     root = std::filesystem::absolute(config.getParent() / root);
 }
@@ -92,19 +92,20 @@ const std::string Site::getDefaultErrorMessage(int code, Request& request,
          line["HTTP-Version"] + "\n" + WS_VER_PRETTY;
 }
 
-const std::string Site::getMessage(Request& request, Response& response,
-                                   const std::vector<Plugin*>& plugins) {
-  for (plugin::Plugin* p : plugins) {
+const std::string Site::getMessage(
+    Request& request, Response& response,
+    const std::vector<std::shared_ptr<Plugin>>& plugins) {
+  for (auto& p : plugins) {
     std::string body;
     if (p->getMessage(body, request, response)) return body;
   }
   return getDefaultMessage(request, response);
 }
 
-const std::string Site::getErrorMessage(int code, Request& request,
-                                        Response& response,
-                                        const std::vector<Plugin*>& plugins) {
-  for (Plugin* p : plugins) {
+const std::string Site::getErrorMessage(
+    int code, Request& request, Response& response,
+    const std::vector<std::shared_ptr<Plugin>>& plugins) {
+  for (auto& p : plugins) {
     std::string body;
     if (p->getErrorMessage(code, body, request, response)) return body;
   }

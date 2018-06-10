@@ -3,6 +3,7 @@ Copyright 2018 Jesse Laning
 */
 
 #pragma once
+#include <memory>
 #include <string>
 #include <vector>
 #include "config.h"
@@ -26,16 +27,16 @@ class Site {
   const std::string getDefaultErrorMessage(
       int code, http::request::Request& request,
       http::response::Response& response) noexcept;
-  const std::string getMessage(http::request::Request& request,
-                               http::response::Response& response,
-                               const std::vector<plugin::Plugin*>& plugins);
+  const std::string getMessage(
+      http::request::Request& request, http::response::Response& response,
+      const std::vector<std::shared_ptr<plugin::Plugin>>& plugins);
   const std::string getErrorMessage(
       int code, http::request::Request& request,
       http::response::Response& response,
-      const std::vector<plugin::Plugin*>& plugins);
+      const std::vector<std::shared_ptr<plugin::Plugin>>& plugins);
 
  private:
-  Config config;
+  StrStrConfig<> config;
   std::string name;
   int port;
   std::filesystem::path root;

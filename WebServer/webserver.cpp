@@ -19,7 +19,7 @@ Copyright 2018 Jesse Laning
 #include "ws_version.h"
 
 using std::chrono::system_clock;
-using webserver::Config;
+using webserver::StrStrConfig;
 using webserver::WebServer;
 using webserver::http::error::Error;
 using webserver::http::request::Request;
@@ -32,16 +32,15 @@ using webserver::site::SiteManager;
 using webserver::utils::MimeTypes;
 using webserver::utils::SocketUtils;
 
-WebServer::WebServer(const Config& config)
+WebServer::WebServer(const StrStrConfig<>& config)
     : config(config),
       pluginManager(PluginManager(config)),
-      server(SOCKET()),
       mimeTypes(MimeTypes(config.getParent() / "mime.types")),
-      siteManager(site::SiteManager(config, &mimeTypes)) {
+      siteManager(site::SiteManager(config, &mimeTypes)),
+      port(config.get<int>("port")) {
   if (SocketUtils::init() != 0)
     throw std::runtime_error("Failed to initialize WinSock");
   if ((*siteManager).empty()) throw std::runtime_error("No sites loaded");
-  port = this->config.get<int>("port");
 }
 
 WebServer::~WebServer() { SocketUtils::quit(); }
@@ -121,7 +120,7 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
   Request request;
   Response response;
   site::Site site = siteManager.getDefault();
-  std::vector<plugin::Plugin*> plugins = *pluginManager;
+  std::vector<std::shared_ptr<Plugin>> plugins = *pluginManager;
   std::vector<char> buffer(bufferSize, 0);
   std::string responseMessage;
 
@@ -175,8 +174,7 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
     for (auto p : plugins)
       if (p->modifyRequest(request)) break;
 
-    if (reqGeneral.has("Connection") &&
-        reqGeneral["Connection"] == "close")
+    if (reqGeneral.has("Connection") && reqGeneral["Connection"] == "close")
       goto close;
 
     site = siteManager[reqLine["Host"]];

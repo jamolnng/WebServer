@@ -5,12 +5,13 @@ Copyright 2018 Jesse Laning
 #include "file_utils.h"
 #include "plugin_manager.h"
 
+using webserver::StrStrConfig;
 using webserver::plugin::Plugin;
 using webserver::plugin::PluginManager;
 
 typedef Plugin*(__stdcall* CreatePlugin)();
 
-PluginManager::PluginManager(const webserver::Config& conf) : config(conf) {
+PluginManager::PluginManager(const StrStrConfig<>& conf) : config(conf) {
   std::filesystem::path path(config["plugins"]);
   if (path.is_relative()) path = config.getParent() / path;
   if (std::filesystem::exists(path))
@@ -41,7 +42,7 @@ void PluginManager::load(const std::string& name) {
     utils::LibUtils::dlclose(lib);
     return;
   }
-  plugins[name] = {lib, create()};
+  plugins[name] = {lib, std::shared_ptr<Plugin>(create())};
 }
 
 bool PluginManager::has(const std::string& name) {
@@ -54,8 +55,8 @@ Plugin& PluginManager::get(const std::string& name) {
 
 Plugin& PluginManager::operator[](const std::string& name) { return get(name); }
 
-std::vector<Plugin*> PluginManager::operator*() {
-  std::vector<Plugin*> r;
+std::vector<std::shared_ptr<Plugin>> PluginManager::operator*() {
+  std::vector<std::shared_ptr<Plugin>> r;
   r.reserve(plugins.size());
   for (auto it = plugins.begin(); it != plugins.end(); ++it)
     r.push_back(it->second.second);

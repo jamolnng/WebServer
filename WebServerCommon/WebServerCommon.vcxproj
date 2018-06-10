@@ -171,7 +171,6 @@
     <ClInclude Include="wsc_version.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="config.cpp" />
     <ClCompile Include="entity_header.cpp" />
     <ClCompile Include="error.cpp" />
     <ClCompile Include="file_utils.cpp" />

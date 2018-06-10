@@ -4,12 +4,12 @@ Copyright 2018 Jesse Laning
 
 #include "site_manager.h"
 
-using webserver::Config;
+using webserver::StrStrConfig;
 using webserver::site::Site;
 using webserver::site::SiteManager;
 using webserver::utils::MimeTypes;
 
-SiteManager::SiteManager(const Config& conf, MimeTypes* mimeTypes)
+SiteManager::SiteManager(const StrStrConfig<>& conf, MimeTypes* mimeTypes)
     : config(conf), mimeTypes(mimeTypes) {
   std::filesystem::path path(config["sites"]);
   if (path.is_relative()) path = config.getParent() / path;
@@ -20,30 +20,31 @@ SiteManager::SiteManager(const Config& conf, MimeTypes* mimeTypes)
 }
 
 void SiteManager::load(const std::filesystem::path& path) {
-  Site s(path, mimeTypes);
-  sites.insert({s.getName(), s});
-  if (s.isDefault()) defaultSite = &sites.find(s.getName())->second;
+  std::shared_ptr<Site> ptr = std::make_shared<Site>(path, mimeTypes);
+  auto pairib = sites.insert({ptr->getName(), std::move(ptr)});
+  if (pairib.second)
+    if (pairib.first->second->isDefault()) defaultSite = pairib.first->second;
 }
 
 Site& SiteManager::get(const std::string& name) {
-  if (sites.find(name) != sites.end()) return sites.find(name)->second;
+  if (sites.find(name) != sites.end()) return *sites.find(name)->second;
   return getDefault();
 }
 
 Site& SiteManager::operator[](const std::string& name) {
-  if (sites.find(name) != sites.end()) return sites.find(name)->second;
+  if (sites.find(name) != sites.end()) return *sites.find(name)->second;
   return getDefault();
 }
 
-std::vector<Site*> SiteManager::operator*() {
-  std::vector<Site*> r;
+std::vector<std::shared_ptr<Site>> SiteManager::operator*() {
+  std::vector<std::shared_ptr<Site>> r;
   r.reserve(sites.size());
   for (auto it = sites.begin(); it != sites.end(); ++it)
-    r.push_back(&(it->second));
+    r.push_back(it->second);
   return r;
 }
 
 Site& SiteManager::getDefault() {
-  if (defaultSite == nullptr) return sites.begin()->second;
+  if (defaultSite == nullptr) return *sites.begin()->second;
   return *defaultSite;
 }

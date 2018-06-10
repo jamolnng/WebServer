@@ -176,9 +176,6 @@
     <ClCompile Include="status_code.cpp">
       <Filter>Source Files\http\response</Filter>
     </ClCompile>
-    <ClCompile Include="config.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="plugin.cpp">
       <Filter>Source Files\plugin</Filter>
     </ClCompile>

@@ -2,16 +2,19 @@
 Copyright 2018 Jesse Laning
 */
 
+#include <filesystem>
 #include <iostream>
+#include <string>
+#include "config.h"
 #include "webserver.h"
 
 int main(int argc, char* argv[]) {
   std::filesystem::path p(argv[0]);
   p = p.parent_path() / "webserver.cfg";
-  webserver::Config c(p, {{"plugins", "plugins"},
-                          {"sites", "sites"},
-                          {"port", "80"},
-                          {"timeout", "5"}});
+  webserver::StrStrConfig<> c(p, {{"plugins", "plugins"},
+                                {"sites", "sites"},
+                                {"port", "80"},
+                                {"timeout", "5"}});
 
   webserver::WebServer server(c);
   try {

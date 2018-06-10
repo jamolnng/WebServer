@@ -18,7 +18,7 @@ Copyright 2018 Jesse Laning
 namespace webserver {
 class WebServer {
  public:
-  explicit WebServer(const Config& config);
+  explicit WebServer(const StrStrConfig<>& config);
   ~WebServer();
 
   void start();
@@ -32,10 +32,10 @@ class WebServer {
 
   std::thread thread;
   std::atomic<bool> running{false};
-  SOCKET server;
+  SOCKET server{ 0 };
   std::map<SOCKET, std::thread> clientThreads;
   int port;
-  Config config;
+  StrStrConfig<> config;
   plugin::PluginManager pluginManager;
   site::SiteManager siteManager;
   utils::MimeTypes mimeTypes;
