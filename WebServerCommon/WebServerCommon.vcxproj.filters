@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\plugin">
-      <UniqueIdentifier>{4fb77ce5-afdd-4ac1-991e-78e47043cb69}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\utils">
       <UniqueIdentifier>{d22dbf92-021d-492d-8fd9-0629a039150e}</UniqueIdentifier>
     </Filter>
@@ -52,23 +49,20 @@
     <Filter Include="Source Files\http\response">
       <UniqueIdentifier>{cf0cc9e6-3da9-4307-b643-10ce7eea5888}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\plugin">
-      <UniqueIdentifier>{9a38380c-19bd-455f-8245-9f47ff264027}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\http\error">
       <UniqueIdentifier>{c3171d27-b9d7-4fb7-ba33-9cc1762cd58b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\http\error">
       <UniqueIdentifier>{de4f661e-a43a-44b3-ba93-720b562bc002}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\plugin">
+      <UniqueIdentifier>{4b011191-4360-404e-b8fc-e176a16c0dd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\plugin">
+      <UniqueIdentifier>{f9606e03-ceda-4662-b95a-1e723415d7a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="plugin.h">
-      <Filter>Header Files\plugin</Filter>
-    </ClInclude>
-    <ClInclude Include="plugin_utils.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
     <ClInclude Include="string_utils.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
@@ -99,9 +93,6 @@
     <ClInclude Include="header.h">
       <Filter>Header Files\http</Filter>
     </ClInclude>
-    <ClInclude Include="line.h">
-      <Filter>Header Files\http</Filter>
-    </ClInclude>
     <ClInclude Include="status_line.h">
       <Filter>Header Files\http\response</Filter>
     </ClInclude>
@@ -129,11 +120,17 @@
     <ClInclude Include="versioning.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="plugin.h">
+      <Filter>Header Files\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="line.h">
+      <Filter>Header Files\http</Filter>
+    </ClInclude>
+    <ClInclude Include="plugin_utils.h">
+      <Filter>Header Files\plugin</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="plugin_utils.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
     <ClCompile Include="string_utils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
@@ -176,14 +173,17 @@
     <ClCompile Include="status_code.cpp">
       <Filter>Source Files\http\response</Filter>
     </ClCompile>
-    <ClCompile Include="plugin.cpp">
-      <Filter>Source Files\plugin</Filter>
-    </ClCompile>
     <ClCompile Include="error.cpp">
       <Filter>Source Files\http\error</Filter>
     </ClCompile>
     <ClCompile Include="file_utils.cpp">
       <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="plugin.cpp">
+      <Filter>Source Files\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="plugin_utils.cpp">
+      <Filter>Source Files\plugin</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
