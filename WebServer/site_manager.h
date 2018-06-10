@@ -7,13 +7,16 @@ Copyright 2018 Jesse Laning
 #include <string>
 #include <vector>
 #include "config.h"
+#include "mime_types.h"
 #include "site.h"
 
 namespace webserver {
 namespace site {
 class SiteManager {
  public:
-  explicit SiteManager(const webserver::Config& config);
+  SiteManager() = default;
+  explicit SiteManager(const webserver::Config& config,
+                       utils::MimeTypes* mimeTypes);
   ~SiteManager();
 
   void load(const std::filesystem::path& path);
@@ -26,6 +29,7 @@ class SiteManager {
   std::map<std::string, Site> sites;
   webserver::Config config;
   Site* defaultSite{nullptr};
+  utils::MimeTypes* mimeTypes{nullptr};
 };
 }  // namespace site
 }  // namespace webserver

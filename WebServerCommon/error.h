@@ -10,6 +10,7 @@ Copyright 2018 Jesse Laning
 namespace webserver {
 namespace http {
 namespace error {
+#pragma warning(disable : 4275)
 class LIBEXPORT Error : public std::exception {
  public:
   explicit Error(int code);

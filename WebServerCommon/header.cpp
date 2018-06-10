@@ -7,10 +7,11 @@ Copyright 2018 Jesse Laning
 #include "header.h"
 
 using webserver::http::Header;
+using webserver::utils::STLUtils;
 
-Header::Header(std::set<std::string> valid) : valid(valid) {}
+Header::Header(STLUtils::ci_set<std::string> valid) : valid(valid) {}
 
-const std::map<std::string, std::string>& Header::operator*() const {
+const STLUtils::ci_map<std::string, std::string>& Header::operator*() const {
   return items;
 }
 
@@ -41,7 +42,7 @@ bool Header::has(const std::string& item) {
 }
 
 bool Header::isValid(const std::string& val) {
-  return Header::inContainer<std::set<std::string>>(val, valid);
+  return STLUtils::inContainer(val, valid);
 }
 
 std::string Header::build() {

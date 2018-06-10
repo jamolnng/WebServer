@@ -87,7 +87,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -101,7 +102,8 @@
       <EnableModules>true</EnableModules>
     </ClCompile>
     <PostBuildEvent>
-      <Command>xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -115,7 +117,8 @@
       <EnableModules>true</EnableModules>
     </ClCompile>
     <PostBuildEvent>
-      <Command>xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -135,7 +138,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -156,6 +160,7 @@
     <ClInclude Include="response_header.h" />
     <ClInclude Include="status_code.h" />
     <ClInclude Include="status_line.h" />
+    <ClInclude Include="stl_utils.h" />
     <ClInclude Include="string_utils.h" />
     <ClInclude Include="win_utils.h" />
   </ItemGroup>
@@ -179,9 +184,6 @@
     <ClCompile Include="status_line.cpp" />
     <ClCompile Include="string_utils.cpp" />
     <ClCompile Include="win_utils.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="mime.types" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

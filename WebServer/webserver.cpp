@@ -29,16 +29,18 @@ using webserver::plugin::Plugin;
 using webserver::plugin::PluginManager;
 using webserver::site::SiteManager;
 using webserver::utils::SocketUtils;
+using webserver::utils::MimeTypes;
 
 WebServer::WebServer(const Config& config)
     : config(config),
-      pluginManager(plugin::PluginManager(config)),
+      pluginManager(PluginManager(config)),
       server(SOCKET()),
-      siteManager(site::SiteManager(config)) {
-  port = this->config.get<int>("port");
+      mimeTypes(MimeTypes(config.getParent() / "mime.types")),
+      siteManager(site::SiteManager(config, &mimeTypes)) {
   if (SocketUtils::init() != 0)
     throw std::runtime_error("Failed to initialize WinSock");
   if ((*siteManager).empty()) throw std::runtime_error("No sites loaded");
+  port = this->config.get<int>("port");
 }
 
 WebServer::~WebServer() { SocketUtils::quit(); }
@@ -176,22 +178,24 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
         StatusCode::getString(StatusCode::OK);
     response.getGeneralHeader()["Connection"] =
         request.getGeneralHeader()["Connection"];
-    response.getEntityHeader()["Content-Type"] =
-        request.getEntityHeader()["Content-Type"] + ",*/*;charset=UTF-8";
 
     try {
-      responseMessage = site.getMessage(request, plugins);
+      responseMessage = site.getMessage(request, response, plugins);
     } catch (Error& messageError) {
-      response.getStatusLine()["Status-Code"] = std::to_string(messageError.code());
+      response.getStatusLine()["Status-Code"] =
+          std::to_string(messageError.code());
       response.getStatusLine()["Reason-Phrase"] = messageError.what();
       try {
-        responseMessage =
-            site.getErrorMessage(messageError.code(), request, plugins);
+        responseMessage = site.getErrorMessage(messageError.code(), request,
+                                               response, plugins);
       } catch (Error&) {
         responseMessage =
-            site.getDefaultErrorMessage(messageError.code(), request);
+            site.getDefaultErrorMessage(messageError.code(), request, response);
       }
     }
+    if (!response.getEntityHeader().has("Content-Type"))
+      response.getEntityHeader()["Content-Type"] =
+          response.getEntityHeader()["Content-Type"] + "*/*;charset=UTF-8";
     response.getEntityHeader()["Content-Length"] =
         std::to_string(responseMessage.size());
 

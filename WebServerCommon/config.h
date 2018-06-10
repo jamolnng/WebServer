@@ -8,20 +8,21 @@ Copyright 2018 Jesse Laning
 #include <string>
 #include <vector>
 #include "lib_utils.h"
+#include "stl_utils.h"
 
 namespace webserver {
 class LIBEXPORT Config {
  public:
   explicit Config(std::filesystem::path file);
   Config(std::filesystem::path file,
-         std::map<std::string, std::string> defaults);
+         std::map<std::string, std::string, utils::STLUtils::ci_less> defaults);
 
-  void load(std::filesystem::path file);
-  inline bool has(std::string item);
+  void load(const std::filesystem::path& file);
+  bool has(const std::string& item);
   std::string& operator[](const std::string& item);
   std::string& operator[](std::string&& item);
 
-  const std::filesystem::path& getParent() { return parent; }
+  const std::filesystem::path& getParent() const { return parent; }
 
   template <typename T>
   T get(const std::string& item);
@@ -47,7 +48,7 @@ class LIBEXPORT Config {
   }
 
  private:
-  std::map<std::string, std::string> config;
+  std::map<std::string, std::string, utils::STLUtils::ci_less> config;
   std::filesystem::path parent;
 };
 }  // namespace webserver

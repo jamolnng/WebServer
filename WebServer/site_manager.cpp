@@ -4,10 +4,13 @@ Copyright 2018 Jesse Laning
 
 #include "site_manager.h"
 
+using webserver::Config;
 using webserver::site::Site;
 using webserver::site::SiteManager;
+using webserver::utils::MimeTypes;
 
-SiteManager::SiteManager(const webserver::Config& conf) : config(conf) {
+SiteManager::SiteManager(const Config& conf, MimeTypes* mimeTypes)
+    : config(conf), mimeTypes(mimeTypes) {
   std::filesystem::path sites(config["sites"]);
   if (sites.is_relative()) sites = config.getParent() / sites;
   if (std::filesystem::exists(sites))
@@ -19,7 +22,7 @@ SiteManager::SiteManager(const webserver::Config& conf) : config(conf) {
 SiteManager::~SiteManager() {}
 
 void SiteManager::load(const std::filesystem::path& path) {
-  Site s(path);
+  Site s(path, mimeTypes);
   sites.insert({s.getName(), s});
   if (s.isDefault()) defaultSite = &sites.find(s.getName())->second;
 }

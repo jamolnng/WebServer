@@ -7,8 +7,11 @@ Copyright 2018 Jesse Laning
 #include <map>
 #include <memory>
 #include <thread>
+
 #include "sock_utils.h"
+
 #include "config.h"
+#include "mime_types.h"
 #include "plugin_manager.h"
 #include "site_manager.h"
 
@@ -35,5 +38,6 @@ class WebServer {
   Config config;
   plugin::PluginManager pluginManager;
   site::SiteManager siteManager;
+  utils::MimeTypes mimeTypes;
 };
 }  // namespace webserver

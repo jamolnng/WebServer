@@ -66,6 +66,9 @@
     <ClCompile Include="site_manager.cpp">
       <Filter>Source Files\site</Filter>
     </ClCompile>
+    <ClCompile Include="mime_types.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sock_utils.h">
@@ -86,9 +89,15 @@
     <ClInclude Include="site_manager.h">
       <Filter>Header Files\site</Filter>
     </ClInclude>
+    <ClInclude Include="mime_types.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="webserver.cfg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="mime.types">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

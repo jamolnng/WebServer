@@ -120,6 +120,9 @@
     <ClInclude Include="error.h">
       <Filter>Header Files\http\error</Filter>
     </ClInclude>
+    <ClInclude Include="stl_utils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="plugin_utils.cpp">
@@ -179,10 +182,5 @@
     <ClCompile Include="file_utils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="mime.types">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
 </Project>
