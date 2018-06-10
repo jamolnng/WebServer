@@ -19,7 +19,7 @@ Copyright 2018 Jesse Laning
 #include "ws_version.h"
 
 using std::chrono::system_clock;
-using webserver::StrStrConfig;
+using webserver::ServerConfig;
 using webserver::WebServer;
 using webserver::http::error::Error;
 using webserver::http::request::Request;
@@ -32,12 +32,11 @@ using webserver::site::SiteManager;
 using webserver::utils::MimeTypes;
 using webserver::utils::SocketUtils;
 
-WebServer::WebServer(const StrStrConfig<>& config)
-    : config(config),
-      pluginManager(PluginManager(config)),
-      mimeTypes(MimeTypes(config.getParent() / "mime.types")),
-      siteManager(site::SiteManager(config, &mimeTypes)),
-      port(config.get<int>("port")) {
+WebServer::WebServer(const std::shared_ptr<ServerConfig>& serverConfig)
+    : serverConfig(serverConfig),
+      pluginManager(PluginManager(serverConfig)),
+      siteManager(SiteManager(serverConfig)),
+      port(serverConfig->get<int>("port")) {
   if (SocketUtils::init() != 0)
     throw std::runtime_error("Failed to initialize WinSock");
   if ((*siteManager).empty()) throw std::runtime_error("No sites loaded");
@@ -108,7 +107,7 @@ void WebServer::run() {
       }
       clientThreads[client] = std::thread(
           [&](WebServer* w) {
-            w->handleClient(client, 256, config.get<int>("timeout"));
+            w->handleClient(client, 256, serverConfig->get<int>("timeout"));
           },
           this);
     }

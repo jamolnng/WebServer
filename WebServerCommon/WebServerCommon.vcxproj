@@ -163,6 +163,7 @@
     <ClInclude Include="request_line.h" />
     <ClInclude Include="response.h" />
     <ClInclude Include="response_header.h" />
+    <ClInclude Include="server_config.h" />
     <ClInclude Include="site.h" />
     <ClInclude Include="sock_utils.h" />
     <ClInclude Include="status_code.h" />
@@ -189,6 +190,7 @@
     <ClCompile Include="request_line.cpp" />
     <ClCompile Include="response.cpp" />
     <ClCompile Include="response_header.cpp" />
+    <ClCompile Include="server_config.cpp" />
     <ClCompile Include="site.cpp" />
     <ClCompile Include="sock_utils.cpp" />
     <ClCompile Include="status_code.cpp" />

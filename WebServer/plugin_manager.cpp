@@ -5,20 +5,22 @@ Copyright 2018 Jesse Laning
 #include "file_utils.h"
 #include "plugin_manager.h"
 
-using webserver::StrStrConfig;
+using webserver::ServerConfig;
 using webserver::plugin::Plugin;
 using webserver::plugin::PluginManager;
 
 typedef Plugin*(__stdcall* CreatePlugin)();
 
-PluginManager::PluginManager(const StrStrConfig<>& conf) : config(conf) {
-  std::filesystem::path path(config["plugins"]);
-  if (path.is_relative()) path = config.getParent() / path;
-  if (std::filesystem::exists(path))
-    for (auto& di : std::filesystem::directory_iterator(path))
+PluginManager::PluginManager(const std::shared_ptr<ServerConfig>& serverConfig)
+    : serverConfig(serverConfig),
+      pluginDir(serverConfig->operator[]("plugins")) {
+  if (pluginDir.is_relative())
+    pluginDir = serverConfig->getParent() / pluginDir;
+  if (std::filesystem::exists(pluginDir))
+    for (auto& di : std::filesystem::directory_iterator(pluginDir))
       if (std::filesystem::is_directory(di.path()))
         if (std::filesystem::exists(di.path() / "plugin.cfg"))
-          load(di.path().filename().generic_string());
+          load(di.path().filename().string());
 }
 
 PluginManager::~PluginManager() {
@@ -26,17 +28,15 @@ PluginManager::~PluginManager() {
 }
 
 void PluginManager::load(const std::string& name) {
-  std::filesystem::path p(config["plugins"]);
-  p /= name;
-  p /= name + utils::LibUtils::libExt;
-  std::string libPath = p.generic_string();
+  std::filesystem::path p = pluginDir / name / (name + utils::LibUtils::libExt);
+  std::string libPath = p.string();
   auto lib = utils::LibUtils::dlopen(libPath, RTLD_LAZY);
   if (!lib) {
     // std::cout << utils::LibUtils::dlerror() << std::endl;
     return;
   }
-  CreatePlugin create =
-      (CreatePlugin)utils::LibUtils::dlsym(lib, "CreatePlugin");
+  CreatePlugin create = reinterpret_cast<CreatePlugin>(
+      utils::LibUtils::dlsym(lib, "CreatePlugin"));
   if (!create) {
     // std::cout << utils::LibUtils::dlerror() << std::endl;
     utils::LibUtils::dlclose(lib);

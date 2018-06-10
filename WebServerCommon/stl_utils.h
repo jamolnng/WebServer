@@ -1,12 +1,17 @@
+/*
+Copyright 2018 Jesse Laning
+*/
+
 #pragma once
 #include <algorithm>
 #include <cctype>
 #include <map>
 #include <set>
 #include <string>
+#include "lib_utils.h"
 namespace webserver {
 namespace utils {
-class STLUtils {
+class LIBEXPORT STLUtils {
  public:
   struct ci_less {
     // case-independent (ci) compare_less binary function

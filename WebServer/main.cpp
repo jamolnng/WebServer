@@ -4,19 +4,20 @@ Copyright 2018 Jesse Laning
 
 #include <filesystem>
 #include <iostream>
+#include <memory>
 #include <string>
-#include "config_map.h"
+
 #include "webserver.h"
+
+#include "server_config.h"
 
 int main(int argc, char* argv[]) {
   std::filesystem::path p(argv[0]);
   p = p.parent_path() / "webserver.cfg";
-  webserver::StrStrConfig<> c(p, {{"plugins", "plugins"},
-                                  {"sites", "sites"},
-                                  {"port", "80"},
-                                  {"timeout", "5"}});
+  std::shared_ptr<webserver::ServerConfig> config =
+      std::make_shared<webserver::ServerConfig>(p);
 
-  webserver::WebServer server(c);
+  webserver::WebServer server(config);
   try {
     server.start();
   } catch (std::runtime_error& err) {

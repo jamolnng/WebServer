@@ -10,56 +10,22 @@ Copyright 2018 Jesse Laning
 #include <type_traits>
 #include <vector>
 #include "stl_utils.h"
+#include "string_utils.h"
 
 namespace webserver {
-template <typename _Key, typename _Val, char _Sep,
+template <typename _Key, typename _Val,
           typename _Less = webserver::utils::STLUtils::ci_less>
 class ConfigMap {
  public:
   using key_type = _Key;
   using mapped_type = _Val;
-  using base_map = std::map<key_type, mapped_type, _Less>;
-  static const char seperator = _Sep;
+  using less = _Less;
+  using base_map = std::map<key_type, mapped_type, less>;
 
-  explicit ConfigMap(const std::filesystem::path& file)
-      : parent(file.parent_path()) {
-    load(file);
-  }
-  ConfigMap(const std::filesystem::path& file, const base_map& defaults)
-      : ConfigMap<_Key, _Val, _Sep, _Less>(file) {
+  explicit ConfigMap() = default;
+  ConfigMap(const base_map& defaults)
+      : ConfigMap<key_type, mapped_type, less>() {
     items.insert(defaults.begin(), defaults.end());
-  }
-
-  void virtual load(const std::filesystem::path& file) {
-    std::ifstream in(file, std::ios::binary);
-    if (in) {
-      std::string line;
-      std::string strItem;
-      std::string strVal;
-      std::vector<std::string> s;
-      while (getline(in, line)) {
-        utils::StringUtils::trim(line);
-        if (line.empty()) continue;
-        if (line[0] == '#') continue;
-
-        s = utils::StringUtils::split(line, seperator, 2);
-        strItem = s[0];
-        utils::StringUtils::trim(strItem);
-
-        if (s.size() == 2)
-          strVal = s[1];
-        else
-          strVal = "";
-        utils::StringUtils::trim(strVal);
-
-        key_type item;
-        mapped_type val;
-        item = toKey(strItem);
-        val = toMapped(strVal);
-        items[item] = val;
-      }
-      in.close();
-    }
   }
 
   bool has(const key_type& key) const { return items.find(key) != items.end(); }
@@ -69,8 +35,10 @@ class ConfigMap {
   mapped_type& operator[](key_type&& key) {
     return items.try_emplace(std::move(key)).first->second;
   }
-
-  const std::filesystem::path& getParent() const { return parent; }
+  const mapped_type& operator[](const key_type& key) const {
+    return items.at(key);
+  }
+  const mapped_type& operator[](key_type&& key) const { return items.at(key); }
 
   template <typename T>
   T get(const key_type& item) const;
@@ -95,9 +63,8 @@ class ConfigMap {
     return fromString<key_type>(items.at(item));
   }
 
- private:
+ protected:
   base_map items;
-  std::filesystem::path parent;
 
   template <typename T>
   T fromString(const std::string& s) const;
@@ -133,6 +100,53 @@ class ConfigMap {
     return fromString<mapped_type>(m);
   }
 };
-template <char _Sep = '='>
-using StrStrConfig = ConfigMap<std::string, std::string, _Sep>;
+
+template <typename _Key, typename _Val, char _Sep,
+          typename _Less = webserver::utils::STLUtils::ci_less>
+class FileConfigMap : public ConfigMap<_Key, _Val, _Less> {
+ public:
+  using _MyBase = ConfigMap<_Key, _Val, _Less>;
+  using key_type = _Key;
+  using mapped_type = _Val;
+  using less = _Less;
+  using base_map = std::map<key_type, mapped_type, less>;
+  static const char seperator = _Sep;
+
+  FileConfigMap() : _MyBase() {}
+
+  FileConfigMap(const base_map& defaults)
+      : _MyBase(defaults) {}
+
+  void virtual load(const std::filesystem::path& file) {
+    std::ifstream in(file, std::ios::binary);
+    if (in) {
+      std::string line;
+      std::string strItem;
+      std::string strVal;
+      std::vector<std::string> s;
+      while (getline(in, line)) {
+        utils::StringUtils::trim(line);
+        if (line.empty()) continue;
+        if (line[0] == '#') continue;
+
+        s = utils::StringUtils::split(line, seperator, 2);
+        strItem = s[0];
+        utils::StringUtils::trim(strItem);
+
+        if (s.size() == 2)
+          strVal = s[1];
+        else
+          strVal = "";
+        utils::StringUtils::trim(strVal);
+
+        key_type item = _MyBase::toKey(strItem);
+        mapped_type val = _MyBase::toMapped(strVal);
+        this->items[item] = val;
+      }
+      in.close();
+    }
+  }
+
+ private:
+};
 }  // namespace webserver

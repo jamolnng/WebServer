@@ -1,14 +1,22 @@
+/*
+Copyright 2018 Jesse Laning
+*/
+
 #include "mime_types.h"
 
 #include <fstream>
+#include <iostream>
 #include <vector>
 #include "string_utils.h"
 
+using webserver::FileConfigMap;
 using webserver::utils::MimeTypes;
-using webserver::utils::STLUtils;
 using webserver::utils::StringUtils;
 
-MimeTypes::MimeTypes(const std::filesystem::path& path) { load(path); }
+MimeTypes::MimeTypes() : FileConfigMap<std::string, std::string, ' '>() {}
+
+MimeTypes::MimeTypes(const base_map& defaults)
+    : FileConfigMap<std::string, std::string, ' '>(defaults) {}
 
 void MimeTypes::load(const std::filesystem::path& path) {
   std::ifstream in(path, std::ios::binary);
@@ -21,22 +29,4 @@ void MimeTypes::load(const std::filesystem::path& path) {
       for (auto& s : splitExt) items[s] = type;
     }
   }
-}
-
-const STLUtils::ci_map<std::string, std::string>& MimeTypes::operator*() const {
-  return items;
-}
-
-std::string& MimeTypes::operator[](const std::string& item) {
-  return items.insert(std::make_pair(item, std::string())).first->second;
-}
-
-std::string& MimeTypes::operator[](std::string&& item) {
-  return items.try_emplace(std::move(item)).first->second;
-}
-
-void MimeTypes::clear() { items.clear(); }
-
-bool MimeTypes::has(const std::string& item) {
-  return items.find(item) != items.end();
 }

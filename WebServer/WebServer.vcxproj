@@ -69,7 +69,18 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ExtensionsToDeleteOnClean>*.html;*.js;*.png;*.cfg;*.types;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ExtensionsToDeleteOnClean>*.html;*.js;*.png;*.cfg;*.types;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ExtensionsToDeleteOnClean>*.html;*.js;*.png;*.cfg;*.types;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ExtensionsToDeleteOnClean>*.html;*.js;*.png;*.cfg;*.types;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
@@ -84,7 +95,8 @@
     </ClCompile>
     <PostBuildEvent>
       <Command>xcopy /y "$(ProjectDir)webserver.cfg"  "$(OutDir)"
-xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"</Command>
+xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"
+xcopy /E /C /I /y "$(ProjectDir)sites"  "$(OutDir)sites\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -101,7 +113,8 @@ xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"</Command>
     </ClCompile>
     <PostBuildEvent>
       <Command>xcopy /y "$(ProjectDir)webserver.cfg"  "$(OutDir)"
-xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"</Command>
+xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"
+xcopy /E /C /I /y "$(ProjectDir)sites"  "$(OutDir)sites\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -124,7 +137,8 @@ xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "$(ProjectDir)webserver.cfg"  "$(OutDir)"
-xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"</Command>
+xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"
+xcopy /E /C /I /y "$(ProjectDir)sites"  "$(OutDir)sites\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -147,7 +161,8 @@ xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "$(ProjectDir)webserver.cfg"  "$(OutDir)"
-xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"</Command>
+xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"
+xcopy /E /C /I /y "$(ProjectDir)sites"  "$(OutDir)sites\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

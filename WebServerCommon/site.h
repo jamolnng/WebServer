@@ -12,11 +12,13 @@ Copyright 2018 Jesse Laning
 #include "plugin.h"
 #include "request.h"
 #include "response.h"
+#include "server_config.h"
 namespace webserver {
 namespace site {
 class LIBEXPORT Site {
  public:
-  explicit Site(const std::filesystem::path& site, utils::MimeTypes* mimeTypes);
+  explicit Site(const std::filesystem::path& site,
+                const std::shared_ptr<ServerConfig>& serverConfig);
 
   const std::string& getName() const;
   const int getPort() const;
@@ -37,12 +39,12 @@ class LIBEXPORT Site {
       const std::vector<std::shared_ptr<plugin::Plugin>>& plugins);
 
  private:
-  StrStrConfig<> config;
+  FileConfigMap<std::string, std::string, '='> config;
   std::string name;
   int port;
   std::filesystem::path root;
   bool defaultSite;
-  utils::MimeTypes* mimeTypes{nullptr};
+  std::shared_ptr<ServerConfig> serverConfig;
 };
 }  // namespace site
 }  // namespace webserver

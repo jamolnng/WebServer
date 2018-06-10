@@ -142,7 +142,10 @@
       <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="config_map.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="server_config.h">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -207,6 +210,9 @@
       <Filter>Source Files\utils</Filter>
     </ClCompile>
     <ClCompile Include="mime_types.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="server_config.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>

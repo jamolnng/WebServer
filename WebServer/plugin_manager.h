@@ -3,21 +3,22 @@ Copyright 2018 Jesse Laning
 */
 
 #pragma once
+#include <filesystem>
 #include <map>
 #include <memory>
 #include <string>
 #include <utility>
 #include <vector>
-#include "config_map.h"
 #include "file_utils.h"
 #include "lib_utils.h"
 #include "plugin.h"
+#include "server_config.h"
 
 namespace webserver {
 namespace plugin {
 class PluginManager {
  public:
-  explicit PluginManager(const StrStrConfig<>& config);
+  explicit PluginManager(const std::shared_ptr<ServerConfig>& serverConfig);
   ~PluginManager();
 
   void load(const std::string& name);
@@ -30,7 +31,8 @@ class PluginManager {
   std::map<std::string,
            std::pair<utils::LibUtils::LIBHANDLE, std::shared_ptr<Plugin>>>
       plugins;
-  StrStrConfig<> config;
+  std::shared_ptr<ServerConfig> serverConfig;
+  std::filesystem::path pluginDir;
 };
 }  // namespace plugin
 }  // namespace webserver

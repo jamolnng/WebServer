@@ -4,23 +4,22 @@ Copyright 2018 Jesse Laning
 
 #include "site_manager.h"
 
-using webserver::StrStrConfig;
+using webserver::ServerConfig;
 using webserver::site::Site;
 using webserver::site::SiteManager;
-using webserver::utils::MimeTypes;
 
-SiteManager::SiteManager(const StrStrConfig<>& conf, MimeTypes* mimeTypes)
-    : config(conf), mimeTypes(mimeTypes) {
-  std::filesystem::path path(config["sites"]);
-  if (path.is_relative()) path = config.getParent() / path;
+SiteManager::SiteManager(const std::shared_ptr<ServerConfig>& serverConfig)
+    : serverConfig(serverConfig) {
+  std::filesystem::path path((*serverConfig)["sites"]);
+  if (path.is_relative()) path = serverConfig->getParent() / path;
   if (std::filesystem::exists(path))
     for (auto& di : std::filesystem::directory_iterator(path))
       if (!std::filesystem::is_directory(di.path()))
-        load(di.path().generic_string());
+        load(di.path().string());
 }
 
 void SiteManager::load(const std::filesystem::path& path) {
-  std::shared_ptr<Site> ptr = std::make_shared<Site>(path, mimeTypes);
+  std::shared_ptr<Site> ptr = std::make_shared<Site>(path, serverConfig);
   auto pairib = sites.insert({ptr->getName(), std::move(ptr)});
   if (pairib.second)
     if (pairib.first->second->isDefault()) defaultSite = pairib.first->second;

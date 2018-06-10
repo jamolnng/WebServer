@@ -10,15 +10,14 @@ Copyright 2018 Jesse Laning
 
 #include "sock_utils.h"
 
-#include "config_map.h"
-#include "mime_types.h"
+#include "server_config.h"
 #include "plugin_manager.h"
 #include "site_manager.h"
 
 namespace webserver {
 class WebServer {
  public:
-  explicit WebServer(const StrStrConfig<>& config);
+  explicit WebServer(const std::shared_ptr<ServerConfig>& serverConfig);
   ~WebServer();
 
   void start();
@@ -35,9 +34,8 @@ class WebServer {
   SOCKET server{0};
   std::map<SOCKET, std::thread> clientThreads;
   int port;
-  StrStrConfig<> config;
+  std::shared_ptr<ServerConfig> serverConfig;
   plugin::PluginManager pluginManager;
   site::SiteManager siteManager;
-  utils::MimeTypes mimeTypes;
 };
 }  // namespace webserver

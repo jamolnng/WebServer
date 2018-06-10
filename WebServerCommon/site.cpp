@@ -2,9 +2,9 @@
 Copyright 2018 Jesse Laning
 */
 
+#include <cassert>
 #include <chrono>
 #include <fstream>
-#include <iomanip>
 #include <sstream>
 #include <streambuf>
 #include "error.h"
@@ -17,27 +17,38 @@ using std::chrono::duration_cast;
 using std::chrono::seconds;
 using std::chrono::system_clock;
 using std::chrono::time_point;
+using webserver::ServerConfig;
 using webserver::http::error::Error;
 using webserver::http::request::Request;
 using webserver::http::response::Response;
 using webserver::http::response::StatusCode;
 using webserver::plugin::Plugin;
 using webserver::site::Site;
-using webserver::utils::MimeTypes;
 namespace fs = std::filesystem;
 
-Site::Site(const fs::path& site, MimeTypes* mimeTypes)
-    : config(site, {{"name", "localhost"},
-                    {"port", "80"},
-                    {"root", ""},
-                    {"default", "false"}}),
-      mimeTypes(mimeTypes),
-      name(config["name"]),
-      port(config.get<int>("port")),
-      root(config["root"]),
-      defaultSite(config.get<bool>("default")) {
+template <typename DstTimePointT, typename SrcTimePointT,
+          typename DstClockT = typename DstTimePointT::clock,
+          typename SrcClockT = typename SrcTimePointT::clock>
+DstTimePointT clock_cast(const SrcTimePointT tp) {
+  const auto src_now = SrcClockT::now();
+  const auto dst_now = DstClockT::now();
+  return dst_now + (tp - src_now);
+}
+
+Site::Site(const fs::path& site,
+           const std::shared_ptr<ServerConfig>& serverConfig)
+    : serverConfig(serverConfig),
+      config({{"name", "localhost"},
+              {"port", "80"},
+              {"root", ""},
+              {"default", "false"}}) {
+  config.load(site);
+  name = config["name"];
+  port = config.get<int>("port");
+  root = config["root"];
+  defaultSite = config["default"] == "true";
   if (root.is_relative())
-    root = std::filesystem::absolute(config.getParent() / root);
+    root = std::filesystem::absolute(site.parent_path() / root);
 }
 
 const std::string& Site::getName() const { return name; }
@@ -67,18 +78,18 @@ const std::string Site::getDefaultMessage(Request& request,
   str.assign(std::istreambuf_iterator<char>(in),
              std::istreambuf_iterator<char>());
   in.close();
-
-  auto s = duration_cast<seconds>(
-      std::filesystem::last_write_time(uri).time_since_epoch());
-  auto lwt = time_point<system_clock>(s);
-  auto lwt_c = system_clock::to_time_t(lwt);
   std::stringstream date;
+
+  auto lwt = clock_cast<system_clock::time_point>(
+      std::filesystem::last_write_time(uri));
+  auto lwt_c = system_clock::to_time_t(lwt);
+
   date << std::put_time(std::gmtime(&lwt_c), "%a, %e %b %Y %T GMT");
   resEntity["Last-Modified"] = date.str();
 
   std::string ext = uri.extension().string().substr(1);
-  if (mimeTypes->has(ext))
-    resEntity["Content-Type"] = (*mimeTypes)[ext];
+  if (serverConfig->getMimeTypes().has(ext))
+    resEntity["Content-Type"] = serverConfig->getMimeTypes()[ext];
   else
     resEntity["Content-Type"] = "application/unknown";
   return str;

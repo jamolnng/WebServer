@@ -7,17 +7,15 @@ Copyright 2018 Jesse Laning
 #include <memory>
 #include <string>
 #include <vector>
-#include "config_map.h"
-#include "mime_types.h"
 #include "site.h"
+#include "server_config.h"
 
 namespace webserver {
 namespace site {
 class SiteManager {
  public:
   SiteManager() = default;
-  explicit SiteManager(const StrStrConfig<>& config,
-                       utils::MimeTypes* mimeTypes);
+  explicit SiteManager(const std::shared_ptr<ServerConfig>& serverConfig);
 
   void load(const std::filesystem::path& path);
   Site& get(const std::string& name);
@@ -27,9 +25,8 @@ class SiteManager {
 
  private:
   std::map<std::string, std::shared_ptr<Site>> sites;
-  StrStrConfig<> config;
+  std::shared_ptr<ServerConfig> serverConfig;
   std::shared_ptr<Site> defaultSite;
-  utils::MimeTypes* mimeTypes{nullptr};
 };
 }  // namespace site
 }  // namespace webserver
