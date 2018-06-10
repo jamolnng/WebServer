@@ -16,9 +16,6 @@
     <Filter Include="Source Files\utils">
       <UniqueIdentifier>{d70384b1-553a-4f9c-87bf-a3cf78d71667}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\utils">
-      <UniqueIdentifier>{a1080a22-c48a-41f3-bc48-6e1145ab167b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\plugin">
       <UniqueIdentifier>{03fe4ca3-2b46-49a5-9439-39ec4f0b7bcd}</UniqueIdentifier>
     </Filter>
@@ -45,9 +42,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="sock_utils.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
     <ClCompile Include="plugin_manager.cpp">
       <Filter>Source Files\plugin</Filter>
     </ClCompile>
@@ -60,20 +54,11 @@
     <ClCompile Include="request_parser.cpp">
       <Filter>Source Files\http\request</Filter>
     </ClCompile>
-    <ClCompile Include="site.cpp">
-      <Filter>Source Files\site</Filter>
-    </ClCompile>
     <ClCompile Include="site_manager.cpp">
       <Filter>Source Files\site</Filter>
     </ClCompile>
-    <ClCompile Include="mime_types.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="sock_utils.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
     <ClInclude Include="plugin_manager.h">
       <Filter>Header Files\plugin</Filter>
     </ClInclude>
@@ -83,14 +68,8 @@
     <ClInclude Include="request_parser.h">
       <Filter>Header Files\http\request</Filter>
     </ClInclude>
-    <ClInclude Include="site.h">
-      <Filter>Header Files\site</Filter>
-    </ClInclude>
     <ClInclude Include="site_manager.h">
       <Filter>Header Files\site</Filter>
-    </ClInclude>
-    <ClInclude Include="mime_types.h">
-      <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="ws_version.h">
       <Filter>Header Files</Filter>

@@ -11,7 +11,7 @@ Copyright 2018 Jesse Laning
 #include "file_utils.h"
 #include "site.h"
 #include "status_code.h"
-#include "ws_version.h"
+#include "wsc_version.h"
 
 using std::chrono::duration_cast;
 using std::chrono::seconds;
@@ -89,7 +89,7 @@ const std::string Site::getDefaultErrorMessage(int code, Request& request,
   http::request::RequestLine& line = request.getRequestLine();
   return "Error " + std::to_string(code) + ": " + StatusCode::getString(code) +
          "\n" + line["Method"] + " | " + name + line["Request-URI"] + " | " +
-         line["HTTP-Version"] + "\n" + WS_VER_PRETTY;
+         line["HTTP-Version"] + "\nWSCommon" + WSC_VER_STR;
 }
 
 const std::string Site::getMessage(

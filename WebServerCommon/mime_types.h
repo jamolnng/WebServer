@@ -2,10 +2,11 @@
 #include <map>
 #include <string>
 #include "file_utils.h"
+#include "lib_utils.h"
 #include "stl_utils.h"
 namespace webserver {
 namespace utils {
-class MimeTypes {
+class LIBEXPORT MimeTypes {
  public:
   MimeTypes() = default;
   MimeTypes(const std::filesystem::path& path);

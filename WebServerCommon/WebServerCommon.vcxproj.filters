@@ -61,6 +61,12 @@
     <Filter Include="Source Files\plugin">
       <UniqueIdentifier>{f9606e03-ceda-4662-b95a-1e723415d7a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\site">
+      <UniqueIdentifier>{bd34e2af-611f-455b-9b62-176f4eaeee6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\site">
+      <UniqueIdentifier>{6760922b-a48c-4e82-b8ed-4703c4e520dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="string_utils.h">
@@ -129,6 +135,15 @@
     <ClInclude Include="plugin_utils.h">
       <Filter>Header Files\plugin</Filter>
     </ClInclude>
+    <ClInclude Include="site.h">
+      <Filter>Header Files\site</Filter>
+    </ClInclude>
+    <ClInclude Include="sock_utils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="mime_types.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="string_utils.cpp">
@@ -184,6 +199,15 @@
     </ClCompile>
     <ClCompile Include="plugin_utils.cpp">
       <Filter>Source Files\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="site.cpp">
+      <Filter>Source Files\site</Filter>
+    </ClCompile>
+    <ClCompile Include="sock_utils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="mime_types.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

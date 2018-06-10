@@ -16,9 +16,11 @@ Copyright 2018 Jesse Laning
 #include <unistd.h> /* Needed for close() */
 #endif
 
+#include "lib_utils.h"
+
 namespace webserver {
 namespace utils {
-class SocketUtils {
+class LIBEXPORT SocketUtils {
  public:
   static int init(void);
   static int quit(void);

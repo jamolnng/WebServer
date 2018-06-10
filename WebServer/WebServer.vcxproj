@@ -151,22 +151,16 @@ xcopy /y "$(ProjectDir)mime.types"  "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="mime_types.cpp" />
     <ClCompile Include="request_parser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="plugin_manager.cpp" />
-    <ClCompile Include="site.cpp" />
     <ClCompile Include="site_manager.cpp" />
-    <ClCompile Include="sock_utils.cpp" />
     <ClCompile Include="webserver.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mime_types.h" />
     <ClInclude Include="request_parser.h" />
     <ClInclude Include="plugin_manager.h" />
-    <ClInclude Include="site.h" />
     <ClInclude Include="site_manager.h" />
-    <ClInclude Include="sock_utils.h" />
     <ClInclude Include="webserver.h" />
     <ClInclude Include="ws_version.h" />
   </ItemGroup>

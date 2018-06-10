@@ -7,13 +7,14 @@ Copyright 2018 Jesse Laning
 #include <string>
 #include <vector>
 #include "config.h"
+#include "lib_utils.h"
 #include "mime_types.h"
 #include "plugin.h"
 #include "request.h"
 #include "response.h"
 namespace webserver {
 namespace site {
-class Site {
+class LIBEXPORT Site {
  public:
   explicit Site(const std::filesystem::path& site, utils::MimeTypes* mimeTypes);
 

@@ -155,6 +155,7 @@
     <ClInclude Include="header.h" />
     <ClInclude Include="lib_utils.h" />
     <ClInclude Include="line.h" />
+    <ClInclude Include="mime_types.h" />
     <ClInclude Include="plugin.h" />
     <ClInclude Include="plugin_utils.h" />
     <ClInclude Include="request.h" />
@@ -162,6 +163,8 @@
     <ClInclude Include="request_line.h" />
     <ClInclude Include="response.h" />
     <ClInclude Include="response_header.h" />
+    <ClInclude Include="site.h" />
+    <ClInclude Include="sock_utils.h" />
     <ClInclude Include="status_code.h" />
     <ClInclude Include="status_line.h" />
     <ClInclude Include="stl_utils.h" />
@@ -178,6 +181,7 @@
     <ClCompile Include="header.cpp" />
     <ClCompile Include="lib_utils.cpp" />
     <ClCompile Include="line.cpp" />
+    <ClCompile Include="mime_types.cpp" />
     <ClCompile Include="plugin.cpp" />
     <ClCompile Include="plugin_utils.cpp" />
     <ClCompile Include="request.cpp" />
@@ -185,6 +189,8 @@
     <ClCompile Include="request_line.cpp" />
     <ClCompile Include="response.cpp" />
     <ClCompile Include="response_header.cpp" />
+    <ClCompile Include="site.cpp" />
+    <ClCompile Include="sock_utils.cpp" />
     <ClCompile Include="status_code.cpp" />
     <ClCompile Include="status_line.cpp" />
     <ClCompile Include="string_utils.cpp" />
