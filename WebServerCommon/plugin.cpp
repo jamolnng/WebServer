@@ -3,21 +3,25 @@ Copyright 2018 Jesse Laning
 */
 
 #include "plugin.h"
+#include "site.h"
 
+using webserver::ServerConfig;
 using webserver::http::request::Request;
 using webserver::http::response::Response;
 using webserver::plugin::Plugin;
+using webserver::site::Site;
+
+Plugin::Plugin(const std::shared_ptr<ServerConfig>& serverConfig)
+    : serverConfig(serverConfig) {}
 
 bool Plugin::modifyRequest(Request& request) { return false; }
 
-bool Plugin::getMessage(std::string& body, Request& request,
+bool Plugin::getMessage(const Site* site, std::string& body, Request& request,
                         Response& response) {
   return false;
 }
 
-bool Plugin::getErrorMessage(int code, std::string& body, Request& request,
+bool Plugin::getErrorMessage(const Site* site, int code, std::string& body, Request& request,
                              Response& response) {
   return false;
 }
-
-bool Plugin::getResponse(Response& response) { return false; }

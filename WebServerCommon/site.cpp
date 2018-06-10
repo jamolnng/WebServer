@@ -98,6 +98,7 @@ const std::string Site::getDefaultMessage(Request& request,
 const std::string Site::getDefaultErrorMessage(int code, Request& request,
                                                Response& response) noexcept {
   http::request::RequestLine& line = request.getRequestLine();
+  response.getEntityHeader()["Content-Type"] = "text/plain";
   return "Error " + std::to_string(code) + ": " + StatusCode::getString(code) +
          "\n" + line["Method"] + " | " + name + line["Request-URI"] + " | " +
          line["HTTP-Version"] + "\nWSCommon" + WSC_VER_STR;
@@ -108,7 +109,7 @@ const std::string Site::getMessage(
     const std::vector<std::shared_ptr<Plugin>>& plugins) {
   for (auto& p : plugins) {
     std::string body;
-    if (p->getMessage(body, request, response)) return body;
+    if (p->getMessage(this, body, request, response)) return body;
   }
   return getDefaultMessage(request, response);
 }
@@ -118,7 +119,7 @@ const std::string Site::getErrorMessage(
     const std::vector<std::shared_ptr<Plugin>>& plugins) {
   for (auto& p : plugins) {
     std::string body;
-    if (p->getErrorMessage(code, body, request, response)) return body;
+    if (p->getErrorMessage(this, code, body, request, response)) return body;
   }
   return getDefaultErrorMessage(code, request, response);
 }

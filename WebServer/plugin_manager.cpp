@@ -2,6 +2,8 @@
 Copyright 2018 Jesse Laning
 */
 
+#include <iostream>
+#include <memory>
 #include "file_utils.h"
 #include "plugin_manager.h"
 
@@ -9,7 +11,7 @@ using webserver::ServerConfig;
 using webserver::plugin::Plugin;
 using webserver::plugin::PluginManager;
 
-typedef Plugin*(__stdcall* CreatePlugin)();
+typedef Plugin*(__stdcall* CreatePlugin)(const std::shared_ptr<ServerConfig>&);
 
 PluginManager::PluginManager(const std::shared_ptr<ServerConfig>& serverConfig)
     : serverConfig(serverConfig),
@@ -42,7 +44,7 @@ void PluginManager::load(const std::string& name) {
     utils::LibUtils::dlclose(lib);
     return;
   }
-  plugins[name] = {lib, std::shared_ptr<Plugin>(create())};
+  plugins[name] = {lib, std::shared_ptr<Plugin>(create(serverConfig))};
 }
 
 bool PluginManager::has(const std::string& name) {
