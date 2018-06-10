@@ -96,7 +96,7 @@ const std::string Site::getMessage(Request& request, Response& response,
                                    const std::vector<Plugin*>& plugins) {
   for (plugin::Plugin* p : plugins) {
     std::string body;
-    if (p->getMessage(body, request)) return body;
+    if (p->getMessage(body, request, response)) return body;
   }
   return getDefaultMessage(request, response);
 }
@@ -106,7 +106,7 @@ const std::string Site::getErrorMessage(int code, Request& request,
                                         const std::vector<Plugin*>& plugins) {
   for (Plugin* p : plugins) {
     std::string body;
-    if (p->getErrorMessage(code, body, request)) return body;
+    if (p->getErrorMessage(code, body, request, response)) return body;
   }
   return getDefaultErrorMessage(code, request, response);
 }

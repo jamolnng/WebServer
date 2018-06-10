@@ -10,12 +10,13 @@ using webserver::plugin::Plugin;
 
 bool Plugin::modifyRequest(Request& request) { return false; }
 
-bool Plugin::getMessage(std::string& body, const Request& request) {
+bool Plugin::getMessage(std::string& body, Request& request,
+                        Response& response) {
   return false;
 }
 
-bool Plugin::getErrorMessage(int code, std::string& body,
-                             const Request& request) {
+bool Plugin::getErrorMessage(int code, std::string& body, Request& request,
+                             Response& response) {
   return false;
 }
 

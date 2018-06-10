@@ -14,11 +14,13 @@ class LIBEXPORT Plugin {
  public:
   Plugin() = default;
 
-  bool modifyRequest(http::request::Request& request);
-  bool getMessage(std::string& body, const http::request::Request& request);
-  bool getErrorMessage(int code, std::string& body,
-                       const http::request::Request& request);
-  bool getResponse(http::response::Response& response);
+  virtual bool modifyRequest(http::request::Request& request);
+  virtual bool getMessage(std::string& body, http::request::Request& request,
+                          http::response::Response& response);
+  virtual bool getErrorMessage(int code, std::string& body,
+                               http::request::Request& request,
+                               http::response::Response& response);
+  virtual bool getResponse(http::response::Response& response);
 };
 }  // namespace plugin
 }  // namespace webserver

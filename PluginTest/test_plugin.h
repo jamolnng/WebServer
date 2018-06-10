@@ -9,9 +9,13 @@ Copyright 2018 Jesse Laning
 using webserver::Config;
 using webserver::plugin::Plugin;
 
-class TestPlugin : public webserver::plugin::Plugin {
+class TestPlugin : public Plugin {
  public:
-  TestPlugin() noexcept;
+  TestPlugin() = default;
+
+  bool getErrorMessage(int code, std::string& body,
+                       webserver::http::request::Request& request,
+                       webserver::http::response::Response& response) override;
 };
 
 REGISTER_PLUGIN(TestPlugin);
