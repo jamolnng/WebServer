@@ -6,7 +6,7 @@ Copyright 2018 Jesse Laning
 #include <memory>
 #include <string>
 #include <vector>
-#include "config.h"
+#include "config_map.h"
 #include "lib_utils.h"
 #include "mime_types.h"
 #include "plugin.h"

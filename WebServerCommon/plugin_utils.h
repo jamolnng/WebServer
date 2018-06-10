@@ -3,7 +3,7 @@ Copyright 2018 Jesse Laning
 */
 
 #pragma once
-#include "config.h"
+#include "config_map.h"
 #include "lib_utils.h"
 #include "plugin.h"
 

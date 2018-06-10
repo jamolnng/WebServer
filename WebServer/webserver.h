@@ -10,7 +10,7 @@ Copyright 2018 Jesse Laning
 
 #include "sock_utils.h"
 
-#include "config.h"
+#include "config_map.h"
 #include "mime_types.h"
 #include "plugin_manager.h"
 #include "site_manager.h"
@@ -32,7 +32,7 @@ class WebServer {
 
   std::thread thread;
   std::atomic<bool> running{false};
-  SOCKET server{ 0 };
+  SOCKET server{0};
   std::map<SOCKET, std::thread> clientThreads;
   int port;
   StrStrConfig<> config;

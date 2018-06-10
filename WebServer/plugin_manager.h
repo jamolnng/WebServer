@@ -8,7 +8,7 @@ Copyright 2018 Jesse Laning
 #include <string>
 #include <utility>
 #include <vector>
-#include "config.h"
+#include "config_map.h"
 #include "file_utils.h"
 #include "lib_utils.h"
 #include "plugin.h"

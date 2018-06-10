@@ -6,7 +6,6 @@ Copyright 2018 Jesse Laning
 #include <string>
 #include "plugin_utils.h"
 
-using webserver::Config;
 using webserver::plugin::Plugin;
 
 class TestPlugin : public Plugin {

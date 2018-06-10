@@ -7,7 +7,7 @@ Copyright 2018 Jesse Laning
 #include <memory>
 #include <string>
 #include <vector>
-#include "config.h"
+#include "config_map.h"
 #include "mime_types.h"
 #include "site.h"
 
@@ -16,7 +16,8 @@ namespace site {
 class SiteManager {
  public:
   SiteManager() = default;
-  explicit SiteManager(const StrStrConfig<>& config, utils::MimeTypes* mimeTypes);
+  explicit SiteManager(const StrStrConfig<>& config,
+                       utils::MimeTypes* mimeTypes);
 
   void load(const std::filesystem::path& path);
   Site& get(const std::string& name);

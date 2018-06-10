@@ -111,9 +111,6 @@
     <ClInclude Include="status_code.h">
       <Filter>Header Files\http\response</Filter>
     </ClInclude>
-    <ClInclude Include="config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="error.h">
       <Filter>Header Files\http\error</Filter>
     </ClInclude>
@@ -143,6 +140,9 @@
     </ClInclude>
     <ClInclude Include="mime_types.h">
       <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="config_map.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

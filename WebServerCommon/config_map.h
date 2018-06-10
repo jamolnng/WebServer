@@ -14,19 +14,19 @@ Copyright 2018 Jesse Laning
 namespace webserver {
 template <typename _Key, typename _Val, char _Sep,
           typename _Less = webserver::utils::STLUtils::ci_less>
-class Config {
+class ConfigMap {
  public:
   using key_type = _Key;
   using mapped_type = _Val;
   using base_map = std::map<key_type, mapped_type, _Less>;
   static const char seperator = _Sep;
 
-  explicit Config(const std::filesystem::path& file)
+  explicit ConfigMap(const std::filesystem::path& file)
       : parent(file.parent_path()) {
     load(file);
   }
-  Config(const std::filesystem::path& file, const base_map& defaults)
-      : Config<_Key, _Val, _Sep, _Less>(file) {
+  ConfigMap(const std::filesystem::path& file, const base_map& defaults)
+      : ConfigMap<_Key, _Val, _Sep, _Less>(file) {
     items.insert(defaults.begin(), defaults.end());
   }
 
@@ -134,5 +134,5 @@ class Config {
   }
 };
 template <char _Sep = '='>
-using StrStrConfig = Config<std::string, std::string, _Sep>;
+using StrStrConfig = ConfigMap<std::string, std::string, _Sep>;
 }  // namespace webserver
