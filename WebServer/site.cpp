@@ -13,6 +13,10 @@ Copyright 2018 Jesse Laning
 #include "status_code.h"
 #include "ws_version.h"
 
+using std::chrono::duration_cast;
+using std::chrono::seconds;
+using std::chrono::system_clock;
+using std::chrono::time_point;
 using webserver::http::error::Error;
 using webserver::http::request::Request;
 using webserver::http::response::Response;
@@ -20,8 +24,9 @@ using webserver::http::response::StatusCode;
 using webserver::plugin::Plugin;
 using webserver::site::Site;
 using webserver::utils::MimeTypes;
+namespace fs = std::filesystem;
 
-Site::Site(const std::filesystem::path& site, MimeTypes* mimeTypes)
+Site::Site(const fs::path& site, MimeTypes* mimeTypes)
     : config(site, {{"name", "localhost"},
                     {"port", "80"},
                     {"root", ""},
@@ -39,40 +44,43 @@ const std::string& Site::getName() const { return name; }
 
 const int Site::getPort() const { return port; }
 
-const std::filesystem::path& Site::getRoot() const { return root; }
+const fs::path& Site::getRoot() const { return root; }
 
 const bool Site::isDefault() const { return defaultSite; }
 
 const std::string Site::getDefaultMessage(Request& request,
                                           Response& response) {
-  std::filesystem::path path = request.getRequestLine()["Request-URI"];
-  if (path.has_root_directory()) path = path.relative_path();
-  path = root / path;
-  if (std::filesystem::is_directory(path)) path = path / "index.html";
-  if (!std::filesystem::exists(path)) throw Error(StatusCode::NOT_FOUND);
-  std::ifstream in(path, std::ios::binary);
+  http::request::RequestLine& reqLine = request.getRequestLine();
+  http::entity::EntityHeader& resEntity = response.getEntityHeader();
+
+  fs::path uri = reqLine["Request-URI"];
+  if (uri.has_root_directory()) uri = uri.relative_path();
+  uri = root / uri;
+  if (std::filesystem::is_directory(uri)) uri = uri / "index.html";
+  if (!std::filesystem::exists(uri)) throw Error(StatusCode::NOT_FOUND);
+  std::ifstream in(uri, std::ios::binary);
   if (!in) throw Error(StatusCode::INTERNAL_SERVER_ERROR);
   std::string str;
   in.seekg(0, std::ios::end);
-  str.reserve(in.tellg());
+  str.reserve(static_cast<size_t>(in.tellg()));
   in.seekg(0, std::ios::beg);
-  str.assign((std::istreambuf_iterator<char>(in)),
+  str.assign(std::istreambuf_iterator<char>(in),
              std::istreambuf_iterator<char>());
   in.close();
 
-  auto s = std::chrono::duration_cast<std::chrono::seconds>(
-      std::filesystem::last_write_time(path).time_since_epoch());
-  auto lwt = std::chrono::time_point<std::chrono::system_clock>(s);
-  auto lwt_c = std::chrono::system_clock::to_time_t(lwt);
+  auto s = duration_cast<seconds>(
+      std::filesystem::last_write_time(uri).time_since_epoch());
+  auto lwt = time_point<system_clock>(s);
+  auto lwt_c = system_clock::to_time_t(lwt);
   std::stringstream date;
   date << std::put_time(std::gmtime(&lwt_c), "%a, %e %b %Y %T GMT");
-  response.getEntityHeader()["Last-Modified"] = date.str();
+  resEntity["Last-Modified"] = date.str();
 
-  std::string ext = path.extension().string().substr(1);
+  std::string ext = uri.extension().string().substr(1);
   if (mimeTypes->has(ext))
-    response.getEntityHeader()["Content-Type"] = (*mimeTypes)[ext];
+    resEntity["Content-Type"] = (*mimeTypes)[ext];
   else
-    response.getEntityHeader()["Content-Type"] = "application/unknown";
+    resEntity["Content-Type"] = "application/unknown";
   return str;
 }
 

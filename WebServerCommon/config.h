@@ -15,14 +15,14 @@ class LIBEXPORT Config {
  public:
   explicit Config(std::filesystem::path file);
   Config(std::filesystem::path file,
-         std::map<std::string, std::string, utils::STLUtils::ci_less> defaults);
+         utils::STLUtils::ci_map<std::string, std::string> defaults);
 
   void load(const std::filesystem::path& file);
   bool has(const std::string& item);
   std::string& operator[](const std::string& item);
   std::string& operator[](std::string&& item);
 
-  const std::filesystem::path& getParent() const { return parent; }
+  const std::filesystem::path& getParent() const;
 
   template <typename T>
   T get(const std::string& item);
@@ -48,7 +48,7 @@ class LIBEXPORT Config {
   }
 
  private:
-  std::map<std::string, std::string, utils::STLUtils::ci_less> config;
+  utils::STLUtils::ci_map<std::string, std::string> config;
   std::filesystem::path parent;
 };
 }  // namespace webserver

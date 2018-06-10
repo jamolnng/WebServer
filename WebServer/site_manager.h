@@ -17,7 +17,6 @@ class SiteManager {
   SiteManager() = default;
   explicit SiteManager(const webserver::Config& config,
                        utils::MimeTypes* mimeTypes);
-  ~SiteManager();
 
   void load(const std::filesystem::path& path);
   Site& get(const std::string& name);

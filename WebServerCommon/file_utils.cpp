@@ -2,7 +2,6 @@
 Copyright 2018 Jesse Laning
 */
 
-#include <iostream>
 #include "file_utils.h"
 
 using webserver::utils::FileUtils;

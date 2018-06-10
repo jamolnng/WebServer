@@ -2,7 +2,6 @@
 Copyright 2018 Jesse Laning
 */
 
-#include <iostream>
 #include "file_utils.h"
 #include "plugin_manager.h"
 
@@ -12,10 +11,10 @@ using webserver::plugin::PluginManager;
 typedef Plugin*(__stdcall* CreatePlugin)();
 
 PluginManager::PluginManager(const webserver::Config& conf) : config(conf) {
-  std::filesystem::path plugins(config["plugins"]);
-  if (plugins.is_relative()) plugins = config.getParent() / plugins;
-  if (std::filesystem::exists(plugins))
-    for (auto& di : std::filesystem::directory_iterator(plugins))
+  std::filesystem::path path(config["plugins"]);
+  if (path.is_relative()) path = config.getParent() / path;
+  if (std::filesystem::exists(path))
+    for (auto& di : std::filesystem::directory_iterator(path))
       if (std::filesystem::is_directory(di.path()))
         if (std::filesystem::exists(di.path() / "plugin.cfg"))
           load(di.path().filename().generic_string());
@@ -32,13 +31,13 @@ void PluginManager::load(const std::string& name) {
   std::string libPath = p.generic_string();
   auto lib = utils::LibUtils::dlopen(libPath, RTLD_LAZY);
   if (!lib) {
-    std::cout << utils::LibUtils::dlerror() << std::endl;
+    // std::cout << utils::LibUtils::dlerror() << std::endl;
     return;
   }
   CreatePlugin create =
       (CreatePlugin)utils::LibUtils::dlsym(lib, "CreatePlugin");
   if (!create) {
-    std::cout << utils::LibUtils::dlerror() << std::endl;
+    // std::cout << utils::LibUtils::dlerror() << std::endl;
     utils::LibUtils::dlclose(lib);
     return;
   }

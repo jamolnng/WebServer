@@ -5,7 +5,6 @@ Copyright 2018 Jesse Laning
 #pragma once
 #include <algorithm>
 #include <cstring>
-#include <iostream>
 #include <iterator>
 #include <sstream>
 #include <string>

@@ -2,22 +2,31 @@
 Copyright 2018 Jesse Laning
 */
 
+#include <cctype>
 #include "string_utils.h"
 
 using webserver::utils::StringUtils;
 
+char my_toupper(char ch) {
+  return static_cast<char>(std::toupper(static_cast<unsigned char>(ch)));
+}
+
+char my_tolower(char ch) {
+  return static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+}
+
 void StringUtils::upper(std::string& text) {
-  std::transform(text.begin(), text.end(), text.begin(), toupper);
+  std::transform(text.begin(), text.end(), text.begin(), my_toupper);
 }
 
 void StringUtils::lower(std::string& text) {
-  std::transform(text.begin(), text.end(), text.begin(), tolower);
+  std::transform(text.begin(), text.end(), text.begin(), my_tolower);
 }
 
 void StringUtils::triml(std::string& text) {
   if (!text.empty()) {
     std::string::iterator pos = text.begin();
-    while (pos != text.end() && isspace(*pos)) pos++;
+    while (pos != text.end() && std::isspace(*pos)) pos++;
 
     text.erase(text.begin(), pos);
   }
@@ -36,7 +45,7 @@ void StringUtils::triml(std::string& text, const char* toremove) {
 void StringUtils::trimr(std::string& text) {
   if (!text.empty()) {
     std::string::iterator pos = text.end() - 1;
-    while (pos != text.begin() && isspace(*pos)) pos--;
+    while (pos != text.begin() && std::isspace(*pos)) pos--;
 
     text.erase(pos + 1, text.end());
   }

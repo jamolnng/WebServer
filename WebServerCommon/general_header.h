@@ -3,7 +3,6 @@ Copyright 2018 Jesse Laning
 */
 
 #pragma once
-#include <iostream>
 #include <map>
 #include <string>
 #include "header.h"

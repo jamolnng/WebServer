@@ -136,7 +136,7 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
   struct timeval tv;
   FD_ZERO(&set);
   FD_SET(client, &set);
-  tv.tv_sec = 5;
+  tv.tv_sec = timeout;
   tv.tv_usec = 0;
 
   int status = 0;
@@ -146,7 +146,7 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
     parser.clear();
     response.clear();
     while (!parser) {
-      std::fill(buffer.begin(), buffer.begin() + bytes, 0);
+      std::fill(buffer.begin(), buffer.begin() + bytes, '\0');
       status = select(static_cast<int>(client), &set, NULL, NULL, &tv);
       if (status == SOCKET_ERROR) {
         // error
@@ -165,27 +165,31 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
       }
     }
     request = parser.get();
+    http::request::RequestLine& reqLine = request.getRequestLine();
+    http::message::GeneralHeader& reqGeneral = request.getGeneralHeader();
+    http::response::StatusLine& statLine = response.getStatusLine();
+    http::response::ResponseHeader& resHead = response.getResponseHeader();
+    http::entity::EntityHeader& resEntity = response.getEntityHeader();
+    http::message::GeneralHeader& resGeneral = response.getGeneralHeader();
+
     for (auto p : plugins)
       if (p->modifyRequest(request)) break;
 
-    if (request.getGeneralHeader().has("Connection") &&
-        request.getGeneralHeader()["Connection"] == "close")
+    if (reqGeneral.has("Connection") &&
+        reqGeneral["Connection"] == "close")
       goto close;
 
-    site = siteManager[request.getRequestLine()["Host"]];
-    response.getStatusLine()["HTTP-Version"] = "HTTP/1.1";
-    response.getStatusLine()["Status-Code"] = std::to_string(StatusCode::OK);
-    response.getStatusLine()["Reason-Phrase"] =
-        StatusCode::getString(StatusCode::OK);
-    response.getGeneralHeader()["Connection"] =
-        request.getGeneralHeader()["Connection"];
+    site = siteManager[reqLine["Host"]];
+    statLine["HTTP-Version"] = "HTTP/1.1";
+    statLine["Status-Code"] = std::to_string(StatusCode::OK);
+    statLine["Reason-Phrase"] = StatusCode::getString(StatusCode::OK);
+    resGeneral["Connection"] = reqGeneral["Connection"];
 
     try {
       responseMessage = site.getMessage(request, response, plugins);
     } catch (Error& messageError) {
-      response.getStatusLine()["Status-Code"] =
-          std::to_string(messageError.code());
-      response.getStatusLine()["Reason-Phrase"] = messageError.what();
+      statLine["Status-Code"] = std::to_string(messageError.code());
+      statLine["Reason-Phrase"] = messageError.what();
       try {
         responseMessage = site.getErrorMessage(messageError.code(), request,
                                                response, plugins);
@@ -194,18 +198,16 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
             site.getDefaultErrorMessage(messageError.code(), request, response);
       }
     }
-    if (!response.getEntityHeader().has("Content-Type"))
-      response.getEntityHeader()["Content-Type"] =
-          response.getEntityHeader()["Content-Type"] + "*/*;charset=UTF-8";
-    response.getEntityHeader()["Content-Length"] =
-        std::to_string(responseMessage.size());
+    if (!resEntity.has("Content-Type"))
+      resEntity["Content-Type"] = "*/*;charset=UTF-8";
+    resEntity["Content-Length"] = std::to_string(responseMessage.size());
 
     auto now_c = system_clock::to_time_t(system_clock::now());
     std::stringstream date;
     date << std::put_time(std::gmtime(&now_c), "%a, %e %b %Y %T GMT");
-    response.getGeneralHeader()["Date"] = date.str();
+    resGeneral["Date"] = date.str();
 
-    response.getResponseHeader()["Server"] = WS_VER_PRETTY;
+    resHead["Server"] = WS_VER_PRETTY;
 
     std::string http = response.build() + responseMessage;
     send(client, http.c_str(), static_cast<int>(http.size()), 0);

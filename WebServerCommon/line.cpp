@@ -12,8 +12,7 @@ using webserver::utils::STLUtils;
 Line::Line(std::vector<std::string> names)
     : name_vec(names), name_set(names.begin(), names.end()) {}
 
-const std::map<std::string, std::string, STLUtils::ci_less>& Line::operator*()
-    const {
+const STLUtils::ci_map<std::string, std::string>& Line::operator*() const {
   return items;
 }
 

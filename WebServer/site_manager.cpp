@@ -11,15 +11,13 @@ using webserver::utils::MimeTypes;
 
 SiteManager::SiteManager(const Config& conf, MimeTypes* mimeTypes)
     : config(conf), mimeTypes(mimeTypes) {
-  std::filesystem::path sites(config["sites"]);
-  if (sites.is_relative()) sites = config.getParent() / sites;
-  if (std::filesystem::exists(sites))
-    for (auto& di : std::filesystem::directory_iterator(sites))
+  std::filesystem::path path(config["sites"]);
+  if (path.is_relative()) path = config.getParent() / path;
+  if (std::filesystem::exists(path))
+    for (auto& di : std::filesystem::directory_iterator(path))
       if (!std::filesystem::is_directory(di.path()))
         load(di.path().generic_string());
 }
-
-SiteManager::~SiteManager() {}
 
 void SiteManager::load(const std::filesystem::path& path) {
   Site s(path, mimeTypes);

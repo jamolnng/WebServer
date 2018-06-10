@@ -8,17 +8,17 @@ Copyright 2018 Jesse Laning
 
 using webserver::Config;
 using webserver::utils::STLUtils;
+namespace fs = std::filesystem;
 
-Config::Config(std::filesystem::path file) { load(file); }
+Config::Config(fs::path file) { load(file); }
 
-Config::Config(
-    std::filesystem::path file,
-    std::map<std::string, std::string, STLUtils::ci_less> defaults) {
+Config::Config(fs::path file,
+               STLUtils::ci_map<std::string, std::string> defaults) {
   config.insert(defaults.begin(), defaults.end());
   load(file);
 }
 
-void Config::load(const std::filesystem::path& file) {
+void Config::load(const fs::path& file) {
   parent = file.parent_path();
   std::ifstream in(file, std::ios::binary);
   if (in) {
@@ -55,3 +55,5 @@ std::string& Config::operator[](const std::string& item) {
 std::string& Config::operator[](std::string&& item) {
   return config.try_emplace(std::move(item)).first->second;
 }
+
+const fs::path& Config::getParent() const { return parent; }
