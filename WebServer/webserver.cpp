@@ -201,7 +201,7 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
 
     auto now_c = system_clock::to_time_t(system_clock::now());
     std::stringstream date;
-    date << std::put_time(std::localtime(&now_c), "%F %T %Z");
+    date << std::put_time(std::gmtime(&now_c), "%a, %e %b %Y %T GMT");
     response.getGeneralHeader()["Date"] = date.str();
 
     response.getResponseHeader()["Server"] = "WS/0.0.1 WSCommon/0.0.1";
