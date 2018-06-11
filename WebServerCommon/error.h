@@ -15,11 +15,13 @@ class LIBEXPORT Error : public std::exception {
  public:
   explicit Error(int code, std::string additional = std::string());
   const char* what() const throw() override;
+  const char* more() const;
   const int code() const;
 
  private:
   Error() = delete;
   std::string message;
+  std::string additional;
   int status;
 };
 }  // namespace error

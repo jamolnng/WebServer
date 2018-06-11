@@ -5,8 +5,12 @@ using webserver::http::error::Error;
 using webserver::http::response::StatusCode;
 
 Error::Error(int code, std::string additional)
-    : status(code), message(StatusCode::getString(code) + (additional.empty() ? "" : ": " + additional)) {}
+    : status(code),
+      message(StatusCode::getString(code)),
+      additional(additional) {}
 
 const char* Error::what() const throw() { return message.c_str(); }
+
+const char* Error::more() const { return additional.c_str(); }
 
 const int Error::code() const { return status; }
