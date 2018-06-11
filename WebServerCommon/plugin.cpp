@@ -6,6 +6,7 @@ Copyright 2018 Jesse Laning
 #include "site.h"
 
 using webserver::ServerConfig;
+using webserver::http::error::Error;
 using webserver::http::request::Request;
 using webserver::http::response::Response;
 using webserver::plugin::Plugin;
@@ -21,7 +22,8 @@ bool Plugin::getMessage(const Site* site, std::string& body, Request& request,
   return false;
 }
 
-bool Plugin::getErrorMessage(const Site* site, int code, std::string& body, Request& request,
+bool Plugin::getErrorMessage(const Site* site, const Error& error,
+                             std::string& body, Request& request,
                              Response& response) {
   return false;
 }

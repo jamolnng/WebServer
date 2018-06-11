@@ -13,9 +13,9 @@ namespace error {
 #pragma warning(disable : 4275)
 class LIBEXPORT Error : public std::exception {
  public:
-  explicit Error(int code);
-  const char* what() throw();
-  const int code();
+  explicit Error(int code, std::string additional = std::string());
+  const char* what() const throw() override;
+  const int code() const;
 
  private:
   Error() = delete;

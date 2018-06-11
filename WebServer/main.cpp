@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
   webserver::WebServer server(config);
   try {
     server.start();
-  } catch (std::runtime_error& err) {
+  } catch (const std::runtime_error& err) {
     std::cout << "Failed to start server: " << err.what() << std::endl;
     return -1;
   }

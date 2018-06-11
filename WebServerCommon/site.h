@@ -7,6 +7,7 @@ Copyright 2018 Jesse Laning
 #include <string>
 #include <vector>
 #include "config_map.h"
+#include "error.h"
 #include "lib_utils.h"
 #include "mime_types.h"
 #include "plugin.h"
@@ -28,13 +29,13 @@ class LIBEXPORT Site {
   const std::string getDefaultMessage(http::request::Request& request,
                                       http::response::Response& response);
   const std::string getDefaultErrorMessage(
-      int code, http::request::Request& request,
+      const http::error::Error& error, http::request::Request& request,
       http::response::Response& response) noexcept;
   const std::string getMessage(
       http::request::Request& request, http::response::Response& response,
       const std::vector<std::shared_ptr<plugin::Plugin>>& plugins);
   const std::string getErrorMessage(
-      int code, http::request::Request& request,
+      const http::error::Error& error, http::request::Request& request,
       http::response::Response& response,
       const std::vector<std::shared_ptr<plugin::Plugin>>& plugins);
 

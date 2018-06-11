@@ -2,6 +2,8 @@
 Copyright 2018 Jesse Laning
 */
 
+#include <iostream>
+
 #include <cassert>
 #include <chrono>
 #include <fstream>
@@ -18,8 +20,10 @@ using std::chrono::seconds;
 using std::chrono::system_clock;
 using std::chrono::time_point;
 using webserver::ServerConfig;
+using webserver::http::entity::EntityHeader;
 using webserver::http::error::Error;
 using webserver::http::request::Request;
+using webserver::http::request::RequestLine;
 using webserver::http::response::Response;
 using webserver::http::response::StatusCode;
 using webserver::plugin::Plugin;
@@ -61,29 +65,33 @@ const bool Site::isDefault() const { return defaultSite; }
 
 const std::string Site::getDefaultMessage(Request& request,
                                           Response& response) {
-  http::request::RequestLine& reqLine = request.getRequestLine();
-  http::entity::EntityHeader& resEntity = response.getEntityHeader();
+  RequestLine& reqLine = request.getRequestLine();
+  EntityHeader& resEntity = response.getEntityHeader();
 
   fs::path uri = reqLine["Request-URI"];
   if (uri.has_root_directory()) uri = uri.relative_path();
   uri = root / uri;
   if (std::filesystem::is_directory(uri)) uri = uri / "index.html";
   if (!std::filesystem::exists(uri)) throw Error(StatusCode::NOT_FOUND);
-  std::ifstream in(uri, std::ios::binary);
-  if (!in) throw Error(StatusCode::INTERNAL_SERVER_ERROR);
   std::string str;
-  in.seekg(0, std::ios::end);
-  str.reserve(static_cast<size_t>(in.tellg()));
-  in.seekg(0, std::ios::beg);
-  str.assign(std::istreambuf_iterator<char>(in),
-             std::istreambuf_iterator<char>());
-  in.close();
+
+  std::ifstream in;
+  try {
+    in.open(uri, std::ios::binary);
+    in.exceptions(std::ios::badbit | std::ios::failbit);
+    in.seekg(0, std::ios::end);
+    str.reserve(static_cast<size_t>(in.tellg()));
+    in.seekg(0, std::ios::beg);
+    str.assign(std::istreambuf_iterator<char>(in),
+               std::istreambuf_iterator<char>());
+  } catch (const std::ios::failure& e) {
+    throw Error(StatusCode::INTERNAL_SERVER_ERROR, e.what());
+  }
+  if (in.is_open()) in.close();
+
   std::stringstream date;
-
-  auto lwt = clock_cast<system_clock::time_point>(
-      std::filesystem::last_write_time(uri));
+  auto lwt = clock_cast<system_clock::time_point>(fs::last_write_time(uri));
   auto lwt_c = system_clock::to_time_t(lwt);
-
   date << std::put_time(std::gmtime(&lwt_c), "%a, %e %b %Y %T GMT");
   resEntity["Last-Modified"] = date.str();
 
@@ -95,12 +103,13 @@ const std::string Site::getDefaultMessage(Request& request,
   return str;
 }
 
-const std::string Site::getDefaultErrorMessage(int code, Request& request,
+const std::string Site::getDefaultErrorMessage(const Error& error,
+                                               Request& request,
                                                Response& response) noexcept {
-  http::request::RequestLine& line = request.getRequestLine();
+  RequestLine& line = request.getRequestLine();
   response.getEntityHeader()["Content-Type"] = "text/plain";
-  return "Error " + std::to_string(code) + ": " + StatusCode::getString(code) +
-         "\n" + line["Method"] + " | " + name + line["Request-URI"] + " | " +
+  return "Error " + std::to_string(error.code()) + ": " + error.what() + "\n" +
+         line["Method"] + " | " + name + line["Request-URI"] + " | " +
          line["HTTP-Version"] + "\nWSCommon" + WSC_VER_STR;
 }
 
@@ -115,11 +124,11 @@ const std::string Site::getMessage(
 }
 
 const std::string Site::getErrorMessage(
-    int code, Request& request, Response& response,
+    const Error& error, Request& request, Response& response,
     const std::vector<std::shared_ptr<Plugin>>& plugins) {
   for (auto& p : plugins) {
     std::string body;
-    if (p->getErrorMessage(this, code, body, request, response)) return body;
+    if (p->getErrorMessage(this, error, body, request, response)) return body;
   }
-  return getDefaultErrorMessage(code, request, response);
+  return getDefaultErrorMessage(error, request, response);
 }

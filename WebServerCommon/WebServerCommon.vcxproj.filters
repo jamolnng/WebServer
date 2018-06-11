@@ -191,9 +191,6 @@
     <ClCompile Include="status_code.cpp">
       <Filter>Source Files\http\response</Filter>
     </ClCompile>
-    <ClCompile Include="error.cpp">
-      <Filter>Source Files\http\error</Filter>
-    </ClCompile>
     <ClCompile Include="file_utils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
@@ -214,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="server_config.cpp">
       <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="error.cpp">
+      <Filter>Source Files\http\error</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -5,6 +5,7 @@ Copyright 2018 Jesse Laning
 #pragma once
 #include <memory>
 #include <string>
+#include "error.h"
 #include "lib_utils.h"
 #include "request.h"
 #include "response.h"
@@ -20,9 +21,12 @@ class LIBEXPORT Plugin {
   Plugin(const std::shared_ptr<webserver::ServerConfig>& serverConfig);
 
   virtual bool modifyRequest(http::request::Request& request);
-  virtual bool getMessage(const site::Site* site, std::string& body, http::request::Request& request,
+  virtual bool getMessage(const site::Site* site, std::string& body,
+                          http::request::Request& request,
                           http::response::Response& response);
-  virtual bool getErrorMessage(const site::Site* site, int code, std::string& body,
+  virtual bool getErrorMessage(const site::Site* site,
+                               const http::error::Error& error,
+                               std::string& body,
                                http::request::Request& request,
                                http::response::Response& response);
 

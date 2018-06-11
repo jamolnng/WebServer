@@ -184,16 +184,20 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
 
     try {
       responseMessage = site.getMessage(request, response, plugins);
-    } catch (Error& messageError) {
+    } catch (const Error& messageError) {
       statLine["Status-Code"] = std::to_string(messageError.code());
       statLine["Reason-Phrase"] = messageError.what();
       try {
-        responseMessage = site.getErrorMessage(messageError.code(), request,
-                                               response, plugins);
-      } catch (Error&) {
         responseMessage =
-            site.getDefaultErrorMessage(messageError.code(), request, response);
+            site.getErrorMessage(messageError, request, response, plugins);
+      } catch (const Error&) {
+        responseMessage =
+            site.getDefaultErrorMessage(messageError, request, response);
+      } catch (const std::exception& e) {
+        responseMessage = e.what();
       }
+    } catch (const std::exception& e) {
+      responseMessage = e.what();
     }
     if (!resEntity.has("Content-Type"))
       resEntity["Content-Type"] = "*/*;charset=UTF-8";
