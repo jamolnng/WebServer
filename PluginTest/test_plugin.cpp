@@ -19,7 +19,7 @@ bool TestPlugin::getErrorMessage(const Site* site, const Error& error,
   response.getEntityHeader()["Content-Type"] = "text/plain";
   body = "This error was handled by a plugin: " + name + ".\n\n";
   body += "Error " + std::to_string(error.code()) + ": " + error.what() + "\n" +
-          site->getName() + line["Request-URI"] + " | " + line["HTTP-Version"] +
-          "\nWScommon/" + WSC_VER_STR;
+          line["Method"] + " | " + site->getName() + line["Request-URI"] +
+          " | " + line["HTTP-Version"] + "\nWScommon/" + WSC_VER_STR;
   return true;
 }
