@@ -52,7 +52,7 @@ class BrainFuck {
     program.push_back(Instruction('\0'));
   }
 
-  template <typename _in, typename _out>
+  template <class _in, class _out>
   void run(_in& in, _out& out) {
     std::vector<ptr> data(MAX_DATA_SIZE, ptr());
     ptr pc = 0;
@@ -72,10 +72,10 @@ class BrainFuck {
           data[p]--;
           break;
         case '.':
-          out << static_cast<char>(data[p]);
+          out.put(static_cast<typename _out::char_type>(data[p]));
           break;
         case ',':
-          in >> data[p];
+          data[p] = static_cast<ptr>(in.get());
           break;
         case '[':
           if (!data[p]) pc = program[pc].operand;
@@ -89,7 +89,7 @@ class BrainFuck {
       pc++;
     }
     if (p == MAX_DATA_SIZE)
-      throw std::exception("program limit exceeded during execution");
+      throw std::exception("data limit exceeded during execution");
   }
 
  private:
