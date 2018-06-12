@@ -55,7 +55,7 @@ class BrainFuck {
   }
 
   template <class _in, class _out>
-  void run(_in& in, _out& out) {
+  void exec(_in& in, _out& out) {
     std::vector<ptr> data(MAX_DATA_SIZE, ptr());
     ptr pc = 0;
     ptr p = 0;

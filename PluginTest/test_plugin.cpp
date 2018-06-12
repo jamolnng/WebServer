@@ -33,7 +33,7 @@ bool TestPlugin::getMessage(Site* site, std::string& body, Request& request,
     if (iter->size() == 2) {
       std::stringstream out;
       bf.compile((*iter)[1]);
-      bf.run(std::cin, out);
+      bf.exec(std::cin, out);
       std::string run = out.str();
       StringUtils::trim(run);
       auto len = (*iter)[0].length();
