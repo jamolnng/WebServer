@@ -5,6 +5,7 @@ Copyright 2018 Jesse Laning
 #pragma once
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 #include "config_map.h"
 #include "error.h"
@@ -26,7 +27,7 @@ class LIBEXPORT Site {
   const std::filesystem::path& getRoot() const;
   const bool isDefault() const;
 
-  const std::filesystem::path getRequestURI(
+  const std::pair<std::filesystem::path, std::string> getRequestURI(
       http::request::Request& request,
       const std::vector<std::string>& extensions = {});
   const std::string getDefaultMessage(

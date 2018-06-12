@@ -4,7 +4,6 @@ Copyright 2018 Jesse Laning
 
 #include <iostream>
 
-#include <cassert>
 #include <chrono>
 #include <fstream>
 #include <sstream>
@@ -13,6 +12,7 @@ Copyright 2018 Jesse Laning
 #include "file_utils.h"
 #include "site.h"
 #include "status_code.h"
+#include "string_utils.h"
 #include "wsc_version.h"
 
 using std::chrono::duration_cast;
@@ -28,6 +28,7 @@ using webserver::http::response::Response;
 using webserver::http::response::StatusCode;
 using webserver::plugin::Plugin;
 using webserver::site::Site;
+using webserver::utils::StringUtils;
 namespace fs = std::filesystem;
 
 template <typename DstTimePointT, typename SrcTimePointT,
@@ -62,9 +63,11 @@ const fs::path& Site::getRoot() const { return root; }
 
 const bool Site::isDefault() const { return defaultSite; }
 
-const fs::path Site::getRequestURI(
+const std::pair<fs::path, std::string> Site::getRequestURI(
     Request& request, const std::vector<std::string>& extensions) {
-  fs::path uri = request.getRequestLine()["Request-URI"];
+  std::vector<std::string> split =
+      StringUtils::split(request.getRequestLine()["Request-URI"], '?', 2);
+  fs::path uri = split[0];
   if (uri.has_root_directory()) uri = uri.relative_path();
   uri = root / uri;
   if (fs::is_directory(uri)) {
@@ -83,7 +86,7 @@ const fs::path Site::getRequestURI(
     }
     if (fs::is_directory(uri)) uri /= "index.html";
   }
-  return uri;
+  return std::make_pair(uri, split.size() == 2 ? split[1] : "");
 }
 
 const std::string Site::getDefaultMessage(
@@ -91,7 +94,7 @@ const std::string Site::getDefaultMessage(
     const std::vector<std::string>& extensions) {
   EntityHeader& resEntity = response.getEntityHeader();
 
-  fs::path uri = getRequestURI(request, extensions);
+  fs::path uri = getRequestURI(request, extensions).first;
   if (!fs::exists(uri)) throw Error(StatusCode::NOT_FOUND);
   std::string str;
 

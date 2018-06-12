@@ -22,7 +22,7 @@ static BrainFuck<> bf;
 
 bool TestPlugin::getMessage(Site* site, std::string& body, Request& request,
                             Response& response) {
-  std::filesystem::path uri = site->getRequestURI(request, {".bf"});
+  std::filesystem::path uri = site->getRequestURI(request, {".bf"}).first;
   if (uri.extension() != ".bf") return false;
   std::string regex = site->getDefaultMessage(request, response, {".bf"});
   std::string str = regex;
