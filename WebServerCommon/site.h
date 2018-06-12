@@ -26,8 +26,12 @@ class LIBEXPORT Site {
   const std::filesystem::path& getRoot() const;
   const bool isDefault() const;
 
-  const std::string getDefaultMessage(http::request::Request& request,
-                                      http::response::Response& response);
+  const std::filesystem::path getRequestURI(
+      http::request::Request& request,
+      const std::vector<std::string>& extensions = {});
+  const std::string getDefaultMessage(
+      http::request::Request& request, http::response::Response& response,
+      const std::vector<std::string>& extensions = {});
   const std::string getDefaultErrorMessage(
       const http::error::Error& error, http::request::Request& request,
       http::response::Response& response) noexcept;

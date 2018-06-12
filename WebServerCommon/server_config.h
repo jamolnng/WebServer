@@ -15,7 +15,7 @@ class LIBEXPORT ServerConfig
   explicit ServerConfig(const std::filesystem::path& path);
   ServerConfig(const std::filesystem::path& path, const base_map& defaults);
 
-  const utils::MimeTypes& getMimeTypes() const;
+  utils::MimeTypes& getMimeTypes();
   const std::filesystem::path& getParent();
 
  private:

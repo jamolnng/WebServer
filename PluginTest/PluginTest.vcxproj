@@ -157,6 +157,7 @@
     <ClCompile Include="test_plugin.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="brain_fuck.h" />
     <ClInclude Include="test_plugin.h" />
   </ItemGroup>
   <ItemGroup>

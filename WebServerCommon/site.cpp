@@ -51,8 +51,7 @@ Site::Site(const fs::path& site,
   port = config.get<int>("port");
   root = config["root"];
   defaultSite = config["default"] == "true";
-  if (root.is_relative())
-    root = std::filesystem::absolute(site.parent_path() / root);
+  if (root.is_relative()) root = fs::absolute(site.parent_path() / root);
 }
 
 const std::string& Site::getName() const { return name; }
@@ -63,16 +62,37 @@ const fs::path& Site::getRoot() const { return root; }
 
 const bool Site::isDefault() const { return defaultSite; }
 
-const std::string Site::getDefaultMessage(Request& request,
-                                          Response& response) {
-  RequestLine& reqLine = request.getRequestLine();
-  EntityHeader& resEntity = response.getEntityHeader();
-
-  fs::path uri = reqLine["Request-URI"];
+const fs::path Site::getRequestURI(
+    Request& request, const std::vector<std::string>& extensions) {
+  fs::path uri = request.getRequestLine()["Request-URI"];
   if (uri.has_root_directory()) uri = uri.relative_path();
   uri = root / uri;
-  if (std::filesystem::is_directory(uri)) uri = uri / "index.html";
-  if (!std::filesystem::exists(uri)) throw Error(StatusCode::NOT_FOUND);
+  if (fs::is_directory(uri)) {
+    std::vector<std::string> realext;
+    realext.reserve(2 + extensions.size());
+    realext.insert(realext.end(), extensions.begin(), extensions.end());
+    realext.push_back(".html");
+    realext.push_back(".htm");
+    fs::path tmpuri;
+    for (std::string ext : realext) {
+      tmpuri = uri / ("index" + ext);
+      if (fs::exists(tmpuri)) {
+        uri = tmpuri;
+        break;
+      }
+    }
+    if (fs::is_directory(uri)) uri /= "index.html";
+  }
+  return uri;
+}
+
+const std::string Site::getDefaultMessage(
+    Request& request, Response& response,
+    const std::vector<std::string>& extensions) {
+  EntityHeader& resEntity = response.getEntityHeader();
+
+  fs::path uri = getRequestURI(request, extensions);
+  if (!fs::exists(uri)) throw Error(StatusCode::NOT_FOUND);
   std::string str;
 
   std::ifstream in;

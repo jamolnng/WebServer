@@ -3,7 +3,9 @@ Copyright 2018 Jesse Laning
 */
 
 #pragma once
+#include <iostream>
 #include <string>
+#include "brain_fuck.h"
 #include "error.h"
 #include "plugin_utils.h"
 #include "site.h"
@@ -17,9 +19,15 @@ class TestPlugin : public Plugin {
  public:
   TestPlugin(const std::shared_ptr<ServerConfig>& serverConfig,
              const std::string& name)
-      : Plugin(serverConfig), name(name) {}
+      : Plugin(serverConfig), name(name) {
+    serverConfig->getMimeTypes()["bf"] = "text/html";
+  }
 
-  bool getErrorMessage(const Site* site, const Error& error, std::string& body,
+  bool getMessage(Site* site, std::string& body,
+                  webserver::http::request::Request& request,
+                  webserver::http::response::Response& response) override;
+
+  bool getErrorMessage(Site* site, const Error& error, std::string& body,
                        webserver::http::request::Request& request,
                        webserver::http::response::Response& response) override;
 

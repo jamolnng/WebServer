@@ -23,6 +23,6 @@ ServerConfig::ServerConfig(const std::filesystem::path& path,
   mimeTypes.load(path.parent_path() / (*this)["mime"]);
 }
 
-const MimeTypes& ServerConfig::getMimeTypes() const { return mimeTypes; }
+MimeTypes& ServerConfig::getMimeTypes() { return mimeTypes; }
 
 const std::filesystem::path& ServerConfig::getParent() { return parent; }
