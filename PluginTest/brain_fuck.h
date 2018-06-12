@@ -47,8 +47,10 @@ class BrainFuck {
       }
       pc++;
     }
-    if (!stack.empty()) throw std::exception("stack error");
-    if (pc == MAX_PROGRAM_SIZE) throw std::exception("pc error");
+    if (!stack.empty())
+      throw std::exception("stack not closed (are you missing a closing ']')");
+    if (pc == MAX_PROGRAM_SIZE)
+      throw std::exception("program excedes max program size");
     program.push_back(Instruction('\0'));
   }
 
