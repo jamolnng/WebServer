@@ -16,6 +16,7 @@ void Request::clear() {
   generalHeader.clear();
   requestHeader.clear();
   entityHeader.clear();
+  body.clear();
 }
 
 void Request::parse(std::vector<std::string>& lines) {
@@ -47,3 +48,5 @@ GeneralHeader& Request::getGeneralHeader() { return generalHeader; }
 RequestHeader& Request::getRequestHeader() { return requestHeader; }
 
 EntityHeader& Request::getEntityHeader() { return entityHeader; }
+
+std::string& Request::getBody() { return body; }

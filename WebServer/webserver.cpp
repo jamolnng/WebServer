@@ -16,6 +16,7 @@ Copyright 2018 Jesse Laning
 #include "response.h"
 #include "site.h"
 #include "status_code.h"
+#include "win_utils.h"
 #include "ws_version.h"
 
 using std::chrono::system_clock;
@@ -101,9 +102,8 @@ void WebServer::run() {
       continue;
     } else {
       if (clientThreads.count(client)) {
-        SocketUtils::shutdown(client);
-        SocketUtils::close(client);
         if (clientThreads[client].joinable()) clientThreads[client].join();
+        clientThreads.erase(client);
       }
       clientThreads[client] = std::thread(
           [&](WebServer* w) {
@@ -154,12 +154,15 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
         goto close;
       } else {
         bytes = recv(client, &buffer[0], static_cast<int>(buffer.size()), NULL);
-        if (bytes == SOCKET_ERROR)  // error
+        if (bytes == SOCKET_ERROR) {
+          // error
           goto close;
-        else if (bytes == 0)  // peer disconnect
+        } else if (bytes == 0) {
+          // peer disconnect
           goto close;
-        else
+        } else {
           parser << std::string(&buffer[0], bytes);
+        }
       }
     }
     request = parser.get();

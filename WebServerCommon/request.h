@@ -26,12 +26,14 @@ class LIBEXPORT Request {
   message::GeneralHeader& getGeneralHeader();
   RequestHeader& getRequestHeader();
   entity::EntityHeader& getEntityHeader();
+  std::string& getBody();
 
  private:
   RequestLine requestLine{};
   message::GeneralHeader generalHeader{};
   RequestHeader requestHeader{};
   entity::EntityHeader entityHeader{};
+  std::string body{};
 };
 }  // namespace request
 }  // namespace http
