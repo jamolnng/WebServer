@@ -10,6 +10,7 @@ Copyright 2018 Jesse Laning
 #include "string_utils.h"
 #include "test_plugin.h"
 #include "wsc_version.h"
+#include "http_utils.h"
 
 using webserver::http::request::Request;
 using webserver::http::request::RequestLine;
@@ -35,7 +36,7 @@ bool TestPlugin::getMessage(Site* site, std::string& body,
       std::string rb = request.getBody();
       std::string sep = (rlq.empty() || rb.empty()) ? "" : "&";
       std::string instr = rlq + sep + rb;
-      std::istringstream in(instr);
+      std::istringstream in(webserver::utils::HTTPUtils::urlDecode(instr));
       std::ostringstream out;
       bf.compile((*iter)[1]);
       bf.exec(in, out);
