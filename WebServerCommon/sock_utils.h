@@ -9,11 +9,10 @@ Copyright 2018 Jesse Laning
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #else
-/* Assume that any non-Windows platform uses POSIX-style sockets instead. */
 #include <arpa/inet.h>
-#include <netdb.h> /* Needed for getaddrinfo() and freeaddrinfo() */
+#include <netdb.h>
 #include <sys/socket.h>
-#include <unistd.h> /* Needed for close() */
+#include <unistd.h>
 #endif
 
 #include "lib_utils.h"

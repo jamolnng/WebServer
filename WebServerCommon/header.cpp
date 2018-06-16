@@ -48,11 +48,11 @@ bool Header::has(const std::string& item) const {
   return items.find(item) != items.end();
 }
 
-bool Header::isValid(const std::string& val) {
+bool Header::isValid(const std::string& val) const {
   return STLUtils::inContainer(val, valid);
 }
 
-std::string Header::build() {
+std::string Header::build() const {
   std::ostringstream oss;
   for (auto& p : items)
     if (isValid(p.first)) oss << p.first << ": " << p.second << std::endl;

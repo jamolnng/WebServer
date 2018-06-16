@@ -129,9 +129,6 @@
     <ClInclude Include="line.h">
       <Filter>Header Files\http</Filter>
     </ClInclude>
-    <ClInclude Include="plugin_utils.h">
-      <Filter>Header Files\plugin</Filter>
-    </ClInclude>
     <ClInclude Include="site.h">
       <Filter>Header Files\site</Filter>
     </ClInclude>
@@ -148,6 +145,9 @@
       <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="http_utils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="plugin_utils.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
@@ -198,9 +198,6 @@
       <Filter>Source Files\utils</Filter>
     </ClCompile>
     <ClCompile Include="plugin.cpp">
-      <Filter>Source Files\plugin</Filter>
-    </ClCompile>
-    <ClCompile Include="plugin_utils.cpp">
       <Filter>Source Files\plugin</Filter>
     </ClCompile>
     <ClCompile Include="site.cpp">

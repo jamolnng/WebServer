@@ -3,8 +3,8 @@ Copyright 2018 Jesse Laning
 */
 
 #pragma once
-#include <string>
 #include <map>
+#include <string>
 #include "lib_utils.h"
 #include "line.h"
 #include "string_utils.h"
@@ -23,7 +23,7 @@ class LIBEXPORT RequestLine : public Line {
   void clear() override;
   void parse(const std::string& line) override;
 
-private:
+ private:
   std::string uri;
   std::map<std::string, std::string> parsedQuery;
   std::string query;

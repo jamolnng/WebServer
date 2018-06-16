@@ -132,7 +132,7 @@ void WebServer::run() {
   }
 }
 
-void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
+void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) const {
   RequestParser parser;
   Request request;
   Response response;
@@ -240,4 +240,4 @@ close:
   SocketUtils::close(client);
 }
 
-bool WebServer::isRunning() { return running; }
+const bool WebServer::isRunning() const { return running; }

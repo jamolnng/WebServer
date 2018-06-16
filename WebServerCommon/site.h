@@ -29,20 +29,20 @@ class LIBEXPORT Site {
 
   const std::filesystem::path getRequestURI(
       const http::request::Request& request,
-      const std::vector<std::string>& extensions = {});
+      const std::vector<std::string>& extensions = {}) const;
   const std::string getDefaultMessage(const std::filesystem::path& uri,
                                       const http::request::Request& request,
-                                      http::response::Response& response);
+                                      http::response::Response& response) const;
   const std::string getDefaultErrorMessage(
       const http::error::Error& error, const http::request::Request& request,
-      http::response::Response& response) noexcept;
+      http::response::Response& response) const noexcept;
   const std::string getMessage(
       const http::request::Request& request, http::response::Response& response,
-      const std::vector<std::shared_ptr<plugin::Plugin>>& plugins);
+      const std::vector<std::shared_ptr<plugin::Plugin>>& plugins) const;
   const std::string getErrorMessage(
       const http::error::Error& error, const http::request::Request& request,
       http::response::Response& response,
-      const std::vector<std::shared_ptr<plugin::Plugin>>& plugins);
+      const std::vector<std::shared_ptr<plugin::Plugin>>& plugins) const;
 
  private:
   FileConfigMap<std::string, std::string, '='> config;

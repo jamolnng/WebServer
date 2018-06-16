@@ -186,7 +186,6 @@
     <ClCompile Include="line.cpp" />
     <ClCompile Include="mime_types.cpp" />
     <ClCompile Include="plugin.cpp" />
-    <ClCompile Include="plugin_utils.cpp" />
     <ClCompile Include="request.cpp" />
     <ClCompile Include="request_header.cpp" />
     <ClCompile Include="request_line.cpp" />

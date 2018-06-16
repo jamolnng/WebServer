@@ -20,7 +20,7 @@ class LIBEXPORT Header {
   bool has(const std::string& item) const;
   const utils::STLUtils::ci_map<std::string, std::string>& operator*() const;
   virtual void parse(std::map<std::string, std::string>& parts);
-  virtual std::string build();
+  virtual std::string build() const;
 
  protected:
   explicit Header(utils::STLUtils::ci_set<std::string> valid);
@@ -28,7 +28,7 @@ class LIBEXPORT Header {
   utils::STLUtils::ci_map<std::string, std::string> items;
   utils::STLUtils::ci_set<std::string> valid;
 
-  bool isValid(const std::string& val);
+  bool isValid(const std::string& val) const;
 };
 }  // namespace http
 }  // namespace webserver

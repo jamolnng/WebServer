@@ -42,13 +42,13 @@ void Line::parse(const std::string& line) {
   }
 }
 
-std::string Line::build() {
+std::string Line::build() const {
   std::stringstream oss;
   for (auto& n : name_vec)
-    if (isValid(n)) oss << items[n] << " ";
+    if (isValid(n)) oss << items.at(n) << " ";
   return oss.str().substr(0, oss.str().size() - 1);
 }
 
-bool Line::isValid(const std::string& val) {
+bool Line::isValid(const std::string& val) const {
   return STLUtils::inContainer(val, name_set);
 }

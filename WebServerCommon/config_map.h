@@ -22,7 +22,7 @@ class ConfigMap {
   using less = _Less;
   using base_map = std::map<key_type, mapped_type, less>;
 
-  explicit ConfigMap() = default;
+  explicit ConfigMap() noexcept {};
   ConfigMap(const base_map& defaults)
       : ConfigMap<key_type, mapped_type, less>() {
     items.insert(defaults.begin(), defaults.end());
@@ -114,8 +114,7 @@ class FileConfigMap : public ConfigMap<_Key, _Val, _Less> {
 
   FileConfigMap() : _MyBase() {}
 
-  FileConfigMap(const base_map& defaults)
-      : _MyBase(defaults) {}
+  FileConfigMap(const base_map& defaults) : _MyBase(defaults) {}
 
   void virtual load(const std::filesystem::path& file) {
     std::ifstream in(file, std::ios::binary);

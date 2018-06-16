@@ -22,10 +22,10 @@ class LIBEXPORT Plugin {
   Plugin(const std::shared_ptr<webserver::ServerConfig>& serverConfig);
 
   virtual bool modifyRequest(http::request::Request& request);
-  virtual bool getMessage(site::Site* site, std::string& body,
+  virtual bool getMessage(const site::Site* site, std::string& body,
                           const http::request::Request& request,
                           http::response::Response& response);
-  virtual bool getErrorMessage(site::Site* site,
+  virtual bool getErrorMessage(const site::Site* site,
                                const http::error::Error& error,
                                std::string& body,
                                const http::request::Request& request,

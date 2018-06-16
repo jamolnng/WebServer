@@ -23,11 +23,11 @@ class TestPlugin : public Plugin {
     serverConfig->getMimeTypes()["bf"] = "text/html";
   }
 
-  bool getMessage(Site* site, std::string& body,
+  bool getMessage(const Site* site, std::string& body,
                   const webserver::http::request::Request& request,
                   webserver::http::response::Response& response) override;
 
-  bool getErrorMessage(Site* site, const Error& error, std::string& body,
+  bool getErrorMessage(const Site* site, const Error& error, std::string& body,
                        const webserver::http::request::Request& request,
                        webserver::http::response::Response& response) override;
 

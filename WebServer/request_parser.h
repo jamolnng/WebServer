@@ -13,7 +13,7 @@ namespace http {
 namespace request {
 class RequestParser {
  public:
-  RequestParser() = default;
+  RequestParser() noexcept = default;
 
   void parse(const std::string& str);
   const bool available() const;
@@ -23,7 +23,7 @@ class RequestParser {
 
  private:
   std::string buf{};
-  std::vector<Request> requests;
+  std::vector<Request> requests{};
   Request request{};
   size_t offset{0};
 
@@ -31,11 +31,8 @@ class RequestParser {
   void parseHeader(size_t strlen);
   void parseBody();
 
-  enum {
-    PARSE_HEADER,
-    PARSE_BODY
-  } state;
-  size_t contentLength{ 0 };
+  enum { PARSE_HEADER, PARSE_BODY } state{ PARSE_HEADER };
+  size_t contentLength{0};
 };
 
 }  // namespace request

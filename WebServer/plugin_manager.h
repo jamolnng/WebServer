@@ -22,10 +22,10 @@ class PluginManager {
   ~PluginManager();
 
   void load(const std::string& name);
-  bool has(const std::string& name);
-  Plugin& get(const std::string& name);
-  Plugin& operator[](const std::string& item);
-  std::vector<std::shared_ptr<Plugin>> operator*();
+  bool has(const std::string& name) const;
+  const Plugin& get(const std::string& name) const;
+  const Plugin& operator[](const std::string& item) const;
+  std::vector<std::shared_ptr<Plugin>> operator*() const;
 
  private:
   std::map<std::string,

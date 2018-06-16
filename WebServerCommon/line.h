@@ -20,7 +20,7 @@ class LIBEXPORT Line {
   const utils::STLUtils::ci_map<std::string, std::string>& operator*() const;
   virtual void clear();
   virtual void parse(const std::string& line);
-  virtual std::string build();
+  virtual std::string build() const;
 
  protected:
   explicit Line(std::vector<std::string> names);
@@ -29,7 +29,7 @@ class LIBEXPORT Line {
   std::vector<std::string> name_vec;
   utils::STLUtils::ci_map<std::string, std::string> items;
 
-  bool isValid(const std::string& val);
+  bool isValid(const std::string& val) const;
 };
 }  // namespace http
 }  // namespace webserver

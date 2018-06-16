@@ -11,9 +11,8 @@ using webserver::http::message::GeneralHeader;
 using webserver::http::request::Request;
 using webserver::http::request::RequestHeader;
 using webserver::http::request::RequestLine;
-using webserver::utils::StringUtils;
 using webserver::utils::HTTPUtils;
-
+using webserver::utils::StringUtils;
 
 void Request::clear() {
   requestLine.clear();
@@ -46,13 +45,12 @@ void Request::parse(std::vector<std::string>& lines) {
   entityHeader.parse(parts);
 }
 
-void Request::parseBody(const std::string& body) {
-  this->body = body;
+void Request::parseBody(const std::string& str) {
+  this->body = str;
   if (entityHeader.has("Content-Type")) {
     if (entityHeader["Content-Type"] == "application/x-www-form-urlencoded") {
       uriData = HTTPUtils::parseURLEncoded(body);
-    }
-    else if (entityHeader["Content-Type"] == "multipart/form-data") {
+    } else if (entityHeader["Content-Type"] == "multipart/form-data") {
       // formData = HTTPUtils::parseFormData(body);
     }
   }

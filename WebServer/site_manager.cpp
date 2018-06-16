@@ -14,8 +14,7 @@ SiteManager::SiteManager(const std::shared_ptr<ServerConfig>& serverConfig)
   if (path.is_relative()) path = serverConfig->getParent() / path;
   if (std::filesystem::exists(path))
     for (auto& di : std::filesystem::directory_iterator(path))
-      if (!std::filesystem::is_directory(di.path()))
-        load(di.path().string());
+      if (!std::filesystem::is_directory(di.path())) load(di.path().string());
 }
 
 void SiteManager::load(const std::filesystem::path& path) {
@@ -25,17 +24,17 @@ void SiteManager::load(const std::filesystem::path& path) {
     if (pairib.first->second->isDefault()) defaultSite = pairib.first->second;
 }
 
-Site& SiteManager::get(const std::string& name) {
+const Site& SiteManager::get(const std::string& name) const {
   if (sites.find(name) != sites.end()) return *sites.find(name)->second;
   return getDefault();
 }
 
-Site& SiteManager::operator[](const std::string& name) {
+const Site& SiteManager::operator[](const std::string& name) const {
   if (sites.find(name) != sites.end()) return *sites.find(name)->second;
   return getDefault();
 }
 
-std::vector<std::shared_ptr<Site>> SiteManager::operator*() {
+const std::vector<std::shared_ptr<Site>> SiteManager::operator*() const {
   std::vector<std::shared_ptr<Site>> r;
   r.reserve(sites.size());
   for (auto it = sites.begin(); it != sites.end(); ++it)
@@ -43,7 +42,7 @@ std::vector<std::shared_ptr<Site>> SiteManager::operator*() {
   return r;
 }
 
-Site& SiteManager::getDefault() {
+const Site& SiteManager::getDefault() const {
   if (defaultSite == nullptr) return *sites.begin()->second;
   return *defaultSite;
 }

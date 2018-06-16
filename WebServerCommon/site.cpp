@@ -2,8 +2,6 @@
 Copyright 2018 Jesse Laning
 */
 
-#include <iostream>
-
 #include <chrono>
 #include <fstream>
 #include <sstream>
@@ -63,8 +61,8 @@ const fs::path& Site::getRoot() const { return root; }
 
 const bool Site::isDefault() const { return defaultSite; }
 
-const fs::path Site::getRequestURI(const Request& request,
-                                   const std::vector<std::string>& extensions) {
+const fs::path Site::getRequestURI(
+    const Request& request, const std::vector<std::string>& extensions) const {
   fs::path uri = request.getRequestLine().getURI();
   if (uri.has_root_directory()) uri = uri.relative_path();
   uri = root / uri;
@@ -89,7 +87,7 @@ const fs::path Site::getRequestURI(const Request& request,
 
 const std::string Site::getDefaultMessage(const fs::path& uri,
                                           const Request& request,
-                                          Response& response) {
+                                          Response& response) const {
   if (!fs::exists(uri)) throw Error(StatusCode::NOT_FOUND);
 
   std::string str;
@@ -125,7 +123,8 @@ const std::string Site::getDefaultMessage(const fs::path& uri,
 
 const std::string Site::getDefaultErrorMessage(const Error& error,
                                                const Request& request,
-                                               Response& response) noexcept {
+                                               Response& response) const
+    noexcept {
   const RequestLine& line = request.getRequestLine();
   response.getEntityHeader()["Content-Type"] = "text/plain";
   return "Error " + std::to_string(error.code()) + ": " + error.what() + "\n" +
@@ -135,9 +134,9 @@ const std::string Site::getDefaultErrorMessage(const Error& error,
 
 const std::string Site::getMessage(
     const Request& request, Response& response,
-    const std::vector<std::shared_ptr<Plugin>>& plugins) {
+    const std::vector<std::shared_ptr<Plugin>>& plugins) const {
+  std::string body;
   for (auto& p : plugins) {
-    std::string body;
     if (p->getMessage(this, body, request, response)) return body;
   }
   return getDefaultMessage(getRequestURI(request, {}), request, response);
@@ -145,9 +144,9 @@ const std::string Site::getMessage(
 
 const std::string Site::getErrorMessage(
     const Error& error, const Request& request, Response& response,
-    const std::vector<std::shared_ptr<Plugin>>& plugins) {
+    const std::vector<std::shared_ptr<Plugin>>& plugins) const {
+  std::string body;
   for (auto& p : plugins) {
-    std::string body;
     if (p->getErrorMessage(this, error, body, request, response)) return body;
   }
   return getDefaultErrorMessage(error, request, response);

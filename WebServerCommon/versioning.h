@@ -12,7 +12,7 @@ Copyright 2018 Jesse Laning
 #define MAKE_VER_CSTR(major, minor, patch) #major "." #minor "." #patch
 
 #define DECL_VERSION(prefix, major, minor, patch)                          \
-  constexpr uint8_t prefix##_MAJOR = major;                                \
+  constexpr uint16_t prefix##_MAJOR = major;                               \
   constexpr uint8_t prefix##_MINOR = minor;                                \
   constexpr uint8_t prefix##_PATCH = patch;                                \
   constexpr uint32_t prefix##_VER_NUM = MAKE_VER_NUM(major, minor, patch); \

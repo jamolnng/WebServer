@@ -13,6 +13,7 @@ Copyright 2018 Jesse Laning
 #define RTLD_GLOBAL 0x00100
 #define RTLD_LOCAL 0
 #define RTLD_NODELETE 0x01000
+#pragma warning(disable : 4251)
 #else
 #include <dlfcn.h>
 #endif
@@ -31,8 +32,6 @@ Copyright 2018 Jesse Laning
 #define LIBEXPORT __attribute__((dllimport))
 #endif
 #endif
-
-#pragma warning(disable : 4251)
 
 namespace webserver {
 namespace utils {

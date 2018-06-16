@@ -7,8 +7,8 @@ Copyright 2018 Jesse Laning
 #include <memory>
 #include <string>
 #include <vector>
-#include "site.h"
 #include "server_config.h"
+#include "site.h"
 
 namespace webserver {
 namespace site {
@@ -18,10 +18,10 @@ class SiteManager {
   explicit SiteManager(const std::shared_ptr<ServerConfig>& serverConfig);
 
   void load(const std::filesystem::path& path);
-  Site& get(const std::string& name);
-  Site& operator[](const std::string& name);
-  std::vector<std::shared_ptr<Site>> operator*();
-  Site& getDefault();
+  const Site& get(const std::string& name) const;
+  const Site& operator[](const std::string& name) const;
+  const std::vector<std::shared_ptr<Site>> operator*() const;
+  const Site& getDefault() const;
 
  private:
   std::map<std::string, std::shared_ptr<Site>> sites;

@@ -1,3 +1,7 @@
+/*
+Copyright 2018 Jesse Laning
+*/
+
 #include "error.h"
 #include "status_code.h"
 

@@ -1,3 +1,7 @@
+/*
+Copyright 2018 Jesse Laning
+*/
+
 #pragma once
 #ifdef max
 #undef max
@@ -14,7 +18,7 @@ class BrainFuck {
  public:
   using data_type = _data_type;
 
-  BrainFuck(size_t maxProgramSize = 4096, size_t maxStackSize = 512)
+  BrainFuck(size_t maxProgramSize = 4096, size_t maxStackSize = 512) noexcept
       : maxProgramSize(maxProgramSize), maxStackSize(maxStackSize) {}
 
   void compile(const std::string& str) {
@@ -53,7 +57,7 @@ class BrainFuck {
   }
 
   template <class _in, class _out>
-  void exec(_in& in, _out& out) {
+  void exec(_in& in, _out& out) const {
     std::vector<data_type> data(maxDataSize, data_type());
     auto ptr = data.begin();
     for (auto pos = program.begin();
@@ -88,12 +92,12 @@ class BrainFuck {
           if (*ptr) pos = std::next(program.begin(), pos->operand);
           break;
         default:
-          throw std::exception("invalid operator");
+          throw std::exception("Invalid operator");
       }
       if (pos != program.end()) ++pos;
     }
     if (ptr == data.end())
-      throw std::exception("data limit exceeded during execution");
+      throw std::exception("Data limit exceeded during execution");
   }
 
  private:

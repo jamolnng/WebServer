@@ -18,7 +18,7 @@ void Response::clear() {
   entityHeader.clear();
 }
 
-std::string Response::build() {
+std::string Response::build() const {
   std::ostringstream oss;
   oss << statusLine.build() << std::endl;
   oss << generalHeader.build();

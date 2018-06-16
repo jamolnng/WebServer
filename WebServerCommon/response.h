@@ -17,7 +17,7 @@ class LIBEXPORT Response {
   Response() = default;
 
   void clear();
-  std::string build();
+  std::string build() const;
 
   StatusLine& getStatusLine();
   message::GeneralHeader& getGeneralHeader();

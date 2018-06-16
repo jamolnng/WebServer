@@ -10,8 +10,8 @@ Copyright 2018 Jesse Laning
 
 #include "sock_utils.h"
 
-#include "server_config.h"
 #include "plugin_manager.h"
+#include "server_config.h"
 #include "site_manager.h"
 
 namespace webserver {
@@ -23,11 +23,11 @@ class WebServer {
   void start();
   void stop();
 
-  bool isRunning();
+  const bool isRunning() const;
 
  private:
   void run();
-  void handleClient(SOCKET client, int buffer_size, int timeout);
+  void handleClient(SOCKET client, int buffer_size, int timeout) const;
 
   std::thread thread;
   std::atomic<bool> running{false};

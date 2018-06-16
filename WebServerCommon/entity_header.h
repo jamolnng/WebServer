@@ -16,7 +16,7 @@ class LIBEXPORT EntityHeader : public Header {
   EntityHeader() noexcept;
 
   void parse(std::map<std::string, std::string>& parts) override;
-  std::string build() override;
+  std::string build() const override;
 };
 }  // namespace entity
 }  // namespace http

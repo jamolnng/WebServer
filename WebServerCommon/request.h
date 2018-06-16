@@ -17,7 +17,7 @@ namespace http {
 namespace request {
 class LIBEXPORT Request {
  public:
-  Request() = default;
+  Request() noexcept {};
 
   void clear();
   void parse(std::vector<std::string>& lines);

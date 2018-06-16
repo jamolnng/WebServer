@@ -22,7 +22,7 @@ using webserver::utils::StringUtils;
 static const std::regex bfr("<\\s*\\?\\s*bf\\s([\\S\\s]*?)\\s*\\?\\s*>");
 static BrainFuck<> bf;
 
-bool TestPlugin::getMessage(Site* site, std::string& body,
+bool TestPlugin::getMessage(const Site* site, std::string& body,
                             const Request& request, Response& response) {
   std::filesystem::path uri = site->getRequestURI(request, {".bf"});
   if (uri.extension() != ".bf") return false;
@@ -52,7 +52,7 @@ bool TestPlugin::getMessage(Site* site, std::string& body,
   return true;
 }
 
-bool TestPlugin::getErrorMessage(Site* site, const Error& error,
+bool TestPlugin::getErrorMessage(const Site* site, const Error& error,
                                  std::string& body, const Request& request,
                                  Response& response) {
   const RequestLine& line = request.getRequestLine();
