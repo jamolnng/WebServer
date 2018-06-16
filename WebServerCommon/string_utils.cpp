@@ -4,8 +4,10 @@ Copyright 2018 Jesse Laning
 
 #include <cctype>
 #include "string_utils.h"
+#include "win_utils.h"
 
 using webserver::utils::StringUtils;
+using webserver::utils::WinUtils;
 
 char my_toupper(char ch) {
   return static_cast<char>(std::toupper(static_cast<unsigned char>(ch)));
@@ -102,5 +104,9 @@ std::vector<std::string> StringUtils::split(const std::string& s, char delim,
 }
 
 std::string StringUtils::strerror(int errnum) {
+#ifdef _WIN32
+  return WinUtils::GetLastErrorAsString();
+#else
   return std::string(std::strerror(errnum));
+#endif
 }

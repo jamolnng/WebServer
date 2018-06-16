@@ -12,10 +12,12 @@ Copyright 2018 Jesse Laning
 #include <utility>
 #include <vector>
 #include "error.h"
+#include "logger.h"
 #include "request_parser.h"
 #include "response.h"
 #include "site.h"
 #include "status_code.h"
+#include "string_utils.h"
 #include "win_utils.h"
 #include "ws_version.h"
 
@@ -30,8 +32,12 @@ using webserver::http::response::StatusCode;
 using webserver::plugin::Plugin;
 using webserver::plugin::PluginManager;
 using webserver::site::SiteManager;
+using webserver::utils::Logger;
 using webserver::utils::MimeTypes;
 using webserver::utils::SocketUtils;
+using webserver::utils::StringUtils;
+
+Logger& logger = webserver::utils::Logger::instance();
 
 WebServer::WebServer(const std::shared_ptr<ServerConfig>& serverConfig)
     : serverConfig(serverConfig),
@@ -46,7 +52,10 @@ WebServer::WebServer(const std::shared_ptr<ServerConfig>& serverConfig)
 WebServer::~WebServer() { SocketUtils::quit(); }
 
 void WebServer::start() {
-  if (running) throw std::runtime_error("Server already running");
+  if (running) {
+    logger.error("Server already running");
+    return;
+  }
 
   std::shared_ptr<addrinfo> res(nullptr,
                                 [](addrinfo* ai) { freeaddrinfo(ai); });
@@ -99,7 +108,11 @@ void WebServer::start() {
 }
 
 void WebServer::stop() {
-  if (!running) throw std::runtime_error("Server not running");
+  if (!running) {
+    logger.error("Server not running");
+    return;
+  }
+  running = false;
   for (std::pair<const SOCKET, std::thread>& a : clientThreads) {
     SocketUtils::shutdown(a.first);
     SocketUtils::close(a.first);
@@ -107,7 +120,6 @@ void WebServer::stop() {
   }
   SocketUtils::shutdown(server);
   SocketUtils::close(server);
-  running = false;
   if (thread.joinable()) thread.join();
 }
 
@@ -116,7 +128,9 @@ void WebServer::run() {
   while (running) {
     client = accept(server, NULL, NULL);
     if (client == INVALID_SOCKET) {
-      // error
+      if (running)
+        logger.error("Error accepting client connection: " +
+                     StringUtils::strerror(errno));
       continue;
     } else {
       if (clientThreads.find(client) != clientThreads.end()) {
@@ -141,13 +155,6 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) const {
   std::vector<char> buffer(bufferSize, 0);
   std::string responseMessage;
 
-  /*sockaddr_in clientInfo;
-  socklen_t addrLen = sizeof(clientInfo);
-  char* clientIP;
-  if (getpeername(client, (sockaddr*)&clientInfo, &addrLen) != 0)
-          goto close;
-  clientIP = inet_ntoa(clientInfo.sin_addr);*/
-
   fd_set set;
   struct timeval tv;
   FD_ZERO(&set);
@@ -155,26 +162,41 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) const {
   tv.tv_sec = timeout;
   tv.tv_usec = 0;
 
-  int status = 1;
-  int bytes = 0;
+  int status;
+  int bytes;
+
+  sockaddr_in clientInfo;
+  socklen_t addrLen = sizeof(clientInfo);
+  std::string clientIP;
+  if (getpeername(client, (sockaddr*)&clientInfo, &addrLen) == SOCKET_ERROR) {
+    logger.error("Error getting client IP: " + StringUtils::strerror(errno));
+    goto close;
+  }
+  clientIP = std::string(inet_ntoa(clientInfo.sin_addr));
+
+  logger.info("Accepted connection from: " + clientIP);
 
   while (true) {
     response.clear();
     while (!parser) {
       status = select(FD_SETSIZE, &set, NULL, NULL, &tv);
       if (status == SOCKET_ERROR) {
-        // error
+        if (running)
+          logger.error("Socket error selecting client (" + clientIP +
+                       "): " + StringUtils::strerror(errno));
         goto close;
       } else if (status == 0) {
-        // timeout
+        logger.info("Client timed out (" + clientIP + ")");
         goto close;
       } else {
         bytes = recv(client, &buffer[0], static_cast<int>(buffer.size()), NULL);
         if (bytes == SOCKET_ERROR) {
-          // error
+          if (running)
+            logger.error("Socket error on recv (" + clientIP +
+                         "): " + StringUtils::strerror(errno));
           goto close;
         } else if (bytes == 0) {
-          // peer disconnect
+          logger.info("Peer disconnect (" + clientIP + ")");
           goto close;
         } else {
           parser << std::string(&buffer[0], bytes);
@@ -238,6 +260,7 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) const {
 close:
   SocketUtils::shutdown(client);
   SocketUtils::close(client);
+  logger.info("Connection closed (" + clientIP + ")");
 }
 
 const bool WebServer::isRunning() const { return running; }
