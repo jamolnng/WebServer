@@ -2,13 +2,14 @@
 #ifdef max
 #undef max
 #endif
+#include <cstdint>
 #include <iostream>
 #include <limits>
 #include <stack>
 #include <string>
 #include <vector>
 
-template <typename _data_type = unsigned short>
+template <typename _data_type = uint16_t>
 class BrainFuck {
  public:
   using data_type = _data_type;
