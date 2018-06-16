@@ -16,20 +16,20 @@ class RequestParser {
   RequestParser() noexcept = default;
 
   void parse(const std::string& str);
-  void clear();
-  const bool isDone() const;
-  const Request& get() const;
+  const bool available() const;
+  const Request get();
   bool operator!();
   RequestParser& operator<<(const std::string& str);
 
  private:
   std::string buf{};
+  std::vector<Request> requests;
   Request request{};
   size_t offset{0};
-  bool done{false};
 
-  void parseHeader(const std::string& str);
-  void parseBody(const std::string& str);
+  void finish();
+  void parseHeader(size_t strlen);
+  void parseBody();
 
   enum {
     PARSE_HEADER,

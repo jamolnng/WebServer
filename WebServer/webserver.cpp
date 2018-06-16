@@ -65,6 +65,24 @@ void WebServer::start() {
   if (server == INVALID_SOCKET)
     throw std::runtime_error("Failed to create socket");
 
+#ifdef _WIN32
+  DWORD timeout = serverConfig->get<int>("timeout") * 1000;
+  if (setsockopt(server, SOL_SOCKET, SO_RCVTIMEO, (const char*)&timeout,
+                 sizeof timeout) == SOCKET_ERROR) {
+    SocketUtils::close(server);
+    throw std::runtime_error("Failed to set recv timeout");
+  }
+#else
+  struct timeval tv;
+  tv.tv_sec = serverConfig->get<int>("timeout");
+  tv.tv_usec = 0;
+  if (setsockopt(server, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv,
+                 sizeof tv)) {
+    SocketUtils::close(server);
+    throw std::runtime_error("Failed to set recv timeout");
+  }
+#endif
+
   if (bind(server, res->ai_addr, static_cast<int>(res->ai_addrlen)) ==
       SOCKET_ERROR) {
     SocketUtils::close(server);
@@ -101,7 +119,9 @@ void WebServer::run() {
       // error
       continue;
     } else {
-      if (clientThreads.count(client)) {
+      if (clientThreads.find(client) != clientThreads.end()) {
+        SocketUtils::shutdown(client);
+        SocketUtils::close(client);
         if (clientThreads[client].joinable()) clientThreads[client].join();
         clientThreads.erase(client);
       }
@@ -137,15 +157,13 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
   tv.tv_sec = timeout;
   tv.tv_usec = 0;
 
-  int status = 0;
+  int status = 1;
   int bytes = 0;
 
   while (true) {
-    parser.clear();
     response.clear();
     while (!parser) {
-      std::fill(buffer.begin(), buffer.begin() + bytes, '\0');
-      status = select(static_cast<int>(client), &set, NULL, NULL, &tv);
+      status = select(FD_SETSIZE, &set, NULL, NULL, &tv);
       if (status == SOCKET_ERROR) {
         // error
         goto close;

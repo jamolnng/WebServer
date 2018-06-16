@@ -9,64 +9,63 @@ Copyright 2018 Jesse Laning
 using webserver::http::request::Request;
 using webserver::http::request::RequestParser;
 
-void RequestParser::parseHeader(const std::string& str) {
-  buf += str;
+void RequestParser::parseHeader(size_t strlen) {
   size_t end;
-  if (buf.size() - str.size() < 3)
+  if (buf.size() - strlen < 3)
     end = buf.find("\r\n\r\n");
   else
-    end = buf.find("\r\n\r\n", buf.size() - str.size() - 3);
+    end = buf.find("\r\n\r\n", buf.size() - strlen - 3);
   if (end != std::string::npos) {
     std::vector<std::string> lines =
         utils::StringUtils::split(buf.substr(0, end), '\n');
     request.parse(lines);
+    buf = buf.substr(end + 4);
     if (request.getEntityHeader().has("Content-Length")) {
       state = PARSE_BODY;
-      buf = buf.substr(end + 4);
-      contentLength = std::stoul(request.getEntityHeader()["Content-Length"]);
-      // edge case where body is fully contained in recieved string
-      parseBody("");
+      contentLength = std::stoull(request.getEntityHeader()["Content-Length"]);
+      parseBody();
     } else {
-      done = true;
-      buf.clear();
+      finish();
     }
   }
 }
 
-void RequestParser::parseBody(const std::string& str) {
-  buf += str;
+void RequestParser::parseBody() {
   if (buf.size() >= contentLength) {
-    done = true;
-    state = PARSE_HEADER;
     request.getBody() = buf.substr(0, contentLength);
+    finish();
     buf = buf.substr(contentLength);
-    // edge case where next header is fully contained in recieved string
-    parseHeader("");
+    parseHeader(buf.size());
   }
 }
 
-void RequestParser::parse(const std::string& str) {
-  switch (state) {
-    case PARSE_HEADER:
-      parseHeader(str);
-      break;
-    case PARSE_BODY:
-      parseBody(str);
-      break;
-  }
-}
-
-void RequestParser::clear() {
+void RequestParser::finish() {
+  requests.push_back(request);
   request.clear();
-  done = false;
   state = PARSE_HEADER;
 }
 
-const bool RequestParser::isDone() const { return done; }
+void RequestParser::parse(const std::string& str) {
+  buf += str;
+  switch (state) {
+    case PARSE_HEADER:
+      parseHeader(str.size());
+      break;
+    case PARSE_BODY:
+      parseBody();
+      break;
+  }
+}
 
-const Request& RequestParser::get() const { return request; }
+const bool RequestParser::available() const { return requests.size() > 0; }
 
-bool RequestParser::operator!() { return !done; }
+const Request RequestParser::get() {
+  Request r = requests.back();
+  requests.pop_back();
+  return r;
+}
+
+bool RequestParser::operator!() { return !available(); }
 
 RequestParser& RequestParser::operator<<(const std::string& str) {
   parse(str);
