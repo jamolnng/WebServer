@@ -28,8 +28,7 @@ class BrainFuck {
             throw std::exception(
                 "Stack error. Are you missing an opening '['?");
           program.push_back(Instruction(c, stack.top()));
-          program[program.back().operand].operand =
-              static_cast<data_type>(program.size());
+          program[stack.top()].operand = static_cast<data_type>(program.size());
           stack.pop();
           break;
         case '[':
@@ -56,7 +55,8 @@ class BrainFuck {
   void exec(_in& in, _out& out) {
     std::vector<data_type> data(maxDataSize, data_type());
     auto ptr = data.begin();
-    for (auto pos = program.begin(); pos != program.end() && ptr != data.end(); ) {
+    for (auto pos = program.begin();
+         pos != program.end() && ptr != data.end();) {
       switch (pos->opt) {
         case '>':
           ++ptr;
