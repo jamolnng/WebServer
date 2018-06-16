@@ -39,5 +39,22 @@ Pointer :   ^
 >>+.                    Add 1 to Cell #5 gives us an exclamation point
 >++.                    And finally a newline from Cell #6
 ?>
+<br/>
+<form method="post">
+  <div>
+    <label for="say">What greeting do you want to say?</label>
+    <input name="say" id="say" value="Hi">
+  </div>
+  <div>
+    <label for="to">Who do you want to say it to?</label>
+    <input name="to" id="to" value="World">
+  </div>
+  <div>
+    <button>Send</button>
+  </div>
+</form>
+<br/>
+Form echo:<br/>
+<?bf ,[.,] ?>
 </body>
 </html>

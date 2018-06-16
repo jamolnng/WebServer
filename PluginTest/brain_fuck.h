@@ -2,6 +2,7 @@
 #ifdef max
 #undef max
 #endif
+#include <iostream>
 #include <limits>
 #include <stack>
 #include <string>
@@ -55,8 +56,7 @@ class BrainFuck {
   void exec(_in& in, _out& out) {
     std::vector<data_type> data(maxDataSize, data_type());
     auto ptr = data.begin();
-    for (auto pos = program.begin(); pos != program.end() && ptr != data.end();
-         ++pos) {
+    for (auto pos = program.begin(); pos != program.end() && ptr != data.end(); ) {
       switch (pos->opt) {
         case '>':
           ++ptr;
@@ -71,11 +71,15 @@ class BrainFuck {
           (*ptr)--;
           break;
         case '.':
-          out.put(static_cast<typename std::ostream::char_type>(*ptr));
+          out.put(static_cast<typename _out::char_type>(*ptr));
           break;
-        case ',':
-          *ptr = static_cast<data_type>(in.get());
-          break;
+        case ',': {
+          int c = in.get();
+          if (c < 0)
+            *ptr = 0;
+          else
+            *ptr = static_cast<data_type>(c);
+        } break;
         case '[':
           if (!*ptr) pos = std::next(program.begin(), pos->operand);
           break;
@@ -85,6 +89,7 @@ class BrainFuck {
         default:
           throw std::exception("invalid operator");
       }
+      if (pos != program.end()) ++pos;
     }
     if (ptr == data.end())
       throw std::exception("data limit exceeded during execution");

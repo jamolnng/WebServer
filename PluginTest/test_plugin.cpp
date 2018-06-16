@@ -31,7 +31,11 @@ bool TestPlugin::getMessage(Site* site, std::string& body,
   size_t removed = 0;
   while (iter != end) {
     if (iter->size() == 2) {
-      std::istringstream in(request.getRequestLine().getQuery() + request.getBody());
+      std::string rlq = request.getRequestLine().getQuery();
+      std::string rb = request.getBody();
+      std::string sep = (rlq.empty() || rb.empty()) ? "" : "&";
+      std::string instr = rlq + sep + rb;
+      std::istringstream in(instr);
       std::ostringstream out;
       bf.compile((*iter)[1]);
       bf.exec(in, out);
