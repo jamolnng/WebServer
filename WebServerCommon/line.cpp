@@ -24,6 +24,14 @@ std::string& Line::operator[](std::string&& item) {
   return items.try_emplace(std::move(item)).first->second;
 }
 
+const std::string& Line::operator[](const std::string& item) const {
+  return items.at(item);
+}
+
+const std::string& Line::operator[](std::string&& item) const {
+  return items.at(item);
+}
+
 void Line::clear() { items.clear(); }
 
 void Line::parse(const std::string& line) {

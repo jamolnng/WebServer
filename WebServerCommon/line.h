@@ -15,9 +15,11 @@ class LIBEXPORT Line {
  public:
   std::string& operator[](const std::string& item);
   std::string& operator[](std::string&& item);
+  const std::string& operator[](const std::string& item) const;
+  const std::string& operator[](std::string&& item) const;
   const utils::STLUtils::ci_map<std::string, std::string>& operator*() const;
-  void clear();
-  void parse(const std::string& line);
+  virtual void clear();
+  virtual void parse(const std::string& line);
   virtual std::string build();
 
  protected:

@@ -182,8 +182,8 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
       }
     }
     request = parser.get();
-    http::request::RequestLine& reqLine = request.getRequestLine();
-    http::message::GeneralHeader& reqGeneral = request.getGeneralHeader();
+    const http::message::GeneralHeader& reqGeneral = request.getGeneralHeader();
+    const http::request::RequestHeader reqHead = request.getRequestHeader();
     http::response::StatusLine& statLine = response.getStatusLine();
     http::response::ResponseHeader& resHead = response.getResponseHeader();
     http::entity::EntityHeader& resEntity = response.getEntityHeader();
@@ -195,7 +195,10 @@ void WebServer::handleClient(SOCKET client, int bufferSize, int timeout) {
     if (reqGeneral.has("Connection") && reqGeneral["Connection"] == "close")
       goto close;
 
-    site = siteManager[reqLine["Host"]];
+    if (reqHead.has("Host"))
+      site = siteManager[reqHead["Host"]];
+    else
+      site = siteManager.getDefault();
     statLine["HTTP-Version"] = "HTTP/1.1";
     statLine["Status-Code"] = std::to_string(StatusCode::OK);
     statLine["Reason-Phrase"] = StatusCode::getString(StatusCode::OK);

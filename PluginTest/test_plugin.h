@@ -24,11 +24,11 @@ class TestPlugin : public Plugin {
   }
 
   bool getMessage(Site* site, std::string& body,
-                  webserver::http::request::Request& request,
+                  const webserver::http::request::Request& request,
                   webserver::http::response::Response& response) override;
 
   bool getErrorMessage(Site* site, const Error& error, std::string& body,
-                       webserver::http::request::Request& request,
+                       const webserver::http::request::Request& request,
                        webserver::http::response::Response& response) override;
 
  private:

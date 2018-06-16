@@ -17,13 +17,12 @@ Plugin::Plugin(const std::shared_ptr<ServerConfig>& serverConfig)
 
 bool Plugin::modifyRequest(Request& request) { return false; }
 
-bool Plugin::getMessage(Site* site, std::string& body, Request& request,
+bool Plugin::getMessage(Site* site, std::string& body, const Request& request,
                         Response& response) {
   return false;
 }
 
-bool Plugin::getErrorMessage(Site* site, const Error& error,
-                             std::string& body, Request& request,
-                             Response& response) {
+bool Plugin::getErrorMessage(Site* site, const Error& error, std::string& body,
+                             const Request& request, Response& response) {
   return false;
 }

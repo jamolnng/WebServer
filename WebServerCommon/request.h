@@ -21,12 +21,14 @@ class LIBEXPORT Request {
 
   void clear();
   void parse(std::vector<std::string>& lines);
+  void parseBody(const std::string& body);
 
-  RequestLine& getRequestLine();
-  message::GeneralHeader& getGeneralHeader();
-  RequestHeader& getRequestHeader();
-  entity::EntityHeader& getEntityHeader();
-  std::string& getBody();
+  const RequestLine& getRequestLine() const;
+  const message::GeneralHeader& getGeneralHeader() const;
+  const RequestHeader& getRequestHeader() const;
+  const entity::EntityHeader& getEntityHeader() const;
+  const std::string& getBody() const;
+  const std::map<std::string, std::string>& getURIDecodedBody() const;
 
  private:
   RequestLine requestLine{};
@@ -34,6 +36,7 @@ class LIBEXPORT Request {
   RequestHeader requestHeader{};
   entity::EntityHeader entityHeader{};
   std::string body{};
+  std::map<std::string, std::string> uriData;
 };
 }  // namespace request
 }  // namespace http

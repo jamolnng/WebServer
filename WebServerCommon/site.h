@@ -27,20 +27,20 @@ class LIBEXPORT Site {
   const std::filesystem::path& getRoot() const;
   const bool isDefault() const;
 
-  const std::pair<std::filesystem::path, std::string> getRequestURI(
-      http::request::Request& request,
+  const std::filesystem::path getRequestURI(
+      const http::request::Request& request,
       const std::vector<std::string>& extensions = {});
-  const std::string getDefaultMessage(
-      http::request::Request& request, http::response::Response& response,
-      const std::vector<std::string>& extensions = {});
+  const std::string getDefaultMessage(const std::filesystem::path& uri,
+                                      const http::request::Request& request,
+                                      http::response::Response& response);
   const std::string getDefaultErrorMessage(
-      const http::error::Error& error, http::request::Request& request,
+      const http::error::Error& error, const http::request::Request& request,
       http::response::Response& response) noexcept;
   const std::string getMessage(
-      http::request::Request& request, http::response::Response& response,
+      const http::request::Request& request, http::response::Response& response,
       const std::vector<std::shared_ptr<plugin::Plugin>>& plugins);
   const std::string getErrorMessage(
-      const http::error::Error& error, http::request::Request& request,
+      const http::error::Error& error, const http::request::Request& request,
       http::response::Response& response,
       const std::vector<std::shared_ptr<plugin::Plugin>>& plugins);
 

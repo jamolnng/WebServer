@@ -13,12 +13,12 @@ namespace http {
 namespace request {
 class RequestParser {
  public:
-  RequestParser() noexcept = default;
+  RequestParser() = default;
 
   void parse(const std::string& str);
   const bool available() const;
   const Request get();
-  bool operator!();
+  bool operator!() const;
   RequestParser& operator<<(const std::string& str);
 
  private:

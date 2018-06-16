@@ -147,6 +147,9 @@
     <ClInclude Include="server_config.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="http_utils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="string_utils.cpp">
@@ -214,6 +217,9 @@
     </ClCompile>
     <ClCompile Include="error.cpp">
       <Filter>Source Files\http\error</Filter>
+    </ClCompile>
+    <ClCompile Include="http_utils.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

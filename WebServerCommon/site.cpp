@@ -63,11 +63,9 @@ const fs::path& Site::getRoot() const { return root; }
 
 const bool Site::isDefault() const { return defaultSite; }
 
-const std::pair<fs::path, std::string> Site::getRequestURI(
-    Request& request, const std::vector<std::string>& extensions) {
-  std::vector<std::string> split =
-      StringUtils::split(request.getRequestLine()["Request-URI"], '?', 2);
-  fs::path uri = split[0];
+const fs::path Site::getRequestURI(const Request& request,
+                                   const std::vector<std::string>& extensions) {
+  fs::path uri = request.getRequestLine().getURI();
   if (uri.has_root_directory()) uri = uri.relative_path();
   uri = root / uri;
   if (fs::is_directory(uri)) {
@@ -86,22 +84,19 @@ const std::pair<fs::path, std::string> Site::getRequestURI(
     }
     if (fs::is_directory(uri)) uri /= "index.html";
   }
-  return std::make_pair(uri, split.size() == 2 ? split[1] : "");
+  return uri;
 }
 
-const std::string Site::getDefaultMessage(
-    Request& request, Response& response,
-    const std::vector<std::string>& extensions) {
-  EntityHeader& resEntity = response.getEntityHeader();
-
-  fs::path uri = getRequestURI(request, extensions).first;
+const std::string Site::getDefaultMessage(const fs::path& uri,
+                                          const Request& request,
+                                          Response& response) {
   if (!fs::exists(uri)) throw Error(StatusCode::NOT_FOUND);
-  std::string str;
 
+  std::string str;
   std::ifstream in;
   try {
-    in.open(uri, std::ios::binary);
     in.exceptions(std::ios::badbit | std::ios::failbit);
+    in.open(uri, std::ios::binary);
     in.seekg(0, std::ios::end);
     str.reserve(static_cast<size_t>(in.tellg()));
     in.seekg(0, std::ios::beg);
@@ -116,6 +111,8 @@ const std::string Site::getDefaultMessage(
   auto lwt = clock_cast<system_clock::time_point>(fs::last_write_time(uri));
   auto lwt_c = system_clock::to_time_t(lwt);
   date << std::put_time(std::gmtime(&lwt_c), "%a, %e %b %Y %T GMT");
+
+  EntityHeader& resEntity = response.getEntityHeader();
   resEntity["Last-Modified"] = date.str();
 
   std::string ext = uri.extension().string().substr(1);
@@ -127,9 +124,9 @@ const std::string Site::getDefaultMessage(
 }
 
 const std::string Site::getDefaultErrorMessage(const Error& error,
-                                               Request& request,
+                                               const Request& request,
                                                Response& response) noexcept {
-  RequestLine& line = request.getRequestLine();
+  const RequestLine& line = request.getRequestLine();
   response.getEntityHeader()["Content-Type"] = "text/plain";
   return "Error " + std::to_string(error.code()) + ": " + error.what() + "\n" +
          line["Method"] + " | " + name + line["Request-URI"] + " | " +
@@ -137,17 +134,17 @@ const std::string Site::getDefaultErrorMessage(const Error& error,
 }
 
 const std::string Site::getMessage(
-    Request& request, Response& response,
+    const Request& request, Response& response,
     const std::vector<std::shared_ptr<Plugin>>& plugins) {
   for (auto& p : plugins) {
     std::string body;
     if (p->getMessage(this, body, request, response)) return body;
   }
-  return getDefaultMessage(request, response);
+  return getDefaultMessage(getRequestURI(request, {}), request, response);
 }
 
 const std::string Site::getErrorMessage(
-    const Error& error, Request& request, Response& response,
+    const Error& error, const Request& request, Response& response,
     const std::vector<std::shared_ptr<Plugin>>& plugins) {
   for (auto& p : plugins) {
     std::string body;

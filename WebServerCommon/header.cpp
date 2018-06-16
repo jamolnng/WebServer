@@ -22,6 +22,14 @@ std::string& Header::operator[](std::string&& item) {
   return items.try_emplace(std::move(item)).first->second;
 }
 
+const std::string& Header::operator[](const std::string& item) const {
+  return items.at(item);
+}
+
+const std::string& Header::operator[](std::string&& item) const {
+  return items.at(item);
+}
+
 void Header::clear() { items.clear(); }
 
 void Header::parse(std::map<std::string, std::string>& parts) {
@@ -36,7 +44,7 @@ void Header::parse(std::map<std::string, std::string>& parts) {
   }
 }
 
-bool Header::has(const std::string& item) {
+bool Header::has(const std::string& item) const {
   return items.find(item) != items.end();
 }
 

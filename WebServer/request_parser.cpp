@@ -32,7 +32,7 @@ void RequestParser::parseHeader(size_t strlen) {
 
 void RequestParser::parseBody() {
   if (buf.size() >= contentLength) {
-    request.getBody() = buf.substr(0, contentLength);
+    request.parseBody(buf.substr(0, contentLength));
     finish();
     buf = buf.substr(contentLength);
     parseHeader(buf.size());
@@ -65,7 +65,7 @@ const Request RequestParser::get() {
   return r;
 }
 
-bool RequestParser::operator!() { return !available(); }
+bool RequestParser::operator!() const { return !available(); }
 
 RequestParser& RequestParser::operator<<(const std::string& str) {
   parse(str);

@@ -20,20 +20,21 @@ using webserver::utils::StringUtils;
 static const std::regex bfr("<\\s*\\?\\s*bf\\s([\\S\\s]*?)\\s*\\?\\s*>");
 static BrainFuck<> bf;
 
-bool TestPlugin::getMessage(Site* site, std::string& body, Request& request,
-                            Response& response) {
-  std::filesystem::path uri = site->getRequestURI(request, {".bf"}).first;
+bool TestPlugin::getMessage(Site* site, std::string& body,
+                            const Request& request, Response& response) {
+  std::filesystem::path uri = site->getRequestURI(request, {".bf"});
   if (uri.extension() != ".bf") return false;
-  std::string regex = site->getDefaultMessage(request, response, {".bf"});
+  std::string regex = site->getDefaultMessage(uri, request, response);
   std::string str = regex;
   std::sregex_iterator iter(regex.begin(), regex.end(), bfr);
   std::sregex_iterator end;
   size_t removed = 0;
   while (iter != end) {
     if (iter->size() == 2) {
-      std::stringstream out;
+      std::istringstream in(request.getRequestLine().getQuery() + request.getBody());
+      std::ostringstream out;
       bf.compile((*iter)[1]);
-      bf.exec(std::cin, out);
+      bf.exec(in, out);
       std::string run = out.str();
       StringUtils::trim(run);
       auto len = (*iter)[0].length();
@@ -47,9 +48,9 @@ bool TestPlugin::getMessage(Site* site, std::string& body, Request& request,
 }
 
 bool TestPlugin::getErrorMessage(Site* site, const Error& error,
-                                 std::string& body, Request& request,
+                                 std::string& body, const Request& request,
                                  Response& response) {
-  RequestLine& line = request.getRequestLine();
+  const RequestLine& line = request.getRequestLine();
   response.getEntityHeader()["Content-Type"] = "text/plain";
   body = "This error was handled by a plugin: " + name + ".\n\n";
   body += "Error " + std::to_string(error.code()) + ": " + error.what() + "\n" +

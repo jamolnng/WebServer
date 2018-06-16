@@ -3,6 +3,7 @@ Copyright 2018 Jesse Laning
 */
 
 #pragma once
+#include <filesystem>
 #include <memory>
 #include <string>
 #include "error.h"
@@ -22,12 +23,12 @@ class LIBEXPORT Plugin {
 
   virtual bool modifyRequest(http::request::Request& request);
   virtual bool getMessage(site::Site* site, std::string& body,
-                          http::request::Request& request,
+                          const http::request::Request& request,
                           http::response::Response& response);
   virtual bool getErrorMessage(site::Site* site,
                                const http::error::Error& error,
                                std::string& body,
-                               http::request::Request& request,
+                               const http::request::Request& request,
                                http::response::Response& response);
 
  protected:

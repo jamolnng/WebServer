@@ -4,12 +4,16 @@ Copyright 2018 Jesse Laning
 
 #include "request.h"
 
+#include "http_utils.h"
+
 using webserver::http::entity::EntityHeader;
 using webserver::http::message::GeneralHeader;
 using webserver::http::request::Request;
 using webserver::http::request::RequestHeader;
 using webserver::http::request::RequestLine;
 using webserver::utils::StringUtils;
+using webserver::utils::HTTPUtils;
+
 
 void Request::clear() {
   requestLine.clear();
@@ -17,6 +21,7 @@ void Request::clear() {
   requestHeader.clear();
   entityHeader.clear();
   body.clear();
+  uriData.clear();
 }
 
 void Request::parse(std::vector<std::string>& lines) {
@@ -41,12 +46,28 @@ void Request::parse(std::vector<std::string>& lines) {
   entityHeader.parse(parts);
 }
 
-RequestLine& Request::getRequestLine() { return requestLine; }
+void Request::parseBody(const std::string& body) {
+  this->body = body;
+  if (entityHeader.has("Content-Type")) {
+    if (entityHeader["Content-Type"] == "application/x-www-form-urlencoded") {
+      uriData = HTTPUtils::parseURLEncoded(body);
+    }
+    else if (entityHeader["Content-Type"] == "multipart/form-data") {
+      // formData = HTTPUtils::parseFormData(body);
+    }
+  }
+}
 
-GeneralHeader& Request::getGeneralHeader() { return generalHeader; }
+const RequestLine& Request::getRequestLine() const { return requestLine; }
 
-RequestHeader& Request::getRequestHeader() { return requestHeader; }
+const GeneralHeader& Request::getGeneralHeader() const { return generalHeader; }
 
-EntityHeader& Request::getEntityHeader() { return entityHeader; }
+const RequestHeader& Request::getRequestHeader() const { return requestHeader; }
 
-std::string& Request::getBody() { return body; }
+const EntityHeader& Request::getEntityHeader() const { return entityHeader; }
+
+const std::string& Request::getBody() const { return body; }
+
+const std::map<std::string, std::string>& Request::getURIDecodedBody() const {
+  return uriData;
+}
