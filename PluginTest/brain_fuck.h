@@ -75,7 +75,7 @@ class BrainFuck {
           break;
         case ',': {
           int c = in.get();
-          if (c < 0)
+          if (c == _in::traits_type::eof())
             *ptr = 0;
           else
             *ptr = static_cast<data_type>(c);

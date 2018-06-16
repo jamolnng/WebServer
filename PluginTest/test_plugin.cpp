@@ -6,16 +6,17 @@ Copyright 2018 Jesse Laning
 #include <regex>
 #include <sstream>
 #include "brain_fuck.h"
+#include "http_utils.h"
 #include "status_code.h"
 #include "string_utils.h"
 #include "test_plugin.h"
 #include "wsc_version.h"
-#include "http_utils.h"
 
 using webserver::http::request::Request;
 using webserver::http::request::RequestLine;
 using webserver::http::response::Response;
 using webserver::http::response::StatusCode;
+using webserver::utils::HTTPUtils;
 using webserver::utils::StringUtils;
 
 static const std::regex bfr("<\\s*\\?\\s*bf\\s([\\S\\s]*?)\\s*\\?\\s*>");
@@ -35,8 +36,7 @@ bool TestPlugin::getMessage(Site* site, std::string& body,
       std::string rlq = request.getRequestLine().getQuery();
       std::string rb = request.getBody();
       std::string sep = (rlq.empty() || rb.empty()) ? "" : "&";
-      std::string instr = rlq + sep + rb;
-      std::istringstream in(webserver::utils::HTTPUtils::urlDecode(instr));
+      std::istringstream in(HTTPUtils::urlDecode(rlq + sep + rb));
       std::ostringstream out;
       bf.compile((*iter)[1]);
       bf.exec(in, out);
