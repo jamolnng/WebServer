@@ -120,8 +120,6 @@ void WebServer::run() {
       continue;
     } else {
       if (clientThreads.find(client) != clientThreads.end()) {
-        SocketUtils::shutdown(client);
-        SocketUtils::close(client);
         if (clientThreads[client].joinable()) clientThreads[client].join();
         clientThreads.erase(client);
       }
