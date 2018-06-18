@@ -6,20 +6,22 @@ Copyright 2018 Jesse Laning
 #include <regex>
 #include <sstream>
 #include "brain_fuck.h"
+#include "html_utils.h"
 #include "http_utils.h"
+#include "logger.h"
 #include "status_code.h"
 #include "string_utils.h"
 #include "test_plugin.h"
 #include "wsc_version.h"
-#include "logger.h"
 
 using webserver::http::request::Request;
 using webserver::http::request::RequestLine;
 using webserver::http::response::Response;
 using webserver::http::response::StatusCode;
+using webserver::utils::HTMLUtils;
 using webserver::utils::HTTPUtils;
-using webserver::utils::StringUtils;
 using webserver::utils::Logger;
+using webserver::utils::StringUtils;
 
 static const std::regex bfr("<\\s*\\?\\s*bf\\s([\\S\\s]*?)\\s*\\?\\s*>");
 static BrainFuck<> bf;
@@ -31,8 +33,9 @@ bool TestPlugin::getMessage(const Site* site, std::string& body,
   std::filesystem::path uri = site->getRequestURI(request, {".bf"});
   if (uri.extension() != ".bf") return false;
 
-  //test of logger singleton in plugins
-  logger.info("Parsing BrainFuck request: " + uri.string());
+  // test of logger singleton in plugins
+  logger.info("Parsing BrainFuck request: " +
+              request.getRequestLine()["Request-URI"]);
 
   std::string regex = site->getDefaultMessage(uri, request, response);
   std::string str = regex;
@@ -50,6 +53,7 @@ bool TestPlugin::getMessage(const Site* site, std::string& body,
       bf.exec(in, out);
       std::string run = out.str();
       StringUtils::trim(run);
+      HTMLUtils::xmlEscape(run);
       auto len = (*iter)[0].length();
       str.replace((*iter).position(0) - removed, len, run);
       removed += len - run.size();

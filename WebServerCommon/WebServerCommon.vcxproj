@@ -153,6 +153,7 @@
     <ClInclude Include="file_utils.h" />
     <ClInclude Include="general_header.h" />
     <ClInclude Include="header.h" />
+    <ClInclude Include="html_utils.h" />
     <ClInclude Include="http_utils.h" />
     <ClInclude Include="lib_utils.h" />
     <ClInclude Include="line.h" />
@@ -182,6 +183,7 @@
     <ClCompile Include="file_utils.cpp" />
     <ClCompile Include="general_header.cpp" />
     <ClCompile Include="header.cpp" />
+    <ClCompile Include="html_utils.cpp" />
     <ClCompile Include="http_utils.cpp" />
     <ClCompile Include="lib_utils.cpp" />
     <ClCompile Include="line.cpp" />

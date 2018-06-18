@@ -6,6 +6,7 @@ Copyright 2018 Jesse Laning
 #include <chrono>
 #include <ctime>
 #include <iomanip>
+#include <set>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -24,7 +25,7 @@ class LIBEXPORT Logger {
 
   enum LogLevel { DEBUG, INFO, WARNING, ERROR, CRITICAL };
 
-  void addStream(std::ostream* ostr) { streams.push_back(ostr); }
+  void addStream(std::ostream* ostr);
 
   template <typename T>
   void log(LogLevel level, const T& t) {
@@ -67,9 +68,10 @@ class LIBEXPORT Logger {
   static Logger& instance();
 
  private:
-  Logger(){};
+  Logger() = default;
+  ~Logger();
 
-  std::vector<std::ostream*> streams;
+  std::set<std::ostream*> streams;
   LogLevel level{DEBUG};
   const std::vector<std::string> levelNames{
       {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}};
